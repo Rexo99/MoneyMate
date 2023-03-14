@@ -1,6 +1,5 @@
 import 'package:cash_crab/pages/test1.dart';
 import 'package:cash_crab/pages/test2.dart';
-import 'package:cash_crab/pages/test3.dart';
 import 'package:cash_crab/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
