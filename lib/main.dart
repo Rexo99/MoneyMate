@@ -1,3 +1,4 @@
+import 'package:cash_crab/UserState.dart';
 import 'package:cash_crab/pages/test1.dart';
 import 'package:cash_crab/pages/test2.dart';
 import 'package:cash_crab/state.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HUD(),
+      home: UserState(child: HUD()),
     );
   }
 }
@@ -61,7 +62,9 @@ class HUD extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {  },
+          onPressed: () {
+            UserState.of(context).login(name: "erik", password: "test");
+          },
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
