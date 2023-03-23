@@ -3,6 +3,7 @@ import 'package:cash_crab/pages/test1.dart';
 import 'package:cash_crab/pages/test2.dart';
 import 'package:cash_crab/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 Future<void> main() async {
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
