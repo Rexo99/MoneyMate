@@ -64,9 +64,8 @@ class expenditureTable extends StatelessWidget {
                 .map(
                   (expenditure) => DataRow(
                     //Todo onLongPress open BottomSheetExample for editing clicked expenditure
-                    onLongPress: () => {
-                      bottomSheet(expenditure: expenditure, context: context)
-                    },
+                    onLongPress: () =>
+                        {popup(expenditure: expenditure, context: context)},
                     cells: <DataCell>[
                       DataCell($(expenditure, (e) => Text(e.name))),
                       DataCell(
@@ -109,26 +108,43 @@ class expenditureTable extends StatelessWidget {
   }
 }
 
-void bottomSheet(
+void popup(
     {required Prop<Expenditure> expenditure, required BuildContext context}) {
+  String name = expenditure.value.name;
+  String amount = expenditure.value.amount.toString();
+  final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
       title: const Text('Edit Expenditure'),
-      content: Column(
-        children: [
-          TextField(
-            controller: TextEditingController()..text = expenditure.value.name,
-            onChanged: (text) {
-              expenditure.value = expenditure.value.setName(text);
-            },
-          ),
-          TextField(
-            controller: TextEditingController()
-              ..text = expenditure.value.amount.toString(),
-            onChanged: (text) => {},
-          )
-        ],
+      content: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              initialValue: expenditure.value.name,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                } else {
+                  name = value;
+                }
+              },
+            ),
+            TextFormField(
+              initialValue: expenditure.value.amount.toString(),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Pleas enter a number';
+                } else if (int.tryParse(value) == null) {
+                  return "Pleas enter a valid number";
+                } else {
+                  amount = value;
+                }
+              },
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(
@@ -136,7 +152,17 @@ void bottomSheet(
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Updated Expenditure')),
+              );
+              expenditure.value =
+                  expenditure.value.setAmount(int.parse(amount));
+              expenditure.value = expenditure.value.setName(name);
+              Navigator.pop(context, 'OK');
+            }
+          },
           child: const Text('OK'),
         ),
       ],
