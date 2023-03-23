@@ -1,6 +1,6 @@
 import 'package:cash_crab/UserState.dart';
-import 'package:cash_crab/pages/test1.dart';
-import 'package:cash_crab/pages/test2.dart';
+import 'package:cash_crab/pages/CategoryOverview.dart';
+import 'package:cash_crab/pages/Homepage.dart';
 import 'package:cash_crab/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,10 +42,12 @@ class MyApp extends StatelessWidget {
 
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
-  final List<String> _titleList = ["Player", "Search"];
+  final List<String> _titleList = ["Home", "Categories"];
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
+
+  HUD({super.key});
 
   //_title = _titleList[0];
 
@@ -56,14 +58,11 @@ class HUD extends StatelessWidget {
         body: PageView(
           controller: _pageController,
           onPageChanged: (newIndex) {
-            /*setState(() {
-            _currentIndex = newIndex;
-
-          });*/
+            _currentIndex.value = newIndex;
           },
-          children: [
-            test1(),
-            test2(),
+          children: const[
+            Homepage(),
+            CategoryOverview(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -81,10 +80,10 @@ class HUD extends StatelessWidget {
                   items: const [
                     BottomNavigationBarItem(
                       icon: Icon(Icons.play_arrow_rounded),
-                      label: "Play",
+                      label: "Home",
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.search), label: "Search"),
+                        icon: Icon(Icons.search), label: "Categories"),
                   ],
                   onTap: (newIndex) {
                     _pageController.animateToPage(newIndex,
