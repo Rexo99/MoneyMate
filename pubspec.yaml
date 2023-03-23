@@ -40,6 +40,7 @@ dependencies:
   http: ^0.13.5
   fast_immutable_collections: ^8.2.0
   intl: ^0.18.0
+  encrypt: ^5.0.1
 
 dev_dependencies:
   flutter_test:

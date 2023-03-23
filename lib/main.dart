@@ -49,8 +49,6 @@ class HUD extends StatelessWidget {
 
   HUD({super.key});
 
-  //_title = _titleList[0];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +65,7 @@ class HUD extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            //Todo change for production
             UserState.of(context).login(name: "erik", password: "test");
           },
           child: const Icon(Icons.add),

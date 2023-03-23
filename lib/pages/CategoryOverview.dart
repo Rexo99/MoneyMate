@@ -53,18 +53,11 @@ class MyStatelessWidget extends StatelessWidget {
 
 
 class _MyStatefulWidgetState extends StatelessWidget {
-  final ScrollController _firstController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SizedBox(
-            // This vertical scroll view has primary set to true, so it is
-            // using the PrimaryScrollController. On mobile platforms, the
-            // PrimaryScrollController automatically attaches to vertical
-            // ScrollViews, unlike on Desktop platforms, where the primary
-            // parameter is required.
               child: Scrollbar(
                 thumbVisibility: true,
                 child: ListView.builder(
