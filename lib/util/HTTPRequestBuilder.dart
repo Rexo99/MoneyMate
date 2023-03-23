@@ -8,6 +8,9 @@ class HTTPRequestBuilder {
 
   HTTPRequestBuilder(this.rootURL);
 
+  //Todo build generic method for Http request
+  //Todo write test method for getting allExpenditures
+
 
 }
 

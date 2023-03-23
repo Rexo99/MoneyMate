@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:cash_crab/state.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:cash_crab/util/HTTPRequestBuilder.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'models/models.dart';
 
 class UserState extends InheritedWidget {
   UserState({super.key, required super.child});
@@ -11,6 +15,9 @@ class UserState extends InheritedWidget {
   String rootURL = "141.71.164.168:6060";
   late String bearerToken;
   late HTTPRequestBuilder builder = HTTPRequestBuilder(rootURL);
+
+
+  Prop<IList<Prop<Expenditure>>> expendList = Prop(<Prop<Expenditure>>[].lockUnsafe);
 
 
   static UserState? maybeOf(BuildContext context) =>
@@ -42,6 +49,7 @@ class UserState extends InheritedWidget {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     bearerToken = jsonDecode(response.body)["token"];
+    print(bearerToken);
   }
 
   @override
