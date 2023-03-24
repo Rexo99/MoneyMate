@@ -1,10 +1,6 @@
 import 'dart:convert';
 
 import 'package:cash_crab/state.dart';
-import 'package:encrypt/encrypt.dart';
-import 'package:encrypt/encrypt_io.dart';
-//Todo Pit fragen
-import 'package:pointycastle/asymmetric/api.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:cash_crab/util/HTTPRequestBuilder.dart';
@@ -23,8 +19,6 @@ class UserState extends InheritedWidget {
 
   Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   Prop<IList<Prop<Expenditure>>> expendList = Prop(<Prop<Expenditure>>[].lockUnsafe);
-
-
 
 
   static UserState? maybeOf(BuildContext context) =>
@@ -63,17 +57,4 @@ class UserState extends InheritedWidget {
   bool updateShouldNotify(covariant UserState oldWidget) {
     return rootURL != oldWidget.rootURL;
   }
-
-  Future<String> encode({required password}) async {
-    //Todo finde a way to get access from phone
-
-    final publicKey = await parseKeyFromFile<RSAPublicKey>('test/certs/public.pem');
-    final encrypter = Encrypter(RSA(publicKey: publicKey));
-    return encrypter.encrypt(password).base64;
-  }
 }
-
-
-
-
-
