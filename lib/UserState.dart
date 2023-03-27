@@ -11,13 +11,10 @@ import 'models/models.dart';
 class UserState extends InheritedWidget {
   UserState({super.key, required super.child});
 
-  late final int userId;
-  final String rootURL = "192.168.0.136:6060";
-  late final String bearerToken;
-  late final HTTPRequestBuilder builder = HTTPRequestBuilder(rootURL);
+  late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
 
-  Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
+  //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   Prop<IList<Prop<Expenditure>>> expendList = Prop(<Prop<Expenditure>>[].lockUnsafe);
 
 
@@ -31,30 +28,10 @@ class UserState extends InheritedWidget {
   }
 
 
-  void register({required String name, required String password}) async {
-    String hashedPassword = password;
-    var url = Uri.http(rootURL, "register");
-    var response =
-        await http.post(url, body: {"name": name, "password": hashedPassword});
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-  }
 
-  void login({required String name, required String password}) async {
-    //Todo password hash
-    String hashedPassword = password;
-    var url = Uri.http(rootURL, "login");
-    print(url);
-    var response =
-        await http.post(url, body: {"name": name, "password": hashedPassword});
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-    bearerToken = jsonDecode(response.body)["token"];
-    print(bearerToken);
-  }
 
   @override
   bool updateShouldNotify(covariant UserState oldWidget) {
-    return rootURL != oldWidget.rootURL;
+    return builder != oldWidget.builder;
   }
 }

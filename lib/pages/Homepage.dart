@@ -92,7 +92,7 @@ class ExpenditureTable extends StatelessWidget {
     required int amount,
   }) {
     expendList.value =
-        expendList.value.add(Prop(Expenditure(name, amount, DateTime.now())));
+        expendList.value.add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
   }
 
   void removeItem(Prop<Expenditure> expenditure) {

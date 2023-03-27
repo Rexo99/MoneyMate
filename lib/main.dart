@@ -2,6 +2,7 @@ import 'package:cash_crab/UserState.dart';
 import 'package:cash_crab/pages/CategoryOverview.dart';
 import 'package:cash_crab/pages/Homepage.dart';
 import 'package:cash_crab/state.dart';
+import 'package:cash_crab/util/HTTPRequestBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +67,7 @@ class HUD extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             //Todo change for production
-            UserState.of(context).login(name: "erik", password: "test");
+            HTTPRequestBuilder().login(name: "erik", password: "test");
           },
           child: const Icon(Icons.add),
         ),

@@ -60,6 +60,7 @@ class _MyStatefulWidgetState extends StatelessWidget {
           return SizedBox(
               child: Scrollbar(
                 thumbVisibility: true,
+                //Todo pit sagt ListView reicht aus
                 child: ListView.builder(
                     primary: true,
                     itemCount: 100,
