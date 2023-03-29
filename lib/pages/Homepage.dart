@@ -1,6 +1,8 @@
 import 'package:cash_crab/UserState.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 import '../models/models.dart';
 import '../state.dart';
@@ -66,8 +68,10 @@ class ExpenditureTable extends StatelessWidget {
             rows: expenditures
                 .map(
                   (expenditure) => DataRow(
-                    onLongPress: () =>
-                        {expenditurePopup(expenditure: expenditure, context: context)},
+                    onLongPress: () => {
+                      expenditurePopup(
+                          expenditure: expenditure, context: context)
+                    },
                     cells: <DataCell>[
                       DataCell($(expenditure, (e) => Text(e.name))),
                       DataCell(
@@ -81,8 +85,16 @@ class ExpenditureTable extends StatelessWidget {
           ),
         ),
         TextButton(
-            onPressed: () => addItem(name: "Döner", amount: 4),
-            child: const Text("hallo")),
+            //onPressed: () => addItem(name: "Döner", amount: 4),
+            onPressed: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles();
+              if(result != null){
+                print(await imageToText());
+              } else {
+                print("result is null");
+              }
+            },
+            child: const Text("test")),
       ],
     );
   }
@@ -91,8 +103,8 @@ class ExpenditureTable extends StatelessWidget {
     required String name,
     required int amount,
   }) {
-    expendList.value =
-        expendList.value.add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
+    expendList.value = expendList.value
+        .add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
   }
 
   void removeItem(Prop<Expenditure> expenditure) {
@@ -108,6 +120,27 @@ class ExpenditureTable extends StatelessWidget {
       expenditure.value = expenditure.value.setAmount(amount);
     }
   }
+
+  Future<String> imageToText() async {
+    final InputImage inputImage = InputImage.fromFilePath("image");
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+
+    for (TextBlock block in recognizedText.blocks) {
+      final String text = block.text;
+      final List<String> languages = block.recognizedLanguages;
+
+      for (TextLine line in block.lines) {
+        // Same getters as TextBlock
+        for (TextElement element in line.elements) {
+          // Same getters as TextBlock
+        }
+      }
+    }
+
+    textRecognizer.close();
+    return recognizedText.text;
+  }
 }
-
-

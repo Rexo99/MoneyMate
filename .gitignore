@@ -31,3 +31,4 @@ doc/api/
 /.idea/runConfigurations/main_dart.xml
 /test/certs/pubkey.pem
 /test/certs/public.pem
+/.flutter-plugins

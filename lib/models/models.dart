@@ -1,10 +1,10 @@
 import 'package:cash_crab/util/HTTPRequestBuilder.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'dtos.dart';
 
 abstract class Model {
-  Future<int?> get id;
+  int? _id;
+
+  get id => _id;
 
   Model copyWith();
 
@@ -13,23 +13,28 @@ abstract class Model {
   }
 }
 
-@immutable
 class Expenditure implements Model {
   @override
-  late final Future<int?> id;
+  int? _id;
+
+  @override
+  int? get id => _id;
   final String name;
   final int amount;
   final DateTime date;
 
   Expenditure(this.name, this.amount, this.date, categoryId) {
-    id = HTTPRequestBuilder().createModel(
-        path: "expenditures", tmp: ExpenditureDTO(name, amount, categoryId, date));
+    HTTPRequestBuilder()
+        .createModel(
+            path: "expenditures",
+            tmp: ExpenditureDTO(name, amount, categoryId, date))
+        .then((value) => _id = value);
   }
 
-  Expenditure._copyWith(this.id, this.name, this.amount, this.date);
+  Expenditure._(this._id, this.name, this.amount, this.date);
 
   static Expenditure fromJson(Map json) {
-    return Expenditure._copyWith(
+    return Expenditure._(
         json["id"], json["name"], json["amount"], DateTime.parse(json["date"]));
   }
 
@@ -38,7 +43,7 @@ class Expenditure implements Model {
     String? name,
     int? amount,
   }) =>
-      Expenditure._copyWith(
+      Expenditure._(
         id,
         name ?? this.name,
         amount ?? this.amount,
@@ -50,20 +55,31 @@ class Expenditure implements Model {
   Expenditure setAmount(int amount) => copyWith(amount: amount);
 }
 
-/*@immutable
 class Category implements Model {
   @override
-  final int? id;
+  int? _id;
+
+  @override
+  get id => _id;
   final String name;
   final int budget;
   final int userId;
   final List<Expenditure> expenditureList;
 
-  const Category(
-      this.id, this.name, this.budget, this.userId, this.expenditureList);
+  Category(
+      this._id, this.name, this.budget, this.userId, this.expenditureList) {
+    HTTPRequestBuilder()
+        .createModel(
+            path: "expenditures",
+            tmp: CategoryDTO(name, budget, userId, expenditureList))
+        .then((value) => _id = value);
+  }
+
+  Category._(
+      this._id, this.name, this.budget, this.userId, this.expenditureList);
 
   static Category fromJson(Map json) {
-    return Category(json["id"], json["name"], json["budget"], json["userId"],
+    return Category._(json["id"], json["name"], json["budget"], json["userId"],
         json["expenditureList"]);
   }
 
@@ -73,16 +89,21 @@ class Category implements Model {
     int? budget,
     List<Expenditure>? expenditureList,
   }) =>
-      Category(id ?? this.id, name ?? this.name, budget ?? this.budget, userId,
-          expenditureList ?? this.expenditureList);
+      Category._(
+          _id,
+          name ?? this.name,
+          budget ?? this.budget,
+          userId,
+          expenditureList ?? this.expenditureList
+      );
 
   Category setName(String name) => copyWith(name: name);
 
-  Category setAmount(int budget) => copyWith(budget: budget);
+  Category setBudget(int budget) => copyWith(budget: budget);
 
   Category addExpenditure(Expenditure expenditure) {
     List<Expenditure> expenditures = expenditureList;
     expenditures.add(expenditure);
     return copyWith(expenditureList: expenditures);
   }
-}*/
+}

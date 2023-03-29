@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -40,12 +41,13 @@ class HTTPRequestBuilder {
     print(bearerToken);
   }
 
-  Future<int?> createModel<T extends DTO>({required String path,required T tmp}) async {
+  Future<int?> createModel<T extends DTO>(
+      {required String path, required T tmp}) async {
     Uri uri = Uri.http(rootURL, "users/$userId/$path");
     Map<String, String>? headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Bearer $bearerToken',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $bearerToken',
     };
     final response = await http.post(uri, headers: headers, body: tmp.toJson());
 
@@ -55,48 +57,83 @@ class HTTPRequestBuilder {
     return object["id"];
   }
 
-  Future get<T extends Model>(
-      {required Uri url, required String bearerToken, required T tmp}) async {
-    final response = await http.get(url, headers: {
+  Future<Model?> get({required String path, required Type returnType}) async {
+    Uri uri = Uri.http(rootURL, "users/$userId/$path");
+    Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $bearerToken',
-    });
+    };
+    final response = await http.get(uri, headers: headers);
     Map object = json.decode(response.body);
-    return Expenditure.fromJson(object);
+    switch (returnType) {
+      case Expenditure:
+        return Expenditure.fromJson(object);
+      case Category:
+        return Category.fromJson(object);
+    }
+    return null;
   }
 
-  Future<void> put({
-    required url,
-    required bearerToken,
-  }) async {
-    final response = await http.put(url, headers: {
+  Future<Model?> put<T extends DTO>({required String path, required T obj,required Type returnType}) async {
+  Uri uri = Uri.http(rootURL, "users/$userId/$path");
+  Map<String, String>? headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'Bearer $bearerToken',
+  };
+  final response = await http.put(uri, headers: headers, body: obj.toJson());
+  Map object = json.decode(response.body);
+  switch (returnType) {
+  case Expenditure:
+  return Expenditure.fromJson(object);
+  case Category:
+  return Category.fromJson(object);
+  }
+  return null;
+  }
+
+  Future<Model?> post<T extends DTO>({required String path, required T obj,required Type returnType}) async {
+    Uri uri = Uri.http(rootURL, "users/$userId/$path");
+    Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $bearerToken',
-    });
+    };
+    final response = await http.post(uri, headers: headers, body: obj.toJson());
+    Map object = json.decode(response.body);
+    switch (returnType) {
+      case Expenditure:
+        return Expenditure.fromJson(object);
+      case Category:
+        return Category.fromJson(object);
+    }
+    return null;
   }
 
-  Future<void> post({
-    required url,
-    required bearerToken,
-  }) async {
-    final response = await http.post(url, headers: {
+  delete({required Type deleteType, required objId}) async {
+    //Todo refresh local category
+    Uri uri;
+    switch (deleteType) {
+      case Expenditure:
+        uri = Uri.http(rootURL, "users/$userId/expenditures/$objId");
+        break;
+      case Category:
+        uri = Uri.http(rootURL, "users/$userId/categories/$objId");
+        break;
+      default:
+        throw ErrorDescription("$deleteType is not a valid Type");
+    }
+    Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $bearerToken',
-    });
-  }
+    };
+    final response = await http.post(uri, headers: headers);
+    if(response.statusCode != 200) {
+      throw ErrorDescription("$deleteType with id $objId not found");
+    }
 
-  Future<void> delete({
-    required url,
-    required bearerToken,
-  }) async {
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
-    });
   }
 
 // get users from api
