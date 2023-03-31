@@ -106,9 +106,6 @@ class ExpenditureListView extends StatelessWidget {
       expenditure.value = expenditure.value.setAmount(amount);
     }
   }
-
-  //Todo Photo test
-
 }
 
 Future<String> imageToText(String path) async {

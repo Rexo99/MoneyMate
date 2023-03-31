@@ -1,11 +1,4 @@
-import 'package:cash_crab/util/Formatter.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-
-import '../UserState.dart';
-import '../models/models.dart';
-import '../state.dart';
-import '../util/Popups.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({super.key});
@@ -53,19 +46,14 @@ class CategoriesOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    /*return ListView(
       padding: const EdgeInsets.all(20.0),
       children: const <Widget>[
         CategoriesOverview(),
         CategoriesOverview(),
-        CategoriesOverview(),
-        CategoriesOverview(),
-        CategoriesOverview(),
-        CategoriesOverview(),
-        CategoriesOverview(),
-        CategoriesOverview(),
+
       ],
-    );
+    );*/
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SizedBox(

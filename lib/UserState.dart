@@ -27,7 +27,13 @@ class UserState extends InheritedWidget {
     return result!;
   }
 
-
+  void addItem({
+    required String name,
+    required int amount,
+  }) {
+    expendList.value = expendList.value
+        .add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
+  }
 
 
   @override

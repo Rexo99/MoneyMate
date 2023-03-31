@@ -16,6 +16,7 @@ class HTTPRequestBuilder {
   //final String rootURL = "192.168.0.136:6060";
   final String rootURL = "45.129.181.24:6060";
   late final String bearerToken;
+  bool _loggedIn = false;
 
   HTTPRequestBuilder._privateConstructor();
 
@@ -29,13 +30,24 @@ class HTTPRequestBuilder {
   }
 
   void login({required String name, required String password}) async {
-    Uri url = Uri.http(rootURL, "login");
-    var response =
-        await http.post(url, body: {"name": name, "password": password});
-    bearerToken = response.body;
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
-    userId = int.parse(decodedToken["id"]);
-    print('Login: Response status: ${response.statusCode}');
+    if (!_loggedIn) {
+      Uri url = Uri.http(rootURL, "login");
+      print("kevin");
+      var response =
+          await http.post(url, body: {"name": name, "password": password});
+
+      if (response.statusCode == 200) {
+        bearerToken = response.body;
+        print(bearerToken);
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
+        print(int.parse(decodedToken["id"]));
+        userId = int.parse(decodedToken["id"]);
+        _loggedIn = true;
+      } else {
+        print("Response body: ${response.body}");
+      }
+      print('Login: Response status: ${response.statusCode}');
+    }
   }
 
   Future<int?> createModel<T extends DTO>(
@@ -72,25 +84,27 @@ class HTTPRequestBuilder {
     return null;
   }
 
-  Future<Model?> put<T extends DTO>({required String path, required T obj,required Type returnType}) async {
-  Uri uri = Uri.http(rootURL, "users/$userId/$path");
-  Map<String, String>? headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer $bearerToken',
-  };
-  final response = await http.put(uri, headers: headers, body: obj.toJson());
-  Map object = json.decode(response.body);
-  switch (returnType) {
-  case Expenditure:
-  return Expenditure.fromJson(object);
-  case Category:
-  return Category.fromJson(object);
-  }
-  return null;
+  Future<Model?> put<T extends DTO>(
+      {required String path, required T obj, required Type returnType}) async {
+    Uri uri = Uri.http(rootURL, "users/$userId/$path");
+    Map<String, String>? headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $bearerToken',
+    };
+    final response = await http.put(uri, headers: headers, body: obj.toJson());
+    Map object = json.decode(response.body);
+    switch (returnType) {
+      case Expenditure:
+        return Expenditure.fromJson(object);
+      case Category:
+        return Category.fromJson(object);
+    }
+    return null;
   }
 
-  Future<Model?> post<T extends DTO>({required String path, required T obj,required Type returnType}) async {
+  Future<Model?> post<T extends DTO>(
+      {required String path, required T obj, required Type returnType}) async {
     Uri uri = Uri.http(rootURL, "users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
@@ -127,10 +141,9 @@ class HTTPRequestBuilder {
       'Authorization': 'Bearer $bearerToken',
     };
     final response = await http.post(uri, headers: headers);
-    if(response.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw ErrorDescription("$deleteType with id $objId not found");
     }
-
   }
 
 // get users from api

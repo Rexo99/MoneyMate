@@ -2,7 +2,6 @@ import 'package:cash_crab/UserState.dart';
 import 'package:cash_crab/pages/CategoryOverview.dart';
 import 'package:cash_crab/pages/Homepage.dart';
 import 'package:cash_crab/state.dart';
-import 'package:cash_crab/util/Camera.dart';
 import 'package:cash_crab/util/HTTPRequestBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,13 +61,14 @@ class HUD extends StatelessWidget {
           },
           children: const[
             Homepage(),
-            CameraExampleHome(),
+            CategoriesOverview(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             //Todo change for production
             HTTPRequestBuilder().login(name: "erik", password: "test");
+            UserState.of(context).addItem(name: "Döner", amount: 3);
           },
           child: const Icon(Icons.add),
         ),
