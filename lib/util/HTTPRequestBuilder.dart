@@ -14,7 +14,7 @@ class HTTPRequestBuilder {
   late final int userId;
 
   //final String rootURL = "192.168.0.136:6060";
-  final String rootURL = "141.71.164.168:6060";
+  final String rootURL = "45.129.181.24:6060";
   late final String bearerToken;
 
   HTTPRequestBuilder._privateConstructor();
@@ -35,6 +35,7 @@ class HTTPRequestBuilder {
     bearerToken = response.body;
     Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
     userId = int.parse(decodedToken["id"]);
+    print('Login: Response status: ${response.statusCode}');
   }
 
   Future<int?> createModel<T extends DTO>(

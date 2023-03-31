@@ -1,6 +1,5 @@
 import 'package:cash_crab/UserState.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
@@ -16,7 +15,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ExpenditureTable(
+        child: ExpenditureListView(
           context: context,
         ),
       ),
@@ -24,79 +23,66 @@ class Homepage extends StatelessWidget {
   }
 }
 
-class ExpenditureTable extends StatelessWidget {
+class ListEntry extends StatelessWidget {
+  Prop<Expenditure> expenditure;
+
+  ListEntry({required this.expenditure, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onLongPress: () =>
+            expenditurePopup(expenditure: expenditure, context: context),
+        child: ListTile(
+          //return new ListTile(
+          leading: const CircleAvatar(
+            //Todo CategoryIcons
+            backgroundColor: Colors.blue,
+            child: Text("Icon"),
+          ),
+          title: Row(children: <Widget>[
+            $(
+                expenditure,
+                (e) => Text(
+                    "${e.name}  ${e.amount.toString()}  ${dateFormatter(e.date)}")),
+          ]),
+        ));
+  }
+}
+
+class ExpenditureListView extends StatelessWidget {
   late final BuildContext context;
   late final Prop<IList<Prop<Expenditure>>> expendList;
 
-  ExpenditureTable({required this.context, super.key}) {
+  ExpenditureListView({required this.context, super.key}) {
     expendList = UserState.of(context).expendList;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        $(
-          expendList,
-          (expenditures) => DataTable(
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Name',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Amount',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Date',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ),
-            ],
-            rows: expenditures
-                .map(
-                  (expenditure) => DataRow(
-                    onLongPress: () => {
-                      expenditurePopup(
-                          expenditure: expenditure, context: context)
-                    },
-                    cells: <DataCell>[
-                      DataCell($(expenditure, (e) => Text(e.name))),
-                      DataCell(
-                          $(expenditure, (e) => Text(e.amount.toString()))),
-                      DataCell(
-                          $(expenditure, (e) => Text(dateFormatter(e.date)))),
+    return $(
+        expendList,
+        (expenditures) => ListView.separated(
+              padding: const EdgeInsets.all(8),
+              itemCount: expendList.value.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  // return the header
+                  return Row(
+                    children: const [
+                      Text("Name       "),
+                      Text("Amount       "),
+                      Text("Date"),
                     ],
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        TextButton(
-            //onPressed: () => addItem(name: "Döner", amount: 4),
-            onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles();
-              if(result != null){
-                print(await imageToText());
-              } else {
-                print("result is null");
-              }
-            },
-            child: const Text("test")),
-      ],
-    );
+                  );
+                }
+                index -= 1;
+                var exp = expendList.value.get(index);
+                return ListEntry(expenditure: exp);
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+            ));
   }
 
   void addItem({
@@ -121,26 +107,29 @@ class ExpenditureTable extends StatelessWidget {
     }
   }
 
-  Future<String> imageToText() async {
-    final InputImage inputImage = InputImage.fromFilePath("image");
-    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+  //Todo Photo test
 
-    final RecognizedText recognizedText =
-        await textRecognizer.processImage(inputImage);
+}
 
-    for (TextBlock block in recognizedText.blocks) {
-      final String text = block.text;
-      final List<String> languages = block.recognizedLanguages;
+Future<String> imageToText(String path) async {
+  final InputImage inputImage = InputImage.fromFilePath(path);
+  final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
-      for (TextLine line in block.lines) {
+  final RecognizedText recognizedText =
+  await textRecognizer.processImage(inputImage);
+
+  for (TextBlock block in recognizedText.blocks) {
+    final String text = block.text;
+    final List<String> languages = block.recognizedLanguages;
+
+    for (TextLine line in block.lines) {
+      // Same getters as TextBlock
+      for (TextElement element in line.elements) {
         // Same getters as TextBlock
-        for (TextElement element in line.elements) {
-          // Same getters as TextBlock
-        }
       }
     }
-
-    textRecognizer.close();
-    return recognizedText.text;
   }
+
+  textRecognizer.close();
+  return recognizedText.text;
 }
