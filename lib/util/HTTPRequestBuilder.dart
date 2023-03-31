@@ -25,20 +25,16 @@ class HTTPRequestBuilder {
 
   void register({required String name, required String password}) async {
     Uri url = Uri.http(rootURL, "register");
-    var response =
-        await http.post(url, body: {"name": name, "password": password});
-    print('Response status: ${response.statusCode}');
+    await http.post(url, body: {"name": name, "password": password});
   }
 
   void login({required String name, required String password}) async {
     Uri url = Uri.http(rootURL, "login");
     var response =
         await http.post(url, body: {"name": name, "password": password});
-    print('Response status: ${response.statusCode}');
     bearerToken = response.body;
     Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
     userId = int.parse(decodedToken["id"]);
-    print(bearerToken);
   }
 
   Future<int?> createModel<T extends DTO>(
@@ -51,8 +47,8 @@ class HTTPRequestBuilder {
     };
     final response = await http.post(uri, headers: headers, body: tmp.toJson());
 
-    print('Response status: ${response.statusCode}');
-    print("Response body: ${response.body}");
+    //print('Response status: ${response.statusCode}');
+    //print("Response body: ${response.body}");
     Map object = json.decode(response.body);
     return object["id"];
   }
