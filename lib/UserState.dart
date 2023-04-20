@@ -27,12 +27,27 @@ class UserState extends InheritedWidget {
     return result!;
   }
 
+
   void addItem({
     required String name,
     required int amount,
   }) {
     expendList.value = expendList.value
         .add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
+  }
+
+  void removeItem(Prop<Expenditure> expenditure) {
+    expendList.value = expendList.value.remove(expenditure);
+  }
+
+  void updateItem(
+      {required Prop<Expenditure> expenditure, String? name, int? amount}) {
+    if (name != null) {
+      expenditure.value = expenditure.value.setName(name);
+    }
+    if (amount != null) {
+      expenditure.value = expenditure.value.setAmount(amount);
+    }
   }
 
 
