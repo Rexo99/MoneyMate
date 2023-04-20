@@ -1,4 +1,4 @@
-import 'package:cash_crab/util/HTTPRequestBuilder.dart';
+import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 
 abstract class Model {
@@ -27,7 +27,7 @@ class Expenditure implements Model {
     HTTPRequestBuilder()
         .createModel(
             path: "expenditures",
-            tmp: ExpenditureDTO(name, amount, categoryId, date))
+            tmp: ExpenditureDTO (name, amount, categoryId, date))
         .then((value) => _id = value);
   }
 

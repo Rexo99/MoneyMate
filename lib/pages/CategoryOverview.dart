@@ -57,16 +57,13 @@ class CategoriesOverview extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SizedBox(
-          child: Scrollbar(
-        thumbVisibility: true,
-        //Todo pit sagt ListView reicht aus
-        child: ListView.builder(
+          child: ListView.builder(
             primary: true,
-            itemCount: 100,
+            itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return CategoriesOverview();
+              return CategoryCard();
             }),
-      ));
+      );
     });
   }
 }

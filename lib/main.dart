@@ -1,11 +1,14 @@
-import 'package:cash_crab/UserState.dart';
-import 'package:cash_crab/pages/CategoryOverview.dart';
-import 'package:cash_crab/pages/Homepage.dart';
-import 'package:cash_crab/state.dart';
-import 'package:cash_crab/util/HTTPRequestBuilder.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
+import 'package:money_mate/pages/CategoryOverview.dart';
+import 'package:money_mate/pages/Homepage.dart';
+import 'package:money_mate/state.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
+
+import 'UserState.dart';
 
 Future<void> main() async {
   //await dotenv.load(fileName: '.env');
@@ -25,17 +28,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          ),
       home: UserState(child: HUD()),
     );
   }
@@ -44,6 +47,7 @@ class MyApp extends StatelessWidget {
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+  /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
@@ -59,20 +63,63 @@ class HUD extends StatelessWidget {
           onPageChanged: (newIndex) {
             _currentIndex.value = newIndex;
           },
-          children: const[
+          children: const [
             Homepage(),
             CategoriesOverview(),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            //Todo change for production
-            HTTPRequestBuilder().login(name: "erik", password: "test");
-            UserState.of(context).addItem(name: "Döner", amount: 3);
-          },
-          child: const Icon(Icons.add),
+
+        /// Bottom located at the bottom center of the screen
+        /// The Button expand on click and
+        /// reveal two options to add an [Expenditure]
+        /// 1. manuel input of name and amount
+        /// 2. take a picture of bill
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.add_event,
+          spaceBetweenChildren: 10,
+          children: [
+            SpeedDialChild(
+              child: IconButton(
+                icon: const Icon(Icons.attach_money),
+                onPressed: () {
+                  UserState.of(context).addItem(name: "Döner", amount: 3);
+                },
+              ),
+              label: "Add Expense",
+            ),
+            SpeedDialChild(
+                child: const Icon(Icons.photo_camera), label: "Take a photo"),
+            SpeedDialChild(
+                child: IconButton(
+                  icon: const Icon(Icons.login),
+                  onPressed: () {
+                    HTTPRequestBuilder().login(name: "erik", password: "test");
+                  },
+                ),
+                label: "Login"),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+
+        ///info of the active user
+        ///LogoutButton
+        ///Button that navigates to the Info-Screen
+        endDrawer: Drawer(
+            child: ListView(children: [
+          ElevatedButton(
+              onPressed: () {
+                HTTPRequestBuilder().login(name: "erik", password: "test");
+              },
+              child: const Text('Login')),
+          ElevatedButton(
+              onPressed: () {
+                //Navigate to the Info-Screen
+              },
+              child: const Text('Info-Screen')),
+        ])),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
+
+        /// BottomNavigation bar will be, rebuild when _currentIndex get changed
         bottomNavigationBar: $(
             _currentIndex,
             (int index) => BottomNavigationBar(
@@ -109,6 +156,7 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Builder(
             builder: (BuildContext context) => IconButton(
+                  //Todo doesnt work!
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                 ))

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:cash_crab/state.dart';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:http/http.dart' as http;
-import 'package:cash_crab/util/HTTPRequestBuilder.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:money_mate/state.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
 
 import 'models/models.dart';
 

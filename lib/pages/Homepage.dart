@@ -1,8 +1,8 @@
-import 'package:cash_crab/UserState.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../UserState.dart';
 import '../models/models.dart';
 import '../state.dart';
 import '../util/Formatter.dart';
@@ -108,6 +108,7 @@ class ExpenditureListView extends StatelessWidget {
   }
 }
 
+// Todo move anywhere else
 Future<String> imageToText(String path) async {
   final InputImage inputImage = InputImage.fromFilePath(path);
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
