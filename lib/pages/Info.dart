@@ -5,38 +5,87 @@ class Info extends StatelessWidget {
 
   final String title;
 
-  void _doNothing() {
-    //
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Container(
-          color: Color(0xff6750a4),
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: ListView(
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Text("Das MoneyMate Team:",
                   textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2
-                  )
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 20)
               ),
-              const SizedBox(height: 60),
-              Image.network("https://docs.flutter.dev/assets/images/shared/brand/flutter/logo/flutter-lockup.png"),
-              const SizedBox(height: 60),
-            ],
-          )
-      ),
+              const SizedBox(height: 20),
+              Expanded(child:
+                Row(children: [
+                  Expanded(child:
+                    Column(children: [
+                      Icon(Icons.account_circle_outlined, size: 90),
+                      ListTile(
+                        title: Text('Daniel Ottolien', textAlign: TextAlign.center),
+                        subtitle: Text('1629292', textAlign: TextAlign.center),
+                      ),
+                      const SizedBox(height: 40),
+                      Icon(Icons.account_circle_outlined, size: 90),
+                      ListTile(
+                        title: Text('Dorian Zimmermann', textAlign: TextAlign.center),
+                        subtitle: Text('1671737', textAlign: TextAlign.center)
+                      ),
+                    ],),
+                  ),
+                  Expanded(child:
+                    Column(children: [
+                      Icon(Icons.account_circle_outlined, size: 90),
+                      ListTile(
+                          title: Text('Dannie Krösche', textAlign: TextAlign.center),
+                          subtitle: Text('1629522', textAlign: TextAlign.center)
+                      ),
+                      const SizedBox(height: 40),
+                      Icon(Icons.account_circle_outlined, size: 90),
+                      ListTile(
+                          title: Text('Erik Hinkelmanns', textAlign: TextAlign.center),
+                          subtitle: Text('1583861', textAlign: TextAlign.center)
+                      ),
+                    ],),
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 30),
+              ExpansionTile(
+                title: Text("Used Widgets"),
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Widget 1'),
+                    subtitle: Text('Used for XXX'),
+                  ),
+                  ListTile(
+                    title: Text('Widget 2'),
+                    subtitle: Text('Used for XXX'),
+                  )
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Used Flutter-Packages'),
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Package 1'),
+                    subtitle: Text('Used for XXX'),
+                  ),
+                  ListTile(
+                    title: Text('Package 2'),
+                    subtitle: Text('Used for XXX'),
+                  )
+                ],
+              ),
+            ],),
+        )
     );
   }
 }
