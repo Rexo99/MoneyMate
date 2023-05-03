@@ -101,22 +101,25 @@ class HUD extends StatelessWidget {
         ///Button that navigates to the Info-Screen
         endDrawer: Drawer(
             child: ListView(children: [
-          ElevatedButton(
-              onPressed: () async {
-                await HTTPRequestBuilder().login(name: "erik", password: "test");
-                if (!context.mounted) return;
-                UserState.of(context).initListExpenseList();
-              },
-              child: const Text('Login')),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Info(title: 'Info')),
-                );
-              },
-              child: const Text('Info-Screen')),
+              Icon(Icons.account_circle_outlined, size: 100),
+              ListTile(
+                title: Text('User XXX', textAlign: TextAlign.center),
+                subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await HTTPRequestBuilder().login(name: "erik", password: "test");
+                    if (!context.mounted) return;
+                    UserState.of(context).initListExpenseList();
+                  },
+                  child: const Text('Login')),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => const Info(title: 'Info')),
+                    );
+                  },
+                  child: const Text('Info-Screen')),
         ])),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterDocked,
