@@ -4,6 +4,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
+import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'UserState.dart';
@@ -25,17 +26,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          ),
+        colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
+      ),
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system, // device controls theme
       home: UserState(child: HUD()),
     );
   }
@@ -114,7 +110,11 @@ class HUD extends StatelessWidget {
               child: const Text('Login')),
           ElevatedButton(
               onPressed: () {
-                //Navigate to the Info-Screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Info(title: 'Info')),
+                );
               },
               child: const Text('Info-Screen')),
         ])),
