@@ -13,7 +13,7 @@ abstract class Model{
   }
 }
 
-class Expenditure implements Model {
+class Expense implements Model {
   @override
   int? _id;
 
@@ -24,32 +24,32 @@ class Expenditure implements Model {
   final DateTime date;
   final int categoryId;
 
-  Expenditure(this.name, this.amount, this.date, this.categoryId) {
+  Expense(this.name, this.amount, this.date, this.categoryId) {
     HTTPRequestBuilder()
         .createModel(
             path: "expenditures",
-            tmp: ExpenditureDTO(name, amount, date, categoryId))
+            tmp: ExpenseDTO(name, amount, date, categoryId))
         .then((value) => _id = value);
   }
 
-  Expenditure._(this._id, this.name, this.amount, this.date, this.categoryId);
+  Expense._(this._id, this.name, this.amount, this.date, this.categoryId);
 
-  static Expenditure fromJson(Map json) {
-    return Expenditure._(json["id"], json["name"], json["amount"],
+  static Expense fromJson(Map json) {
+    return Expense._(json["id"], json["name"], json["amount"],
         DateTime.parse(json["dateTime"]), json["categoryId"]);
   }
 
   @override
-  Expenditure copyWith({
+  Expense copyWith({
     String? name,
     int? amount,
   }) =>
-      Expenditure._(
+      Expense._(
           id, name ?? this.name, amount ?? this.amount, date, categoryId);
 
-  Expenditure setName(String name) => copyWith(name: name);
+  Expense setName(String name) => copyWith(name: name);
 
-  Expenditure setAmount(int amount) => copyWith(amount: amount);
+  Expense setAmount(int amount) => copyWith(amount: amount);
 }
 
 class Category implements Model {
@@ -61,7 +61,7 @@ class Category implements Model {
   final String name;
   final int budget;
   final int userId;
-  final List<Expenditure> expenditureList;
+  final List<Expense> expenditureList;
 
   Category(
       this._id, this.name, this.budget, this.userId, this.expenditureList) {
@@ -84,7 +84,7 @@ class Category implements Model {
   Category copyWith({
     String? name,
     int? budget,
-    List<Expenditure>? expenditureList,
+    List<Expense>? expenditureList,
   }) =>
       Category._(_id, name ?? this.name, budget ?? this.budget, userId,
           expenditureList ?? this.expenditureList);
@@ -93,8 +93,8 @@ class Category implements Model {
 
   Category setBudget(int budget) => copyWith(budget: budget);
 
-  Category addExpenditure(Expenditure expenditure) {
-    List<Expenditure> expenditures = expenditureList;
+  Category addExpenditure(Expense expenditure) {
+    List<Expense> expenditures = expenditureList;
     expenditures.add(expenditure);
     return copyWith(expenditureList: expenditures);
   }

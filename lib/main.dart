@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -7,7 +6,6 @@ import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
-
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -25,7 +23,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Money Mate',
       theme: ThemeData(
           colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
           // This is the theme of your application.
@@ -71,8 +69,8 @@ class HUD extends StatelessWidget {
 
         /// Button located at the bottom center of the screen
         /// The Button expand on click and
-        /// reveal two options to add an [Expenditure]
-        /// 1. manuel input of name and amount
+        /// reveal two options to add an [Expense]
+        /// 1. manual input of name and amount
         /// 2. take a picture of bill
         floatingActionButton: SpeedDial(
           animatedIcon: AnimatedIcons.add_event,
@@ -95,7 +93,7 @@ class HUD extends StatelessWidget {
                   onPressed: () async {
                     await HTTPRequestBuilder().login(name: "erik", password: "test");
                     if (!context.mounted) return;
-                    UserState.of(context).initListExpenditureList();
+                    UserState.of(context).initListExpenseList();
                   },
                 ),
                 label: "Login"),
@@ -111,7 +109,7 @@ class HUD extends StatelessWidget {
               onPressed: () async {
                 await HTTPRequestBuilder().login(name: "erik", password: "test");
                 if (!context.mounted) return;
-                UserState.of(context).initListExpenditureList();
+                UserState.of(context).initListExpenseList();
               },
               child: const Text('Login')),
           ElevatedButton(
@@ -162,7 +160,8 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
             builder: (BuildContext context) => IconButton(
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
-                ))
+                )
+        )
       ],
     );
   }
