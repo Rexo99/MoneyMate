@@ -18,7 +18,7 @@ class ExpenditureDTO extends DTO {
   final int categoryId;
   final DateTime dateTime;
 
-  ExpenditureDTO(this.name, this.amount, this.categoryId, this.dateTime);
+  ExpenditureDTO(this.name, this.amount, this.dateTime, this.categoryId);
 
   @override
   String toJson() {

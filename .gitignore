@@ -32,3 +32,4 @@ doc/api/
 /test/certs/pubkey.pem
 /test/certs/public.pem
 /.flutter-plugins
+/.flutter-plugins-dependencies

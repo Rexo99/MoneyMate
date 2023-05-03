@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -28,17 +29,16 @@ class HTTPRequestBuilder {
     await http.post(url, body: {"name": name, "password": password});
   }
 
-  void login({required String name, required String password}) async {
+  Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
       Uri url = Uri.https(rootURL, "api/login");
       var response =
           await http.post(url, body: {"name": name, "password": password});
       if (response.statusCode == 200) {
         bearerToken = response.body;
-        print(bearerToken);
         Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
-        print(int.parse(decodedToken["id"]));
         userId = int.parse(decodedToken["id"]);
+        print("userID: $userId");
         _loggedIn = true;
       } else {
         print("Response body: ${response.body}");
@@ -63,7 +63,7 @@ class HTTPRequestBuilder {
     return object["id"];
   }
 
-  Future<Model?> get({required String path, required Type returnType}) async {
+  Future<Object?> get({required String path, required Type returnType}) async {
     Uri uri = Uri.https(rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
@@ -72,9 +72,16 @@ class HTTPRequestBuilder {
     };
     final response = await http.get(uri, headers: headers);
     Map object = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
     switch (returnType) {
       case Expenditure:
         return Expenditure.fromJson(object);
+      case List<Expenditure>:
+        List<Expenditure> temp = [];
+        for (var element in (object['message'] as List)) {
+          temp.add(Expenditure.fromJson(element));
+        }
+        return temp;
       case Category:
         return Category.fromJson(object);
     }
@@ -93,7 +100,8 @@ class HTTPRequestBuilder {
     Map object = json.decode(response.body);
     switch (returnType) {
       case Expenditure:
-        return Expenditure.fromJson(object);
+        print(object);
+        return (Expenditure.fromJson(object["message"]));
       case Category:
         return Category.fromJson(object);
     }

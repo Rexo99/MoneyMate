@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_mate/UserState.dart';
 
 import '../models/models.dart';
 import '../state.dart';
@@ -11,7 +12,7 @@ void expenditurePopup(
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
-    builder: (BuildContext context) => AlertDialog(
+    builder: (BuildContext subcontext) => AlertDialog(
       title: const Text('Edit Expenditure'),
       content: Form(
         key: formKey,
@@ -46,19 +47,21 @@ void expenditurePopup(
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
+          onPressed: () => Navigator.pop(subcontext, 'Cancel'),
           child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              ScaffoldMessenger.of(subcontext).showSnackBar(
                 const SnackBar(content: Text('Updated Expenditure')),
               );
-              expenditure.value =
-                  expenditure.value.setAmount(int.parse(amount));
-              expenditure.value = expenditure.value.setName(name);
-              Navigator.pop(context, 'OK');
+              //Todo not the right context?
+              UserState.of(context).updateItem(
+                  expenditure: expenditure,
+                  name: name,
+                  amount: int.parse(amount));
+              Navigator.pop(subcontext, 'OK');
             }
           },
           child: const Text('OK'),

@@ -15,7 +15,6 @@ Future<void> main() async {
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -66,10 +65,11 @@ class HUD extends StatelessWidget {
           children: const [
             Homepage(),
             CategoriesOverview(),
+
           ],
         ),
 
-        /// Bottom located at the bottom center of the screen
+        /// Button located at the bottom center of the screen
         /// The Button expand on click and
         /// reveal two options to add an [Expenditure]
         /// 1. manuel input of name and amount
@@ -92,8 +92,9 @@ class HUD extends StatelessWidget {
             SpeedDialChild(
                 child: IconButton(
                   icon: const Icon(Icons.login),
-                  onPressed: () {
-                    HTTPRequestBuilder().login(name: "erik", password: "test");
+                  onPressed: () async {
+                    await HTTPRequestBuilder().login(name: "erik", password: "test");
+                    UserState.of(context).initListExpenditureList();
                   },
                 ),
                 label: "Login"),
@@ -106,8 +107,9 @@ class HUD extends StatelessWidget {
         endDrawer: Drawer(
             child: ListView(children: [
           ElevatedButton(
-              onPressed: () {
-                HTTPRequestBuilder().login(name: "erik", password: "test");
+              onPressed: () async {
+                await HTTPRequestBuilder().login(name: "erik", password: "test");
+                UserState.of(context).initListExpenditureList();
               },
               child: const Text('Login')),
           ElevatedButton(
@@ -156,7 +158,6 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Builder(
             builder: (BuildContext context) => IconButton(
-                  //Todo doesnt work!
                   icon: const Icon(Icons.settings_outlined),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                 ))

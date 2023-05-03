@@ -55,6 +55,7 @@ class ExpenditureListView extends StatelessWidget {
   late final Prop<IList<Prop<Expenditure>>> expendList;
 
   ExpenditureListView({required this.context, super.key}) {
+    //Todo load List if logged in
     expendList = UserState.of(context).expendList;
   }
 
