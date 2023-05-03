@@ -94,6 +94,7 @@ class HUD extends StatelessWidget {
                   icon: const Icon(Icons.login),
                   onPressed: () async {
                     await HTTPRequestBuilder().login(name: "erik", password: "test");
+                    if (!context.mounted) return;
                     UserState.of(context).initListExpenditureList();
                   },
                 ),
@@ -109,6 +110,7 @@ class HUD extends StatelessWidget {
           ElevatedButton(
               onPressed: () async {
                 await HTTPRequestBuilder().login(name: "erik", password: "test");
+                if (!context.mounted) return;
                 UserState.of(context).initListExpenditureList();
               },
               child: const Text('Login')),
