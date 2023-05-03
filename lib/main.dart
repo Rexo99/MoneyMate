@@ -161,7 +161,7 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Builder(
             builder: (BuildContext context) => IconButton(
-                  icon: const Icon(Icons.settings_outlined),
+                  icon: const Icon(Icons.menu),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                 )
         )
