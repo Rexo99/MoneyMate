@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import '../util/Popups.dart';
 
 class Info extends StatelessWidget {
-  const Info({super.key, required this.title});
+  Info({super.key, required this.title});
 
   final String title;
 
-  @override
+
+@override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -27,13 +29,19 @@ class Info extends StatelessWidget {
                 Row(children: [
                   Expanded(child:
                     Column(children: [
-                      Icon(Icons.account_circle_outlined, size: 90),
+                      GestureDetector(
+                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        child: Icon(Icons.account_circle_outlined, size: 90),
+                      ),
                       ListTile(
                         title: Text('Daniel Ottolien', textAlign: TextAlign.center),
                         subtitle: Text('1629292', textAlign: TextAlign.center),
                       ),
                       const SizedBox(height: 40),
-                      Icon(Icons.account_circle_outlined, size: 90),
+                      GestureDetector(
+                        onTap: () => infoPopup(featureList: [Text('Info Page'), /*todo fill list*/], context: context),
+                        child: Icon(Icons.account_circle_outlined, size: 90),
+                      ),
                       ListTile(
                         title: Text('Dorian Zimmermann', textAlign: TextAlign.center),
                         subtitle: Text('1671737', textAlign: TextAlign.center)
@@ -42,13 +50,19 @@ class Info extends StatelessWidget {
                   ),
                   Expanded(child:
                     Column(children: [
-                      Icon(Icons.account_circle_outlined, size: 90),
+                      GestureDetector(
+                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        child: Icon(Icons.account_circle_outlined, size: 90),
+                      ),
                       ListTile(
                           title: Text('Dannie Krösche', textAlign: TextAlign.center),
                           subtitle: Text('1629522', textAlign: TextAlign.center)
                       ),
                       const SizedBox(height: 40),
-                      Icon(Icons.account_circle_outlined, size: 90),
+                      GestureDetector(
+                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        child: Icon(Icons.account_circle_outlined, size: 90),
+                      ),
                       ListTile(
                           title: Text('Erik Hinkelmanns', textAlign: TextAlign.center),
                           subtitle: Text('1583861', textAlign: TextAlign.center)

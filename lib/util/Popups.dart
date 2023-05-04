@@ -69,3 +69,23 @@ void expensePopup(
     ),
   );
 }
+
+void infoPopup(
+    {required List featureList, required BuildContext context}) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext subContext) => AlertDialog(
+      title: const Text('Implemented Features'),
+      content: Column(
+        children: [...featureList],
+        mainAxisSize: MainAxisSize.min,
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(subContext, 'Cancel'),
+          child: const Text('Close'),
+        ),
+      ],
+    ),
+  );
+}
