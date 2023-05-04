@@ -128,7 +128,6 @@ class HTTPRequestBuilder {
   }
 
   delete({required Type deleteType, required objId}) async {
-    //Todo refresh local category
     Uri uri;
     switch (deleteType) {
       case Expenditure:
@@ -145,15 +144,9 @@ class HTTPRequestBuilder {
       'Accept': 'application/json',
       'Authorization': 'Bearer $bearerToken',
     };
-    final response = await http.post(uri, headers: headers);
+    final response = await http.delete(uri, headers: headers);
     if (response.statusCode != 200) {
       throw ErrorDescription("$deleteType with id $objId not found");
     }
   }
-
-// get users from api
-
 }
-
-//Todo build generic method for Http request
-//Todo write test method for getting allExpenditures

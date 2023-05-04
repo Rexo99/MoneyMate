@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:money_mate/state.dart';
@@ -44,16 +42,19 @@ class UserState extends InheritedWidget {
   }) {
     expendList.value = expendList.value
         .add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
-    //Todo api call
   }
 
   void removeItem(Prop<Expenditure> expenditure) {
     expendList.value = expendList.value.remove(expenditure);
-    //Todo api call
+    HTTPRequestBuilder().delete(deleteType: Expenditure, objId: expenditure.value.id);
   }
 
   void updateItem(
       {required Prop<Expenditure> expenditure, String? name, int? amount}) {
+    switch(name) {
+
+    }
+
     if (name != null) {
       expenditure.value = expenditure.value.setName(name);
     }

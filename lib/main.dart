@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -15,6 +14,7 @@ Future<void> main() async {
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -27,17 +27,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          ),
+        colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+      ),
       home: UserState(child: HUD()),
     );
   }
@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
@@ -65,7 +66,6 @@ class HUD extends StatelessWidget {
           children: const [
             Homepage(),
             CategoriesOverview(),
-
           ],
         ),
 
@@ -91,13 +91,14 @@ class HUD extends StatelessWidget {
                 child: const Icon(Icons.photo_camera), label: "Take a photo"),
             SpeedDialChild(
                 child: IconButton(
-                  icon: const Icon(Icons.login),
-                  onPressed: () async {
-                    await HTTPRequestBuilder().login(name: "erik", password: "test");
-                    if (!context.mounted) return;
-                    UserState.of(context).initListExpenditureList();
-                  },
-                ),
+                    icon: const Icon(Icons.login),
+                    onPressed: () async {
+                      await HTTPRequestBuilder()
+                          .login(name: "erik", password: "test");
+                      if (context.mounted) {
+                        UserState.of(context).initListExpenditureList();
+                      }
+                    }),
                 label: "Login"),
           ],
         ),
@@ -109,9 +110,11 @@ class HUD extends StatelessWidget {
             child: ListView(children: [
           ElevatedButton(
               onPressed: () async {
-                await HTTPRequestBuilder().login(name: "erik", password: "test");
-                if (!context.mounted) return;
-                UserState.of(context).initListExpenditureList();
+                await HTTPRequestBuilder()
+                    .login(name: "erik", password: "test");
+                if (context.mounted) {
+                  UserState.of(context).initListExpenditureList();
+                }
               },
               child: const Text('Login')),
           ElevatedButton(

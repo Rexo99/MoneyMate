@@ -45,6 +45,12 @@ class ListEntry extends StatelessWidget {
                 expenditure,
                 (e) => Text(
                     "${e.name}  ${e.amount.toString()}  ${dateFormatter(e.date)}")),
+            MaterialButton(
+                child: const Text('Delete'),
+                color: Colors.red,
+                onPressed: () {
+                  UserState.of(context).removeItem(expenditure);
+                }),
           ]),
         ));
   }
@@ -55,7 +61,6 @@ class ExpenditureListView extends StatelessWidget {
   late final Prop<IList<Prop<Expenditure>>> expendList;
 
   ExpenditureListView({required this.context, super.key}) {
-    //Todo load List if logged in
     expendList = UserState.of(context).expendList;
   }
 
@@ -93,7 +98,7 @@ Future<String> imageToText(String path) async {
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 
   final RecognizedText recognizedText =
-  await textRecognizer.processImage(inputImage);
+      await textRecognizer.processImage(inputImage);
 
   for (TextBlock block in recognizedText.blocks) {
     final String text = block.text;
