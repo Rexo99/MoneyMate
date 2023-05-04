@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
-
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
@@ -86,15 +85,23 @@ class HUD extends StatelessWidget {
                 child: const Icon(Icons.photo_camera), label: "Take a photo"),
             SpeedDialChild(
                 child: IconButton(
-                    icon: const Icon(Icons.login),
-                    onPressed: () async {
-                      await HTTPRequestBuilder()
-                          .login(name: "erik", password: "test");
-                      if (context.mounted) {
-                        UserState.of(context).initListExpenseList();
-                      }
-                    }),
+                  icon: const Icon(Icons.login),
+                  onPressed: () async {
+                    await UserState.of(context).loginUser(name: "erik", password: "test");
+                    if (context.mounted) {
+                      UserState.of(context).initListExpenseList();
+                    }
+                  },
+                ),
                 label: "Login"),
+            SpeedDialChild(
+                child: IconButton(
+                  icon: const Icon(Icons.bug_report),
+                  onPressed: () async {
+                    await UserState.of(context).registerUser(name: "dannie1", password: "ee");
+                  },
+                ),
+                label: "DevelopmentButton"),
           ],
         ),
 

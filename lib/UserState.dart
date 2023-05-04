@@ -34,14 +34,14 @@ class UserState extends InheritedWidget {
     }
   }
 
-  void loginUser({
+  Future<void> loginUser({
     required String name,
     required String password,
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
   }
 
-  void registerUser({
+  Future<void> registerUser({
     required String name,
     required String password,
   }) async {
