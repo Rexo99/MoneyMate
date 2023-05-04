@@ -88,12 +88,20 @@ class HUD extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.login),
                   onPressed: () async {
-                    await HTTPRequestBuilder().login(name: "erik", password: "test");
+                    await UserState.of(context).loginUser(name: "erik", password: "test");
                     if (!context.mounted) return;
                     UserState.of(context).initListExpenseList();
                   },
                 ),
                 label: "Login"),
+            SpeedDialChild(
+                child: IconButton(
+                  icon: const Icon(Icons.bug_report),
+                  onPressed: () async {
+                    await UserState.of(context).registerUser(name: "dannie1", password: "ee");
+                  },
+                ),
+                label: "DevelopmentButton"),
           ],
         ),
 

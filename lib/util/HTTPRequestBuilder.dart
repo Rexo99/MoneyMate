@@ -24,9 +24,17 @@ class HTTPRequestBuilder {
     return _instance;
   }
 
-  Future<void> register({required String name, required String password}) async {
+  Future<void> register(
+      {required String name, required String password}) async {
     Uri url = Uri.https(rootURL, "api/register");
-    await http.post(url, body: {"name": name, "password": password});
+    var response =
+        await http.post(url, body: {"name": name, "password": password});
+    if (response.statusCode == 200) {
+      print("Register successful");
+    } else {
+      print("Response body: ${response.body}");
+    }
+    print('Register: Response status: ${response.statusCode}');
   }
 
   Future<void> login({required String name, required String password}) async {
@@ -132,7 +140,8 @@ class HTTPRequestBuilder {
     Uri uri;
     switch (deleteType) {
       case Expense:
-        uri = Uri.https(rootURL, "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
+        uri = Uri.https(rootURL,
+            "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
         break;
       case Category:
         uri = Uri.https(rootURL, "api/users/$userId/categories/$objId");
@@ -152,7 +161,6 @@ class HTTPRequestBuilder {
   }
 
 // get users from api
-
 }
 
 //Todo build generic method for Http request
