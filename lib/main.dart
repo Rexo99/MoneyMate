@@ -69,12 +69,13 @@ class HUD extends StatelessWidget {
         /// 1. manual input of name and amount
         /// 2. take a picture of bill
         floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.add_event,
+          // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+          animatedIcon: AnimatedIcons.menu_close,
           spaceBetweenChildren: 10,
           children: [
             SpeedDialChild(
               child: IconButton(
-                icon: const Icon(Icons.attach_money),
+                icon: const Icon(Icons.add),
                 onPressed: () {
                   UserState.of(context).addItem(name: "Döner", amount: 3);
                 },
@@ -132,11 +133,12 @@ class HUD extends StatelessWidget {
                   unselectedItemColor: Colors.black,
                   items: const [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.play_arrow_rounded),
-                      label: "Home",
+                      icon: Icon(Icons.euro_outlined),
+                      label: "Expenses",
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.search), label: "Categories"),
+                        icon: Icon(Icons.inventory_2_outlined),
+                        label: "Categories"),
                   ],
                   onTap: (newIndex) {
                     _pageController.animateToPage(newIndex,
