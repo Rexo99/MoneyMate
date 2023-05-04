@@ -4,9 +4,9 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
+import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
-
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -14,7 +14,6 @@ Future<void> main() async {
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -25,19 +24,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Money Mate',
       theme: ThemeData(
         colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
       ),
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system, // device controls theme
       home: UserState(child: HUD()),
     );
   }
@@ -71,16 +65,17 @@ class HUD extends StatelessWidget {
 
         /// Button located at the bottom center of the screen
         /// The Button expand on click and
-        /// reveal two options to add an [Expenditure]
-        /// 1. manuel input of name and amount
+        /// reveal two options to add an [Expense]
+        /// 1. manual input of name and amount
         /// 2. take a picture of bill
         floatingActionButton: SpeedDial(
-          animatedIcon: AnimatedIcons.add_event,
+          // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+          animatedIcon: AnimatedIcons.menu_close,
           spaceBetweenChildren: 10,
           children: [
             SpeedDialChild(
               child: IconButton(
-                icon: const Icon(Icons.attach_money),
+                icon: const Icon(Icons.add),
                 onPressed: () {
                   UserState.of(context).addItem(name: "Döner", amount: 3);
                 },
@@ -96,7 +91,7 @@ class HUD extends StatelessWidget {
                       await HTTPRequestBuilder()
                           .login(name: "erik", password: "test");
                       if (context.mounted) {
-                        UserState.of(context).initListExpenditureList();
+                        UserState.of(context).initListExpenseList();
                       }
                     }),
                 label: "Login"),
@@ -108,18 +103,25 @@ class HUD extends StatelessWidget {
         ///Button that navigates to the Info-Screen
         endDrawer: Drawer(
             child: ListView(children: [
+              Icon(Icons.account_circle_outlined, size: 100),
+              ListTile(
+                title: Text('User XXX', textAlign: TextAlign.center),
+                subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
+              ),
           ElevatedButton(
               onPressed: () async {
-                await HTTPRequestBuilder()
-                    .login(name: "erik", password: "test");
+                await HTTPRequestBuilder().login(name: "erik", password: "test");
                 if (context.mounted) {
-                  UserState.of(context).initListExpenditureList();
+                  UserState.of(context).initListExpenseList();
                 }
               },
               child: const Text('Login')),
           ElevatedButton(
               onPressed: () {
                 //Navigate to the Info-Screen
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
+                );
               },
               child: const Text('Info-Screen')),
         ])),
@@ -134,11 +136,12 @@ class HUD extends StatelessWidget {
                   unselectedItemColor: Colors.black,
                   items: const [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.play_arrow_rounded),
-                      label: "Home",
+                      icon: Icon(Icons.euro_outlined),
+                      label: "Expenses",
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.search), label: "Categories"),
+                        icon: Icon(Icons.inventory_2_outlined),
+                        label: "Categories"),
                   ],
                   onTap: (newIndex) {
                     _pageController.animateToPage(newIndex,
@@ -163,9 +166,10 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Builder(
             builder: (BuildContext context) => IconButton(
-                  icon: const Icon(Icons.settings_outlined),
+                  icon: const Icon(Icons.menu),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
-                ))
+                )
+        )
       ],
     );
   }

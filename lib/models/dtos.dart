@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-
 import 'models.dart';
 
 abstract class DTO {
@@ -11,14 +9,14 @@ abstract class DTO {
 }
 
 @immutable
-class ExpenditureDTO extends DTO {
+class ExpenseDTO extends DTO {
   @override
   final String name;
   final int amount;
   final int categoryId;
   final DateTime dateTime;
 
-  ExpenditureDTO(this.name, this.amount, this.dateTime, this.categoryId);
+  ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId);
 
   @override
   String toJson() {
@@ -38,14 +36,13 @@ class CategoryDTO extends DTO {
   final String name;
   final int budget;
   final int userId;
-  final List<Expenditure> expenditureList;
+  final List<Expense> expenseList;
 
-  CategoryDTO(this.name, this.budget, this.userId, this.expenditureList);
+  CategoryDTO(this.name, this.budget, this.userId, this.expenseList);
 
   @override
   String toJson() {
     // TODO: implement toJson
     throw UnimplementedError();
   }
-
 }

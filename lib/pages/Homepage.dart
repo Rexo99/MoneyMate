@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-
 import '../UserState.dart';
 import '../models/models.dart';
 import '../state.dart';
@@ -15,7 +14,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ExpenditureListView(
+        child: ExpenseListView(
           context: context,
         ),
       ),
@@ -24,15 +23,15 @@ class Homepage extends StatelessWidget {
 }
 
 class ListEntry extends StatelessWidget {
-  Prop<Expenditure> expenditure;
+  Prop<Expense> expense;
 
-  ListEntry({required this.expenditure, super.key});
+  ListEntry({required this.expense, super.key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onLongPress: () =>
-            expenditurePopup(expenditure: expenditure, context: context),
+            expensePopup(expense: expense, context: context),
         child: ListTile(
           //return new ListTile(
           leading: const CircleAvatar(
@@ -42,7 +41,7 @@ class ListEntry extends StatelessWidget {
           ),
           title: Row(children: <Widget>[
             $(
-                expenditure,
+                expense,
                 (e) => Text(
                     "${e.name}  ${e.amount.toString()}  ${dateFormatter(e.date)}")),
             MaterialButton(
@@ -56,11 +55,11 @@ class ListEntry extends StatelessWidget {
   }
 }
 
-class ExpenditureListView extends StatelessWidget {
+class ExpenseListView extends StatelessWidget {
   late final BuildContext context;
-  late final Prop<IList<Prop<Expenditure>>> expendList;
+  late final Prop<IList<Prop<Expense>>> expendList;
 
-  ExpenditureListView({required this.context, super.key}) {
+  ExpenseListView({required this.context, super.key}) {
     expendList = UserState.of(context).expendList;
   }
 
@@ -68,7 +67,7 @@ class ExpenditureListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return $(
         expendList,
-        (expenditures) => ListView.separated(
+        (expenses) => ListView.separated(
               padding: const EdgeInsets.all(8),
               itemCount: expendList.value.length + 1,
               itemBuilder: (BuildContext context, int index) {
@@ -84,7 +83,7 @@ class ExpenditureListView extends StatelessWidget {
                 }
                 index -= 1;
                 var exp = expendList.value.get(index);
-                return ListEntry(expenditure: exp);
+                return ListEntry(expense: exp);
               },
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),

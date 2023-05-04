@@ -24,7 +24,7 @@ class HTTPRequestBuilder {
     return _instance;
   }
 
-  void register({required String name, required String password}) async {
+  Future<void> register({required String name, required String password}) async {
     Uri url = Uri.https(rootURL, "api/register");
     await http.post(url, body: {"name": name, "password": password});
   }
@@ -74,12 +74,12 @@ class HTTPRequestBuilder {
     Map object = json.decode(response.body);
     print('Response status: ${response.statusCode}');
     switch (returnType) {
-      case Expenditure:
-        return Expenditure.fromJson(object);
-      case List<Expenditure>:
-        List<Expenditure> temp = [];
+      case Expense:
+        return Expense.fromJson(object);
+      case List<Expense>:
+        List<Expense> temp = [];
         for (var element in (object['message'] as List)) {
-          temp.add(Expenditure.fromJson(element));
+          temp.add(Expense.fromJson(element));
         }
         return temp;
       case Category:
@@ -99,9 +99,9 @@ class HTTPRequestBuilder {
     final response = await http.put(uri, headers: headers, body: obj.toJson());
     Map object = json.decode(response.body);
     switch (returnType) {
-      case Expenditure:
+      case Expense:
         print(object);
-        return (Expenditure.fromJson(object["message"]));
+        return (Expense.fromJson(object["message"]));
       case Category:
         return Category.fromJson(object);
     }
@@ -119,8 +119,8 @@ class HTTPRequestBuilder {
     final response = await http.post(uri, headers: headers, body: obj.toJson());
     Map object = json.decode(response.body);
     switch (returnType) {
-      case Expenditure:
-        return Expenditure.fromJson(object);
+      case Expense:
+        return Expense.fromJson(object);
       case Category:
         return Category.fromJson(object);
     }
@@ -130,8 +130,8 @@ class HTTPRequestBuilder {
   delete({required Type deleteType, required objId}) async {
     Uri uri;
     switch (deleteType) {
-      case Expenditure:
-        uri = Uri.https(rootURL, "api/users/$userId/expenditures/$objId");
+      case Expense:
+        uri = Uri.https(rootURL, "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
         break;
       case Category:
         uri = Uri.https(rootURL, "api/users/$userId/categories/$objId");

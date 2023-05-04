@@ -12,8 +12,7 @@ class UserState extends InheritedWidget {
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
-  Prop<IList<Prop<Expenditure>>> expendList =
-      Prop(<Prop<Expenditure>>[].lockUnsafe);
+  Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<UserState>();
@@ -25,14 +24,28 @@ class UserState extends InheritedWidget {
   }
 
   //clears the expendList and fills it with fresh data from the backend
-  Future<void> initListExpenditureList() async {
+  Future<void> initListExpenseList() async {
     expendList.value.clear();
-    List<Expenditure> exps = (await HTTPRequestBuilder().get(
-        path: "expenditures",
-        returnType: List<Expenditure>)) as List<Expenditure>;
-    for (Expenditure element in exps) {
+    List<Expense> exps = (await HTTPRequestBuilder().get(
+        path: "expenditures", //todo - change to "expenses"
+        returnType: List<Expense>)) as List<Expense>;
+    for (Expense element in exps) {
       expendList.value = expendList.value.add(Prop(element));
     }
+  }
+
+  void loginUser({
+    required String name,
+    required String password,
+  }) async {
+    await HTTPRequestBuilder().login(name: name, password: password);
+  }
+
+  void registerUser({
+    required String name,
+    required String password,
+  }) async {
+    await HTTPRequestBuilder().register(name: name, password: password);
   }
 
   //Create an Expenditure and adds it to the [expendList]
@@ -41,31 +54,26 @@ class UserState extends InheritedWidget {
     required int amount,
   }) {
     expendList.value = expendList.value
-        .add(Prop(Expenditure(name, amount, DateTime.now(), 1)));
+        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
   }
 
-  void removeItem(Prop<Expenditure> expenditure) {
-    expendList.value = expendList.value.remove(expenditure);
-    HTTPRequestBuilder().delete(deleteType: Expenditure, objId: expenditure.value.id);
+  void removeItem(Prop<Expense> expense) {
+    expendList.value = expendList.value.remove(expense);
+    HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);
   }
 
-  void updateItem(
-      {required Prop<Expenditure> expenditure, String? name, int? amount}) {
-    switch(name) {
-
-    }
-
+  void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
     if (name != null) {
-      expenditure.value = expenditure.value.setName(name);
+      expense.value = expense.value.setName(name);
     }
     if (amount != null) {
-      expenditure.value = expenditure.value.setAmount(amount);
+      expense.value = expense.value.setAmount(amount);
     }
     HTTPRequestBuilder().put(
-        path: "expenditures/${expenditure.value.id}",
-        obj: ExpenditureDTO(expenditure.value.name, expenditure.value.amount,
-            expenditure.value.date, expenditure.value.categoryId),
-        returnType: Expenditure);
+        path: "expenditures/${expense.value.id}",
+        obj: ExpenseDTO(expense.value.name, expense.value.amount,
+            expense.value.date, expense.value.categoryId),
+        returnType: Expense);
   }
 
   @override
