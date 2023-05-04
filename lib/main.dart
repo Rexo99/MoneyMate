@@ -117,7 +117,7 @@ class HUD extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const Info(title: 'Info')),
+                      context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
                     );
                   },
                   child: const Text('Info-Screen')),
