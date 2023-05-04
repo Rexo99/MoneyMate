@@ -14,8 +14,7 @@ class UserState extends InheritedWidget {
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
-  Prop<IList<Prop<Expense>>> expendList =
-      Prop(<Prop<Expense>>[].lockUnsafe);
+  Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<UserState>();
@@ -37,13 +36,27 @@ class UserState extends InheritedWidget {
     }
   }
 
+  void loginUser({
+    required String name,
+    required String password,
+  }) async {
+    await HTTPRequestBuilder().login(name: name, password: password);
+  }
+
+  void registerUser({
+    required String name,
+    required String password,
+  }) async {
+    await HTTPRequestBuilder().register(name: name, password: password);
+  }
+
   //Create an Expenditure and adds it to the [expendList]
   void addItem({
     required String name,
     required int amount,
   }) {
-    expendList.value = expendList.value
-        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
+    expendList.value =
+        expendList.value.add(Prop(Expense(name, amount, DateTime.now(), 1)));
     //Todo api call
   }
 
@@ -52,8 +65,7 @@ class UserState extends InheritedWidget {
     //Todo api call
   }
 
-  void updateItem(
-      {required Prop<Expense> expense, String? name, int? amount}) {
+  void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
     if (name != null) {
       expense.value = expense.value.setName(name);
     }

@@ -24,7 +24,7 @@ class HTTPRequestBuilder {
     return _instance;
   }
 
-  void register({required String name, required String password}) async {
+  Future<void> register({required String name, required String password}) async {
     Uri url = Uri.https(rootURL, "api/register");
     await http.post(url, body: {"name": name, "password": password});
   }
