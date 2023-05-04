@@ -48,7 +48,7 @@ class ListEntry extends StatelessWidget {
                 child: const Text('Delete'),
                 color: Colors.red,
                 onPressed: () {
-                  UserState.of(context).removeItem(expenditure);
+                  UserState.of(context).removeItem(expense);
                 }),
           ]),
         ));
