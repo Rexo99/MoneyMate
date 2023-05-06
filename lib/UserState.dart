@@ -48,7 +48,14 @@ class UserState extends InheritedWidget {
     await HTTPRequestBuilder().register(name: name, password: password);
   }
 
-  //Create an Expenditure and adds it to the [expendList]
+  //todo - implement
+  Future<void> logoutUser() async {
+    //await HTTPRequestBuilder().logout();
+
+    expendList.value.clear();
+  }
+
+  //Creates an Expense and adds it to the [expendList]
   void addItem({
     required String name,
     required int amount,

@@ -105,32 +105,36 @@ class HUD extends StatelessWidget {
           ],
         ),
 
-        ///info of the active user
-        ///LogoutButton
-        ///Button that navigates to the Info-Screen
-        endDrawer: Drawer(
+          //todo - info of the active user
+          //todo - LogoutButton
+          endDrawer: Drawer(
             child: ListView(children: [
               Icon(Icons.account_circle_outlined, size: 100),
               ListTile(
                 title: Text('User XXX', textAlign: TextAlign.center),
                 subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
               ),
-          ElevatedButton(
-              onPressed: () async {
-                await HTTPRequestBuilder().login(name: "erik", password: "test");
-                if (context.mounted) {
-                  UserState.of(context).initListExpenseList();
-                }
-              },
-              child: const Text('Login')),
-          ElevatedButton(
-              onPressed: () {
-                //Navigate to the Info-Screen
-                Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
-                );
-              },
-              child: const Text('Info-Screen')),
+              ElevatedButton(
+                  onPressed: () async {
+                    await HTTPRequestBuilder().login(name: "erik", password: "test");
+                    if (context.mounted) {
+                      UserState.of(context).initListExpenseList();
+                    }
+                  },
+                  child: const Text('Login')),
+              ElevatedButton(
+                  onPressed: () async {
+                    UserState.of(context).logoutUser();
+                  },
+                  child: const Text('Logout')),
+              ElevatedButton(
+                  onPressed: () {
+                    //Navigate to the Info-Screen
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
+                    );
+                  },
+                  child: const Text('Info-Screen')),
         ])),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterDocked,
