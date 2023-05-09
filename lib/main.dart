@@ -116,7 +116,9 @@ class HUD extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () async {
+
                   //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
+                  //start of content that needs do be deleted
                   if(loginButtonText == 'Login') {
                     //todo - move login request to login screen
                     await HTTPRequestBuilder().login(name: "erik", password: "test");
@@ -129,6 +131,8 @@ class HUD extends StatelessWidget {
                     UserState.of(context).logoutUser(); //not working yet
                     loginButtonText = 'Login';
                   }
+                  //end of content that needs do be deleted
+
                   //Navigate to the Login-Screen
                   Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),
