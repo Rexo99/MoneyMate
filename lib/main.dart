@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
+import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'UserState.dart';
@@ -44,6 +45,8 @@ class HUD extends StatelessWidget {
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
+
+  String loginButtonText = 'Login'; //doesn't save value on page switch
 
   HUD({super.key});
 
@@ -102,39 +105,44 @@ class HUD extends StatelessWidget {
                   },
                 ),
                 label: "DevelopmentButton"),
-          ],
-        ),
+            ],),
 
-          //todo - info of the active user
-          //todo - LogoutButton
-          endDrawer: Drawer(
-            child: ListView(children: [
-              Icon(Icons.account_circle_outlined, size: 100),
-              ListTile(
-                title: Text('User XXX', textAlign: TextAlign.center),
-                subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
-              ),
-              ElevatedButton(
-                  onPressed: () async {
+        endDrawer: Drawer(
+          child: ListView(children: [
+            Icon(Icons.account_circle_outlined, size: 100),
+            ListTile(
+              title: Text('User XXX', textAlign: TextAlign.center),
+              subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
+                  if(loginButtonText == 'Login') {
+                    //todo - move login request to login screen
                     await HTTPRequestBuilder().login(name: "erik", password: "test");
                     if (context.mounted) {
                       UserState.of(context).initListExpenseList();
+                      loginButtonText = 'Logout';
                     }
-                  },
-                  child: const Text('Login')),
-              ElevatedButton(
-                  onPressed: () async {
-                    UserState.of(context).logoutUser();
-                  },
-                  child: const Text('Logout')),
-              ElevatedButton(
-                  onPressed: () {
-                    //Navigate to the Info-Screen
-                    Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
-                    );
-                  },
-                  child: const Text('Info-Screen')),
+                  } else {
+                    //todo - implement logout
+                    UserState.of(context).logoutUser(); //not working yet
+                    loginButtonText = 'Login';
+                  }
+                  //Navigate to the Login-Screen
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),
+                  );
+                },
+                child: Text(loginButtonText)),
+            ElevatedButton(
+                onPressed: () {
+                  //Navigate to the Info-Screen
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
+                  );
+                },
+                child: const Text('Info-Screen')),
         ])),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterDocked,

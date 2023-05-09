@@ -32,9 +32,9 @@ void expensePopup(
               initialValue: expense.value.amount.toString(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Pleas enter a number';
+                  return 'Please enter a number';
                 } else if (int.tryParse(value) == null) {
-                  return "Pleas enter a valid number";
+                  return "Please enter a valid number";
                 } else {
                   amount = value;
                 }
