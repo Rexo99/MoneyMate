@@ -18,6 +18,10 @@ void updateExpensePopup(
         child: Column(
           children: [
             TextFormField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.shopping_cart),
+                labelText: 'Name',
+              ),
               initialValue: expense.value.name,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -29,6 +33,10 @@ void updateExpensePopup(
               },
             ),
             TextFormField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.euro),
+                labelText: 'Amount',
+              ),
               initialValue: expense.value.amount.toString(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -84,7 +92,7 @@ void createExpensePopup({ required BuildContext context}){
           children: [
             TextFormField(
               decoration: const InputDecoration(
-                icon: Icon(Icons.person),
+                icon: Icon(Icons.shopping_cart),
                 hintText: 'Name of your Expense?',
                 labelText: 'Name',
               ),
@@ -99,7 +107,7 @@ void createExpensePopup({ required BuildContext context}){
             ),
             TextFormField(
               decoration: const InputDecoration(
-                icon: Icon(Icons.person),
+                icon: Icon(Icons.euro),
                 hintText: 'Amount of your Expense',
                 labelText: 'Amount',
               ),
