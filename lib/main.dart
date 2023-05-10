@@ -7,6 +7,7 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
+import 'package:money_mate/util/Popups.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -86,8 +87,7 @@ class HUD extends StatelessWidget {
                       child: IconButton(
                         icon: const Icon(Icons.add),
                         onPressed: () {
-                          UserState.of(context)
-                              .addItem(name: "Döner", amount: 3);
+                          createExpensePopup(context: context);
                           isDialOpen.value = false;
                         },
                       ),

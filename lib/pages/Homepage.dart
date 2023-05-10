@@ -31,7 +31,7 @@ class ListEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onLongPress: () =>
-            expensePopup(expense: expense, context: context),
+            updateExpensePopup(expense: expense, context: context),
         child: ListTile(
           //return new ListTile(
           leading: const CircleAvatar(
