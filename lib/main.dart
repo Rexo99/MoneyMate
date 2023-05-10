@@ -81,7 +81,7 @@ class HUD extends StatelessWidget {
               _currentIndex.value == 0
                   ? SpeedDialChild(
                       child: IconButton(
-                        icon: const Icon(Icons.euro),
+                        icon: const Icon(Icons.add),
                         onPressed: () {
                           UserState.of(context)
                               .addItem(name: "Döner", amount: 3);
