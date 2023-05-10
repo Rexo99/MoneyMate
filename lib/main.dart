@@ -52,127 +52,133 @@ class HUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: Topbar(title: $(_title, (String title) => Text(title))),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (newIndex) {
-            _currentIndex.value = newIndex;
-          },
-          children: const [
-            Homepage(),
-            CategoriesOverview(),
-          ],
-        ),
-
-        /// Button located at the bottom center of the screen
-        /// The Button expand on click and
-        /// reveal two options to add an [Expense]
-        /// 1. manual input of name and amount
-        /// 2. take a picture of bill
-        floatingActionButton: SpeedDial(
-          // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
-          animatedIcon: AnimatedIcons.menu_close,
-          spaceBetweenChildren: 10,
-          children: [
-            SpeedDialChild(
-              child: IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  UserState.of(context).addItem(name: "Döner", amount: 3);
-                },
-              ),
-              label: "Add Expense",
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+            //appBar: Topbar(title: $(_title, (String title) => Text(title))),
+            appBar: AppBar(title: $(_title, (String title) => Text(title)), automaticallyImplyLeading: false),
+            body: PageView(
+              controller: _pageController,
+              onPageChanged: (newIndex) {
+                _currentIndex.value = newIndex;
+              },
+              children: const [
+                Homepage(),
+                CategoriesOverview(),
+              ],
             ),
-            SpeedDialChild(
-                child: const Icon(Icons.photo_camera), label: "Take a photo"),
-            SpeedDialChild(
-                child: IconButton(
-                  icon: const Icon(Icons.login),
-                  onPressed: () async {
-                    await UserState.of(context).loginUser(name: "erik", password: "test");
-                    if (context.mounted) {
-                      UserState.of(context).initListExpenseList();
-                    }
-                  },
+
+            /// Button located at the bottom center of the screen
+            /// The Button expand on click and
+            /// reveal two options to add an [Expense]
+            /// 1. manual input of name and amount
+            /// 2. take a picture of bill
+            floatingActionButton: SpeedDial(
+              // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+              animatedIcon: AnimatedIcons.menu_close,
+              spaceBetweenChildren: 10,
+              children: [
+                SpeedDialChild(
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      UserState.of(context).addItem(name: "Döner", amount: 3);
+                    },
+                  ),
+                  label: "Add Expense",
                 ),
-                label: "Login"),
-            SpeedDialChild(
-                child: IconButton(
-                  icon: const Icon(Icons.bug_report),
-                  onPressed: () async {
-                    await UserState.of(context).registerUser(name: "dannie1", password: "ee");
-                  },
-                ),
-                label: "DevelopmentButton"),
-            ],),
-
-        endDrawer: Drawer(
-          child: ListView(children: [
-            Icon(Icons.account_circle_outlined, size: 100),
-            ListTile(
-              title: Text('User XXX', textAlign: TextAlign.center),
-              subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-
-                  //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
-                  //start of content that needs do be deleted
-                  if(loginButtonText == 'Login') {
-                    //todo - move login request to login screen
-                    await HTTPRequestBuilder().login(name: "erik", password: "test");
-                    if (context.mounted) {
-                      UserState.of(context).initListExpenseList();
-                      loginButtonText = 'Logout';
-                    }
-                  } else {
-                    //todo - implement logout
-                    UserState.of(context).logoutUser(); //not working yet
-                    loginButtonText = 'Login';
-                  }
-                  //end of content that needs do be deleted
-
-                  //Navigate to the Login-Screen
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),
-                  );
-                },
-                child: Text(loginButtonText)),
-            ElevatedButton(
-                onPressed: () {
-                  //Navigate to the Info-Screen
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
-                  );
-                },
-                child: const Text('Info-Screen')),
-        ])),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterDocked,
-
-        /// BottomNavigation bar will be, rebuild when _currentIndex get changed
-        bottomNavigationBar: $(
-            _currentIndex,
-            (int index) => BottomNavigationBar(
-                  currentIndex: _currentIndex.value,
-                  unselectedItemColor: Colors.black,
-                  items: const [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.euro_outlined),
-                      label: "Expenses",
+                SpeedDialChild(
+                    child: const Icon(Icons.photo_camera), label: "Take a photo"),
+                SpeedDialChild(
+                    child: IconButton(
+                      icon: const Icon(Icons.login),
+                      onPressed: () async {
+                        await UserState.of(context).loginUser(name: "erik", password: "test");
+                        if (context.mounted) {
+                          UserState.of(context).initListExpenseList();
+                        }
+                      },
                     ),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.inventory_2_outlined),
-                        label: "Categories"),
-                  ],
-                  onTap: (newIndex) {
-                    _pageController.animateToPage(newIndex,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease);
-                    _currentIndex.value = newIndex;
-                  },
-                )));
+                    label: "Login"),
+                SpeedDialChild(
+                    child: IconButton(
+                      icon: const Icon(Icons.bug_report),
+                      onPressed: () async {
+                        await UserState.of(context).registerUser(name: "dannie1", password: "ee");
+                      },
+                    ),
+                    label: "DevelopmentButton"),
+                ],),
+
+            endDrawer: Drawer(
+              child: ListView(children: [
+                Icon(Icons.account_circle_outlined, size: 100),
+                ListTile(
+                  title: Text('User XXX', textAlign: TextAlign.center),
+                  subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+
+                      //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
+                      //start of content that needs do be deleted
+                      if(loginButtonText == 'Login') {
+                        //todo - move login request to login screen
+                        await HTTPRequestBuilder().login(name: "erik", password: "test");
+                        if (context.mounted) {
+                          UserState.of(context).initListExpenseList();
+                          loginButtonText = 'Logout';
+                        }
+                      } else {
+                        //todo - implement logout
+                        UserState.of(context).logoutUser(); //not working yet
+                        loginButtonText = 'Login';
+                      }
+                      //end of content that needs do be deleted
+
+                      //Navigate to the Login-Screen
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),
+                      );
+                    },
+                    child: Text(loginButtonText)),
+                ElevatedButton(
+                    onPressed: () {
+                      //Navigate to the Info-Screen
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
+                      );
+                    },
+                    child: const Text('Info-Screen')),
+            ])),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.miniCenterDocked,
+
+            /// BottomNavigation bar will be, rebuild when _currentIndex get changed
+            bottomNavigationBar: $(
+                _currentIndex,
+                (int index) => BottomNavigationBar(
+                      currentIndex: _currentIndex.value,
+                      unselectedItemColor: Colors.black,
+                      items: const [
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.euro_outlined),
+                          label: "Expenses",
+                        ),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.inventory_2_outlined),
+                            label: "Categories"),
+                      ],
+                      onTap: (newIndex) {
+                        _pageController.animateToPage(newIndex,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease);
+                        _currentIndex.value = newIndex;
+                      },
+                    )
+            )
+        )
+    );
   }
 }
 

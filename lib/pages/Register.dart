@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money_mate/pages/Homepage.dart';
 import '../UserState.dart';
 import '../main.dart';
-import 'Register.dart';
+import 'Login.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key, required this.title});
+class Register extends StatelessWidget {
+  Register({super.key, required this.title});
 
   final String title;
 
@@ -27,7 +26,7 @@ class Login extends StatelessWidget {
                       children: [
                         const SizedBox(height: 100),
                         Center(
-                          child: Text("Log in to your MoneyMate",
+                          child: Text("Register for MoneyMate",
                               textDirection: TextDirection.ltr,
                               textAlign: TextAlign.left,
                               style: TextStyle(fontSize: 20)
@@ -40,7 +39,7 @@ class Login extends StatelessWidget {
                               border: OutlineInputBorder(), labelText: "Username"),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your Username';
+                              return 'Please choose a Username';
                             }
                             return null;
                           },
@@ -53,7 +52,7 @@ class Login extends StatelessWidget {
                               border: OutlineInputBorder(), labelText: "Password"),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
+                              return 'Please enter a safe password';
                             }
                             return null;
                           },
@@ -63,12 +62,11 @@ class Login extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await UserState.of(context).loginUser(name: 'erik', password: 'test');
-                                //await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text); //todo - use this
+                                await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text);
                                 if(context.mounted) {
                                   UserState.of(context).initListExpenseList();
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Logged in!')),);
+                                    const SnackBar(content: Text('Registered!')),);
                                   Navigator.pop(context); // Navigate the user to the Home page
                                 }
                               } else {
@@ -81,11 +79,11 @@ class Login extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Text('Have no Account?', textAlign: TextAlign.center),
+                        Text('Already have an Account?', textAlign: TextAlign.center),
                         GestureDetector(
                               onTap: () => Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => Register(title: 'Register')),),
-                              child: Text('Register instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
+                                context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),),
+                              child: Text('Log in instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
                         ),
                         SizedBox(height: 90),
                         Column(

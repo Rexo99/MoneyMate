@@ -13,11 +13,11 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ExpenseListView(
-          context: context,
+        body: Center(
+          child: ExpenseListView(
+            context: context,
+          ),
         ),
-      ),
     );
   }
 }
