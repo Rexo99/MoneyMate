@@ -55,7 +55,6 @@ class HUD extends StatelessWidget {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-            //appBar: Topbar(title: $(_title, (String title) => Text(title))),
             appBar: AppBar(title: $(_title, (String title) => Text(title)), automaticallyImplyLeading: false),
             body: PageView(
               controller: _pageController,

@@ -30,7 +30,7 @@ class Info extends StatelessWidget {
                   Expanded(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       ListTile(
@@ -39,7 +39,7 @@ class Info extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('Info Page'), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [Text('Info Page \n''Login Page', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       ListTile(
@@ -51,7 +51,7 @@ class Info extends StatelessWidget {
                   Expanded(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       ListTile(
@@ -60,7 +60,7 @@ class Info extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [/*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       ListTile(

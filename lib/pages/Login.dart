@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:money_mate/pages/Homepage.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Register.dart';
@@ -87,15 +85,10 @@ class Login extends StatelessWidget {
                                 context, MaterialPageRoute(builder: (context) => Register(title: 'Register')),),
                               child: Text('Register instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
                         ),
-                        SizedBox(height: 90),
+                        SizedBox(height: 200),
                         Column(
                           children: <Widget>[
-                            Text("Additional Information", textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold)),
                             Divider(),
-                            ListTile(
-                              title: Text('What is MoneyMate?'),
-                              subtitle: Text('MoneyMate helps you keep track of your finances'),
-                            ),
                             ListTile(
                               title: Text('Version Info'),
                               subtitle: Text('Beta 0.1'),
@@ -105,7 +98,6 @@ class Login extends StatelessWidget {
                         ElevatedButton(onPressed:() => Navigator.push(
                           context, MaterialPageRoute(builder: (context) => UserState(child: HUD())),),
                             child: Text('Debug exit')), //todo - remove debug button
-                        SizedBox(height: 30),
                     ]),
                 )
               )
