@@ -14,6 +14,7 @@ Future<void> main() async {
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -26,12 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
-        colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
+        colorSchemeSeed: const Color(0xff6750a4),
+        useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.system, // device controls theme
+      themeMode: ThemeMode.system,
+      // device controls theme
       home: UserState(child: HUD()),
     );
   }
@@ -40,6 +43,7 @@ class MyApp extends StatelessWidget {
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
@@ -67,42 +71,57 @@ class HUD extends StatelessWidget {
         /// reveal two options to add an [Expense]
         /// 1. manual input of name and amount
         /// 2. take a picture of bill
-        floatingActionButton: SpeedDial(
-          // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
-          animatedIcon: AnimatedIcons.menu_close,
-          spaceBetweenChildren: 10,
-          children: [
-            SpeedDialChild(
-              child: IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  UserState.of(context).addItem(name: "Döner", amount: 3);
-                },
-              ),
-              label: "Add Expense",
-            ),
-            SpeedDialChild(
-                child: const Icon(Icons.photo_camera), label: "Take a photo"),
-            SpeedDialChild(
-                child: IconButton(
-                  icon: const Icon(Icons.login),
-                  onPressed: () async {
-                    await UserState.of(context).loginUser(name: "erik", password: "test");
-                    if (context.mounted) {
-                      UserState.of(context).initListExpenseList();
-                    }
-                  },
-                ),
-                label: "Login"),
-            SpeedDialChild(
-                child: IconButton(
-                  icon: const Icon(Icons.bug_report),
-                  onPressed: () async {
-                    await UserState.of(context).registerUser(name: "dannie1", password: "ee");
-                  },
-                ),
-                label: "DevelopmentButton"),
-          ],
+        floatingActionButton: $(
+          _currentIndex,
+          (p0) => SpeedDial(
+            // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+            animatedIcon: AnimatedIcons.menu_close,
+            spaceBetweenChildren: 10,
+            children: [
+              _currentIndex.value == 0
+                  ? SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.euro),
+                        onPressed: () {
+                          UserState.of(context)
+                              .addItem(name: "Döner", amount: 3);
+                        },
+                      ),
+                      label: "Add Expense",
+                    )
+                  : SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          //Todo addCategory
+                        },
+                      ),
+                      label: "Add Category",
+                    ),
+              SpeedDialChild(
+                  child: IconButton(
+                    icon: const Icon(Icons.login),
+                    onPressed: () async {
+                      await HTTPRequestBuilder()
+                          .login(name: "erik", password: "test");
+                      if (context.mounted &&
+                          UserState.of(context).expendList.value.isEmpty) {
+                        UserState.of(context).initListExpenseList();
+                      }
+                    },
+                  ),
+                  label: "Login"),
+              SpeedDialChild(
+                  child: IconButton(
+                    icon: const Icon(Icons.bug_report),
+                    onPressed: () async {
+                      await UserState.of(context)
+                          .registerUser(name: "dannie1", password: "ee");
+                    },
+                  ),
+                  label: "DevelopmentButton"),
+            ],
+          ),
         ),
 
         ///info of the active user
@@ -110,15 +129,18 @@ class HUD extends StatelessWidget {
         ///Button that navigates to the Info-Screen
         endDrawer: Drawer(
             child: ListView(children: [
-              Icon(Icons.account_circle_outlined, size: 100),
-              ListTile(
-                title: Text('User XXX', textAlign: TextAlign.center),
-                subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
-              ),
+          Icon(Icons.account_circle_outlined, size: 100),
+          ListTile(
+            title: Text('User XXX', textAlign: TextAlign.center),
+            subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
+          ),
           ElevatedButton(
               onPressed: () async {
-                await HTTPRequestBuilder().login(name: "erik", password: "test");
-                if (context.mounted) {
+                await HTTPRequestBuilder()
+                    .login(name: "erik", password: "test");
+                print(UserState.of(context).expendList.value.isEmpty);
+                if (context.mounted &&
+                    UserState.of(context).expendList.value.isEmpty) {
                   UserState.of(context).initListExpenseList();
                 }
               },
@@ -127,7 +149,8 @@ class HUD extends StatelessWidget {
               onPressed: () {
                 //Navigate to the Info-Screen
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
+                  context,
+                  MaterialPageRoute(builder: (context) => Info(title: 'Info')),
                 );
               },
               child: const Text('Info-Screen')),
@@ -175,8 +198,7 @@ class Topbar extends StatelessWidget implements PreferredSizeWidget {
             builder: (BuildContext context) => IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
-                )
-        )
+                ))
       ],
     );
   }
