@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
 class HUD extends StatelessWidget {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+  final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
@@ -53,6 +54,7 @@ class HUD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: Topbar(title: $(_title, (String title) => Text(title))),
         body: PageView(
@@ -77,6 +79,7 @@ class HUD extends StatelessWidget {
             // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
             animatedIcon: AnimatedIcons.menu_close,
             spaceBetweenChildren: 10,
+            openCloseDial: isDialOpen,
             children: [
               _currentIndex.value == 0
                   ? SpeedDialChild(
@@ -85,6 +88,7 @@ class HUD extends StatelessWidget {
                         onPressed: () {
                           UserState.of(context)
                               .addItem(name: "Döner", amount: 3);
+                          isDialOpen.value = false;
                         },
                       ),
                       label: "Add Expense",
@@ -94,6 +98,7 @@ class HUD extends StatelessWidget {
                         icon: const Icon(Icons.add),
                         onPressed: () {
                           //Todo addCategory
+                          isDialOpen.value = false;
                         },
                       ),
                       label: "Add Category",
@@ -108,6 +113,7 @@ class HUD extends StatelessWidget {
                           UserState.of(context).expendList.value.isEmpty) {
                         UserState.of(context).initListExpenseList();
                       }
+                      isDialOpen.value = false;
                     },
                   ),
                   label: "Login"),
@@ -117,6 +123,7 @@ class HUD extends StatelessWidget {
                     onPressed: () async {
                       await UserState.of(context)
                           .registerUser(name: "dannie1", password: "ee");
+                      isDialOpen.value = false;
                     },
                   ),
                   label: "DevelopmentButton"),
