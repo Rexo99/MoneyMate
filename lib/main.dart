@@ -57,9 +57,16 @@ class MyApp extends StatefulWidget {
     }
 }
 
-class HUD extends StatelessWidget {
+class HUD extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => HUD_State();
+  HUD({super.key});
+}
+
+class HUD_State extends State<HUD> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+  final List<bool> _selection = <bool>[false, false, true]; //List for switching app design //todo - load user settings for app design mode (system mode is standard)
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title =
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
@@ -67,10 +74,9 @@ class HUD extends StatelessWidget {
 
   String loginButtonText = 'Login'; //doesn't save value on page switch
 
-  HUD({super.key});
-
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -169,16 +175,39 @@ class HUD extends StatelessWidget {
                     },
                     child: const Text('Info-Screen')
                 ),
-                ElevatedButton(
-                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.light),
-                    child: Text('Light')),
-                ElevatedButton(
-                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.dark),
-                    child: Text('Dark')),
-                ElevatedButton(
-                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.system),
-                    child: Text('System')),
-            ])),
+                SizedBox(height: 20),
+                Center(
+                  child: ToggleButtons(
+                    children: [Icon(Icons.light_mode), Icon(Icons.dark_mode), Icon(Icons.app_shortcut)],
+                    isSelected: _selection,
+
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    //selectedBorderColor: Colors.green[700],
+                    //selectedColor: Colors.white,
+                    //fillColor: Colors.green[200],
+                    //color: Colors.green[400],
+
+                    onPressed: (int index) {
+                      setState(() {
+                        // The button that is tapped is set to true, and the others to false.
+                        for (int i = 0; i < _selection.length; i++) {
+                          _selection[i] = i == index;
+                        }
+                        switch(index){
+                          case 0: MyApp.of(context).changeTheme(ThemeMode.light);
+                                  break;
+                          case 1: MyApp.of(context).changeTheme(ThemeMode.dark);
+                                  break;
+                          case 2: MyApp.of(context).changeTheme(ThemeMode.system);
+                                  break;
+                        }
+                      });
+                    },
+                )
+                )]
+              )
+            ),
+
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniCenterDocked,
 
