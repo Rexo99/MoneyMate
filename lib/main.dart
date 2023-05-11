@@ -8,6 +8,7 @@ import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
+import 'package:money_mate/util/Popups.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -28,6 +29,7 @@ class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   class _MyAppState extends State<MyApp> {
     ThemeMode _themeMode = ThemeMode.system;
+    Color _themeColor = Color(0xff6750a4);
 
     @override
     void initState() {
@@ -39,11 +41,11 @@ class MyApp extends StatefulWidget {
     Widget build(BuildContext context) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
-    ]);
+      ]);
     return MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
-        colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
+        colorSchemeSeed: _themeColor, useMaterial3: true,
       ),
       darkTheme: ThemeData.dark(useMaterial3: true,),
       themeMode: _themeMode,
@@ -53,6 +55,12 @@ class MyApp extends StatefulWidget {
     void changeTheme(ThemeMode themeMode) {
       setState(() {
         _themeMode = themeMode;
+      });
+    }
+
+    void changeThemeColor(Color color) {
+      setState(() {
+        _themeColor = color;
       });
     }
 }
@@ -204,7 +212,14 @@ class HUD_State extends State<HUD> {
                       });
                     },
                 )
-                )]
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      colorPicker2(context: context);
+                      },
+                    child: const Text('Change color')
+                ),
+              ],
               )
             ),
 
