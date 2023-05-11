@@ -15,27 +15,46 @@ Future<void> main() async {
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+
   const MyApp({super.key});
 
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
+  }
+
   // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
+  class _MyAppState extends State<MyApp> {
+    ThemeMode _themeMode = ThemeMode.system;
+
+    @override
+    void initState() {
+      //todo - load app settings on initialization
+      super.initState();
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
         colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(
-        useMaterial3: true,
-      ),
-      themeMode: ThemeMode.system, // device controls theme
+      darkTheme: ThemeData.dark(useMaterial3: true,),
+      themeMode: _themeMode,
       home: UserState(child: HUD()),
     );
   }
+    void changeTheme(ThemeMode themeMode) {
+      setState(() {
+        _themeMode = themeMode;
+      });
+    }
 }
 
 class HUD extends StatelessWidget {
@@ -148,7 +167,17 @@ class HUD extends StatelessWidget {
                         context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
                       );
                     },
-                    child: const Text('Info-Screen')),
+                    child: const Text('Info-Screen')
+                ),
+                ElevatedButton(
+                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.light),
+                    child: Text('Light')),
+                ElevatedButton(
+                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.dark),
+                    child: Text('Dark')),
+                ElevatedButton(
+                    onPressed: () => MyApp.of(context).changeTheme(ThemeMode.system),
+                    child: Text('System')),
             ])),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniCenterDocked,
