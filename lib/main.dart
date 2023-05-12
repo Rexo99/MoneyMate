@@ -51,29 +51,30 @@ class MyApp extends StatefulWidget {
         colorSchemeSeed: _themeColor, brightness: Brightness.dark, useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: UserState(child: HUD()),
+      home: UserState(child: Hud()),
     );
   }
-    void changeTheme(ThemeMode themeMode) {
-      setState(() {
-        _themeMode = themeMode;
-      });
-    }
-
-    void changeThemeColor(Color color) {
-      setState(() {
-        _themeColor = color;
-      });
-    }
+  //used to change between light/dark/system mode
+  void changeTheme(ThemeMode themeMode) {
+    setState(() {
+      _themeMode = themeMode;
+    });
+  }
+  //used to change themeColor //todo - figure out how to create a whole color palette instead of using a color as a seed
+  void changeThemeColor(Color color) {
+    setState(() {
+      _themeColor = color;
+    });
+  }
 }
 
-class HUD extends StatefulWidget {
+class Hud extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => HUD_State();
-  HUD({super.key});
+  State<StatefulWidget> createState() => HudState();
+  Hud({super.key});
 }
 
-class HUD_State extends State<HUD> {
+class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
   final List<bool> _selection = <bool>[false, false, true]; //List for switching app design //todo - load user settings for app design mode (system mode is standard)
@@ -82,11 +83,10 @@ class HUD_State extends State<HUD> {
       ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
-  String loginButtonText = 'Login'; //doesn't save value on page switch
+  String loginButtonText = 'Login'; //doesn't save value on page switch //todo - change value according to users loggedIn state
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -101,12 +101,6 @@ class HUD_State extends State<HUD> {
                 CategoriesOverview(),
               ],
             ),
-
-            /// Button located at the bottom center of the screen
-            /// The Button expand on click and
-            /// reveal two options to add an [Expense]
-            /// 1. manual input of name and amount
-            /// 2. take a picture of bill
             floatingActionButton: SpeedDial(
               // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
               animatedIcon: AnimatedIcons.menu_close,
@@ -142,8 +136,8 @@ class HUD_State extends State<HUD> {
                       },
                     ),
                     label: "DevelopmentButton"),
-                ],),
-
+                ],
+            ),
             endDrawer: Drawer(
               child: ListView(children: [
                 Icon(Icons.account_circle_outlined, size: 100),
@@ -228,7 +222,7 @@ class HUD_State extends State<HUD> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.miniCenterDocked,
 
-            /// BottomNavigation bar will be, rebuild when _currentIndex get changed
+            /// BottomNavigation bar will be rebuild when _currentIndex get changed
             bottomNavigationBar: $(
                 _currentIndex,
                 (int index) => BottomNavigationBar(
@@ -256,11 +250,11 @@ class HUD_State extends State<HUD> {
   }
 }
 
-class Topbar extends StatelessWidget implements PreferredSizeWidget {
+class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final double height = 50;
 
-  const Topbar({super.key, this.title = const Text("No Title")});
+  const TopBar({super.key, this.title = const Text("No Title")});
 
   @override
   Widget build(BuildContext context) {

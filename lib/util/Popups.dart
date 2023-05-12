@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
@@ -13,7 +12,7 @@ void expensePopup(
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
-    builder: (BuildContext subcontext) => AlertDialog(
+    builder: (BuildContext subContext) => AlertDialog(
       title: const Text('Edit Expense'),
       content: Form(
         key: formKey,
@@ -48,13 +47,13 @@ void expensePopup(
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(subcontext, 'Cancel'),
+          onPressed: () => Navigator.pop(subContext, 'Cancel'),
           child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(subcontext).showSnackBar(
+              ScaffoldMessenger.of(subContext).showSnackBar(
                 const SnackBar(content: Text('Updated Expense')),
               );
               //Todo not the right context?
@@ -62,7 +61,7 @@ void expensePopup(
                   expense: expense,
                   name: name,
                   amount: int.parse(amount));
-              Navigator.pop(subcontext, 'OK');
+              Navigator.pop(subContext, 'OK');
             }
           },
           child: const Text('OK'),
@@ -94,8 +93,8 @@ void infoPopup({required List featureList, required BuildContext context}) {
 
 //todo - put all theme related options in this popup?
 void colorPicker({required Color currentColor, required BuildContext context}) {
-  List <Color> _colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
-  List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal]; //todo - create custom color palette
+  List <Color> _colors = [Colors.red, Colors.purple, Colors.blue, Colors.green,Colors.yellow, Colors.brown];
+  //List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal]; //todo - create custom color palette
 
   showDialog<String>(
     context: context,
@@ -108,15 +107,20 @@ void colorPicker({required Color currentColor, required BuildContext context}) {
               children: [
                 FilledButton(
                     onPressed: () => MyApp.of(context).changeThemeColor(_colors[0]),
-                    child: Text('Red'), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
+                    child: Text('Red', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
                 FilledButton(
                     onPressed: () => MyApp.of(context).changeThemeColor(_colors[1]),
-                    child: Text('Green'), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
+                    child: Text('Purple', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
                 FilledButton(
                     onPressed: () => MyApp.of(context).changeThemeColor(_colors[2]),
-                    child: Text('Blue'), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
-                FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
-                    child: Text('Yellow'), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
+                    child: Text('Blue', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
+                FilledButton(
+                    onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
+                    child: Text('Green', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
+                FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[4]),
+                    child: Text('Yellow', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[4], shape: CircleBorder())),
+                FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[5]),
+                    child: Text('Brown', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[5], shape: CircleBorder())),
               ]
             ),
           ),
