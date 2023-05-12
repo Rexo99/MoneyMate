@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -7,16 +8,21 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/state.dart';
+import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
+  //Initialize for Camera
+  WidgetsFlutterBinding.ensureInitialized();
+
   //await dotenv.load(fileName: '.env');
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
 class MyApp extends StatefulWidget {
+
   @override
   _MyAppState createState() => _MyAppState();
 
@@ -152,6 +158,16 @@ class HudState extends State<Hud> {
                         },
                       ),
                       label: "DevelopmentButton"),
+                  SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.camera),
+                        onPressed: ()  async {
+                          final cameras = await availableCameras();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: cameras.first)));
+                          isDialOpen.value = false;
+                        },
+                      ),
+                      label: "Open Camera"),
                 ],
               ),
             ),
