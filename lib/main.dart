@@ -139,6 +139,7 @@ class HudState extends State<Hud> {
                 ],
             ),
             endDrawer: Drawer(
+              width: 250,
               child: ListView(children: [
                 Icon(Icons.account_circle_outlined, size: 100),
                 ListTile(
@@ -146,40 +147,65 @@ class HudState extends State<Hud> {
                   subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
                 ),
                 ElevatedButton(
-                    onPressed: () async {
+                  onPressed: () async {
+                    //Navigate to the Login-Screen
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
 
-                      //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
-                      //start of content that needs do be deleted
-                      if(loginButtonText == 'Login') {
-                        //todo - move login request to login screen
-                        await HTTPRequestBuilder().login(name: "erik", password: "test");
-                        if (context.mounted) {
-                          UserState.of(context).initListExpenseList();
-                          loginButtonText = 'Logout';
-                        }
-                      } else {
-                        //todo - implement logout
-                        UserState.of(context).logoutUser(); //not working yet
-                        loginButtonText = 'Login';
+                    //start of content that needs do be deleted //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
+                    if(loginButtonText == 'Login') {
+                      //todo - move login request to login screen
+                      await HTTPRequestBuilder().login(name: "erik", password: "test");
+                      if (context.mounted) {
+                        UserState.of(context).initListExpenseList();
+                        loginButtonText = 'Logout';
                       }
-                      //end of content that needs do be deleted
+                    } else {
+                      //todo - implement logout
+                      UserState.of(context).logoutUser(); //not working yet
+                      loginButtonText = 'Login';
+                    }
+                    //end of content that needs do be deleted
 
-                      //Navigate to the Login-Screen
-                      Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),
-                      );
-                    },
-                    child: Text(loginButtonText)),
-                ElevatedButton(
-                    onPressed: () {
-                      //Navigate to the Info-Screen
-                      Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => Info(title: 'Info')),
-                      );
-                    },
-                    child: const Text('Info-Screen')
+                  },
+                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 40),
+                      Icon(Icons.login_outlined, size: 24.0),
+                      SizedBox(width: 10),
+                      Text('Login'),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
+                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 40),
+                      Icon(Icons.design_services_outlined, size: 24.0),
+                      SizedBox(width: 10),
+                      Text('Theme Settings'),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
+                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 40),
+                      Icon(Icons.info_outlined, size: 24.0),
+                      SizedBox(width: 10),
+                      Text('Info Screen'),
+                    ],
+                  ),
+                ),
+                //In case we decide to keep a quick menu for selecting themeMode:
+                /*
                 Center(
                   child: ToggleButtons(
                     children: [Icon(Icons.light_mode), Icon(Icons.dark_mode), Icon(Icons.app_shortcut)],
@@ -209,12 +235,7 @@ class HudState extends State<Hud> {
                     },
                 )
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      colorPicker(currentColor: MyApp.of(context)._themeColor, context: context);
-                      },
-                    child: const Text('Change color')
-                ),
+                 */
               ],
               )
             ),
