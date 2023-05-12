@@ -92,7 +92,7 @@ void infoPopup({required List featureList, required BuildContext context}) {
   );
 }
 
-//todo - make colors work in dark mode
+//todo - put all theme related options in this popup?
 void colorPicker({required Color currentColor, required BuildContext context}) {
   List <Color> _colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
   List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal]; //todo - create custom color palette

@@ -47,7 +47,9 @@ class MyApp extends StatefulWidget {
       theme: ThemeData(
         colorSchemeSeed: _themeColor, useMaterial3: true,
       ),
-      darkTheme: ThemeData.dark(useMaterial3: true,),
+      darkTheme: ThemeData(
+        colorSchemeSeed: _themeColor, brightness: Brightness.dark, useMaterial3: true,
+      ),
       themeMode: _themeMode,
       home: UserState(child: HUD()),
     );
