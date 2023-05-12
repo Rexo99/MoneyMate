@@ -72,124 +72,30 @@ void expensePopup(
   );
 }
 
-void infoPopup(
-    {required List featureList, required BuildContext context}) {
+void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
     context: context,
-    builder: (BuildContext subContext) => AlertDialog(
-      title: const Text('Implemented Features'),
-      content: Column(
-        children: [...featureList],
-        mainAxisSize: MainAxisSize.min,
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(subContext, 'Cancel'),
-          child: const Text('Close'),
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('Implemented Features'),
+          content: Column(
+            children: [...featureList],
+            mainAxisSize: MainAxisSize.min,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(subContext, 'Cancel'),
+              child: const Text('Close'),
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
-//not in use, code stays here until color is 100% sorted out though
-  void colorPicker({required BuildContext context}) {
-    List <bool> _selection = List.generate(4, (index) => false);
-    List <Color> _colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
-
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext subContext) =>
-          AlertDialog(
-            title: const Text('Color Picker'),
-            content: Center(
-                child:
-                ToggleButtons(
-                  children: [
-                    Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: _colors[0],
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.grey.shade300)),
-                        child: const Center(
-                            child: Text('Red')
-                        )
-                    ),
-                    Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: _colors[1],
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.grey.shade300)),
-                        child: const Center(
-                            child: Text('Green')
-                        )
-                    ),
-                    Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: _colors[2],
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.grey.shade300)),
-                        child: const Center(
-                            child: Text('Blue')
-                        )
-                    ),
-                    Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: _colors[3],
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.grey.shade300)),
-                        child: const Center(
-                            child: Text('Yellow')
-                        )
-                    ),
-                  ],
-                  isSelected: _selection,
-                  borderColor: Colors.transparent,
-
-                  onPressed: (int index) {
-                    // The button that is tapped is set to true, and the others to false.
-                    for (int i = 0; i < _selection.length; i++) {
-                      _selection[i] = i == index;
-                    }
-                  },
-
-            ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(subContext, 'Cancel'),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  for (int i = 0; i < _selection.length; i++) {
-                    if (_selection[i] == true) {
-                      MyApp.of(context).changeThemeColor(_colors[i]);
-                    }
-                  }
-                  Navigator.pop(subContext, 'Confirm');
-                },
-                child: const Text('Confirm'),
-              ),
-            ],
-          ),
-
-    );
-  }
-
-  //todo - make colors work in dark mode
-void colorPicker2({required BuildContext context}) {
-  List <bool> _selection = List.generate(4, (index) => false);
+//todo - make colors work in dark mode
+void colorPicker({required Color currentColor, required BuildContext context}) {
   List <Color> _colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
-  List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal];
+  List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal]; //todo - create custom color palette
 
   showDialog<String>(
     context: context,
@@ -198,42 +104,113 @@ void colorPicker2({required BuildContext context}) {
           title: const Text('Color Picker'),
           content: Expanded(
             child: Wrap(
+              alignment: WrapAlignment.center,
               children: [
-                /*
-              GestureDetector(child: Container(color: testColor, width: 50, height: 50), onTap: () {
-                for (int i = 0; i < _selection.length; i++) {
-                  _selection[i] = i == 0;
-                }
-                testColor = Color(_colors[0] as int).withBlue(80);
-              }
-              ),
+                FilledButton(
+                    onPressed: () => MyApp.of(context).changeThemeColor(_colors[0]),
+                    child: Text('Red'), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
+                FilledButton(
+                    onPressed: () => MyApp.of(context).changeThemeColor(_colors[1]),
+                    child: Text('Green'), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
+                FilledButton(
+                    onPressed: () => MyApp.of(context).changeThemeColor(_colors[2]),
+                    child: Text('Blue'), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
+                FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
+                    child: Text('Yellow'), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
+              ]
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                MyApp.of(context).changeThemeColor(currentColor);
+                Navigator.pop(subContext, 'Cancel');},
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                //todo - maybe save chosen color to account here?
+                Navigator.pop(subContext, 'Confirm');
+                },
+              child: const Text('Confirm'),
+            ),
+          ],
+        ),
+  );
+}
 
-                 */
-              FilledButton(
-                  onPressed: () {
-                    for (int i = 0; i < _selection.length; i++) {
-                      _selection[i] = i == 0;
-                    }
-                  }, child: Text('Red'), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
-                FilledButton(
-                    onPressed: () {
-                      for (int i = 0; i < _selection.length; i++) {
-                        _selection[i] = i == 1;
-                      }
-                    }, child: Text('Green'), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
-                FilledButton(
-                    onPressed: () {
-                      for (int i = 0; i < _selection.length; i++) {
-                        _selection[i] = i == 2;
-                      }
-                    }, child: Text('Blue'), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
-              FilledButton(onPressed: () {
+
+//not in use, code stays here until color is 100% sorted out though
+void oldColorPicker({required BuildContext context}) {
+  List <bool> _selection = List.generate(4, (index) => false);
+  List <Color> _colors = [Colors.red, Colors.green, Colors.blue, Colors.yellow];
+
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('Color Picker'),
+          content: Center(
+            child:
+            ToggleButtons(
+              children: [
+                Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: _colors[0],
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1, color: Colors.grey.shade300)),
+                    child: const Center(
+                        child: Text('Red')
+                    )
+                ),
+                Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: _colors[1],
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1, color: Colors.grey.shade300)),
+                    child: const Center(
+                        child: Text('Green')
+                    )
+                ),
+                Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: _colors[2],
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1, color: Colors.grey.shade300)),
+                    child: const Center(
+                        child: Text('Blue')
+                    )
+                ),
+                Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: _colors[3],
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 1, color: Colors.grey.shade300)),
+                    child: const Center(
+                        child: Text('Yellow')
+                    )
+                ),
+              ],
+              isSelected: _selection,
+              borderColor: Colors.transparent,
+
+              onPressed: (int index) {
+                // The button that is tapped is set to true, and the others to false.
                 for (int i = 0; i < _selection.length; i++) {
-                  _selection[i] = i == 3;
+                  _selection[i] = i == index;
                 }
-              }, child: Text('Yellow'), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),]
+              },
+
             ),
-            ),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(subContext, 'Cancel'),

@@ -215,7 +215,7 @@ class HUD_State extends State<HUD> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      colorPicker2(context: context);
+                      colorPicker(currentColor: MyApp.of(context)._themeColor, context: context);
                       },
                     child: const Text('Change color')
                 ),
