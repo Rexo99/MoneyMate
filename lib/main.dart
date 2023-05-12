@@ -5,10 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
-import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
-import 'package:money_mate/util/Popups.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -77,6 +75,8 @@ class Hud extends StatefulWidget {
 class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
+  final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
@@ -99,42 +99,62 @@ class HudState extends State<Hud> {
                 CategoriesOverview(),
               ],
             ),
-            floatingActionButton: SpeedDial(
-              // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
-              animatedIcon: AnimatedIcons.menu_close,
-              spaceBetweenChildren: 10,
-              children: [
-                SpeedDialChild(
-                  child: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      UserState.of(context).addItem(name: "Döner", amount: 3);
-                    },
+            floatingActionButton: $(
+              _currentIndex,
+                  (p0) => SpeedDial(
+                // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+                animatedIcon: AnimatedIcons.menu_close,
+                spaceBetweenChildren: 10,
+                openCloseDial: isDialOpen,
+                children: [
+                  _currentIndex.value == 0
+                      ? SpeedDialChild(
+                    child: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        UserState.of(context)
+                            .addItem(name: "Döner", amount: 3);
+                        isDialOpen.value = false;
+                      },
+                    ),
+                    label: "Add Expense",
+                  )
+                      : SpeedDialChild(
+                    child: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        //Todo addCategory
+                        isDialOpen.value = false;
+                      },
+                    ),
+                    label: "Add Category",
                   ),
-                  label: "Add Expense",
-                ),
-                SpeedDialChild(
-                    child: const Icon(Icons.photo_camera), label: "Take a photo"),
-                SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.login),
-                      onPressed: () async {
-                        await UserState.of(context).loginUser(name: "erik", password: "test");
-                        if (context.mounted) {
-                          UserState.of(context).initListExpenseList();
-                        }
-                      },
-                    ),
-                    label: "Login"),
-                SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.bug_report),
-                      onPressed: () async {
-                        await UserState.of(context).registerUser(name: "dannie1", password: "ee");
-                      },
-                    ),
-                    label: "DevelopmentButton"),
+                  SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.login),
+                        onPressed: () async {
+                          await HTTPRequestBuilder()
+                              .login(name: "erik", password: "test");
+                          if (context.mounted &&
+                              UserState.of(context).expendList.value.isEmpty) {
+                            UserState.of(context).initListExpenseList();
+                          }
+                          isDialOpen.value = false;
+                        },
+                      ),
+                      label: "Login"),
+                  SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.bug_report),
+                        onPressed: () async {
+                          await UserState.of(context)
+                              .registerUser(name: "dannie1", password: "ee");
+                          isDialOpen.value = false;
+                        },
+                      ),
+                      label: "DevelopmentButton"),
                 ],
+              ),
             ),
             endDrawer: Drawer(
               width: 250,
@@ -153,10 +173,11 @@ class HudState extends State<Hud> {
                     if(loginButtonText == 'Login') {
                       //todo - move login request to login screen
                       await HTTPRequestBuilder().login(name: "erik", password: "test");
-                      if (context.mounted) {
+                      print(UserState.of(context).expendList.value.isEmpty);
+                      if (context.mounted &&
+                          UserState.of(context).expendList.value.isEmpty) {
                         UserState.of(context).initListExpenseList();
                         loginButtonText = 'Logout';
-                      }
                     } else {
                       //todo - implement logout
                       UserState.of(context).logoutUser(); //not working yet
