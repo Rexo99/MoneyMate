@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
+import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
+import 'package:money_mate/util/Popups.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -100,15 +102,13 @@ class HudState extends State<Hud> {
               ],
             ),
             floatingActionButton: $(
-              _currentIndex,
-                  (p0) => SpeedDial(
+              _currentIndex, (p0) => SpeedDial(
                 // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                 animatedIcon: AnimatedIcons.menu_close,
                 spaceBetweenChildren: 10,
                 openCloseDial: isDialOpen,
                 children: [
-                  _currentIndex.value == 0
-                      ? SpeedDialChild(
+                  _currentIndex.value == 0 ? SpeedDialChild(
                     child: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
@@ -118,8 +118,7 @@ class HudState extends State<Hud> {
                       },
                     ),
                     label: "Add Expense",
-                  )
-                      : SpeedDialChild(
+                  ) : SpeedDialChild(
                     child: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
@@ -178,14 +177,13 @@ class HudState extends State<Hud> {
                           UserState.of(context).expendList.value.isEmpty) {
                         UserState.of(context).initListExpenseList();
                         loginButtonText = 'Logout';
-                    } else {
-                      //todo - implement logout
-                      UserState.of(context).logoutUser(); //not working yet
-                      loginButtonText = 'Login';
-                    }
-                    //end of content that needs do be deleted
-
-                  },
+                      } else {
+                        //todo - implement logout
+                        UserState.of(context).logoutUser(); //not working yet
+                        loginButtonText = 'Login';
+                      }
+                    } //end of content that needs do be deleted
+                    },
                   style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -223,45 +221,10 @@ class HudState extends State<Hud> {
                     ],
                   ),
                 ),
-                //In case we decide to keep a quick menu for selecting themeMode:
-                /*
-                Center(
-                  child: ToggleButtons(
-                    children: [Icon(Icons.light_mode), Icon(Icons.dark_mode), Icon(Icons.app_shortcut)],
-                    isSelected: _selection,
-
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    //selectedBorderColor: Colors.green[700],
-                    //selectedColor: Colors.white,
-                    //fillColor: Colors.green[200],
-                    //color: Colors.green[400],
-
-                    onPressed: (int index) {
-                      setState(() {
-                        // The button that is tapped is set to true, and the others to false.
-                        for (int i = 0; i < _selection.length; i++) {
-                          _selection[i] = i == index;
-                        }
-                        switch(index){
-                          case 0: MyApp.of(context).changeTheme(ThemeMode.light);
-                                  break;
-                          case 1: MyApp.of(context).changeTheme(ThemeMode.dark);
-                                  break;
-                          case 2: MyApp.of(context).changeTheme(ThemeMode.system);
-                                  break;
-                        }
-                      });
-                    },
-                )
-                ),
-                 */
               ],
               )
             ),
-
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.miniCenterDocked,
-
+            floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
             bottomNavigationBar: $(
                 _currentIndex,
@@ -290,6 +253,7 @@ class HudState extends State<Hud> {
   }
 }
 
+/* Useless class
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final double height = 50;
@@ -314,3 +278,4 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(height);
 }
+ */
