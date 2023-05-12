@@ -77,10 +77,8 @@ class Hud extends StatefulWidget {
 class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
-  final List<bool> _selection = <bool>[false, false, true]; //List for switching app design //todo - load user settings for app design mode (system mode is standard)
   /// _title dependant on _currentIndex and well update on change
-  late final ComputedProp<String> _title =
-      ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
+  late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
   String loginButtonText = 'Login'; //doesn't save value on page switch //todo - change value according to users loggedIn state
