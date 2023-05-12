@@ -109,26 +109,32 @@ void colorPicker({required Color currentColor, required ThemeMode currentThemeMo
                 Text('Choose your Theme Color', textAlign: TextAlign.center),
                 SizedBox(height: 10),
                 //todo - find a way to highlight the selected button
-                Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      FilledButton(
-                          onPressed: () => MyApp.of(context).changeThemeColor(_colors[0]),
-                          child: Text('Red', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
-                      FilledButton(
-                          onPressed: () => MyApp.of(context).changeThemeColor(_colors[1]),
-                          child: Text('Purple', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
-                      FilledButton(
-                          onPressed: () => MyApp.of(context).changeThemeColor(_colors[2]),
-                          child: Text('Blue', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
-                      FilledButton(
-                          onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
-                          child: Text('Green', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
-                      FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[4]),
-                          child: Text('Yellow', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[4], shape: CircleBorder())),
-                      FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[5]),
-                          child: Text('Brown', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[5], shape: CircleBorder())),
-                    ]
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                  FilledButton(
+                      onPressed: () => MyApp.of(context).changeThemeColor(_colors[0]),
+                      child: Text('Red', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
+                  FilledButton(
+                      onPressed: () => MyApp.of(context).changeThemeColor(_colors[1]),
+                      child: Text('Purple', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())),
+                  FilledButton(
+                      onPressed: () => MyApp.of(context).changeThemeColor(_colors[2]),
+                      child: Text('Blue', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                  FilledButton(
+                      onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
+                      child: Text('Green', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
+                  FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[4]),
+                      child: Text('Yellow', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[4], shape: CircleBorder())),
+                  FilledButton(onPressed: () => MyApp.of(context).changeThemeColor(_colors[5]),
+                      child: Text('Brown', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[5], shape: CircleBorder())),
+                  ],
                 ),
                 SizedBox(height: 25),
                 Divider(),
