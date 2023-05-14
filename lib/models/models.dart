@@ -57,17 +57,25 @@ class Category implements Model {
   int? _id;
 
   @override
-  get id => _id;
+  int? get id => _id;
   final String name;
   final int budget;
-  final int userId;
+  int? userId;
 
   Category(
       this._id, this.name, this.budget, this.userId) {
     HTTPRequestBuilder()
         .createModel(
-            path: "expenditures",
+            path: "categories",
             tmp: CategoryDTO(name, budget, userId))
+        .then((value) => _id = value);
+  }
+
+  Category.create(this.name, this.budget) {
+    HTTPRequestBuilder()
+        .createModel(
+        path: "categories",
+        tmp: CategoryDTO(name, budget, _id))
         .then((value) => _id = value);
   }
 

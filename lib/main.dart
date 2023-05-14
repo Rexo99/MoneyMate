@@ -129,6 +129,9 @@ class HudState extends State<Hud> {
                       icon: const Icon(Icons.add),
                       onPressed: () {
                         //Todo addCategory
+
+                        //UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
+                        //UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
                         isDialOpen.value = false;
                       },
                     ),

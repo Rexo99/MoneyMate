@@ -35,7 +35,7 @@ class CategoryDTO extends DTO {
   @override
   final String name;
   final int budget;
-  final int userId;
+  int? userId;
 
   CategoryDTO(this.name, this.budget, this.userId);
 

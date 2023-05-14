@@ -80,11 +80,14 @@ class UserState extends InheritedWidget {
   //Creates a Category and adds it to the [categoryList]
   void addCategory({
     required String name,
-    required int amount,
+    required int budget,
   }) {
-    //categoryList.add(new Category(_id, name, budget, userId))
-    expendList.value = expendList.value
-        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
+    categoryList.add(new Category.create(name, budget));
+  }
+
+  void removeCategory(Category category) {
+    categoryList.remove(category);
+    HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
   }
 
   void removeItem(Prop<Expense> expense) {
