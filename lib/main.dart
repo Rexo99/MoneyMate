@@ -132,6 +132,7 @@ class HudState extends State<Hud> {
 
                         //UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
                         //UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
+                        //UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, budget: 1234);
                         isDialOpen.value = false;
                       },
                     ),

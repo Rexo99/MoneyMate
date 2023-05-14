@@ -90,6 +90,21 @@ class UserState extends InheritedWidget {
     HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
   }
 
+  void updateCategory({required Category category, String? name, int? budget}) {
+    // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
+    // attributes, but it works tho *Grinning Face With Sweat emoji*
+    if (name == null) {
+      name = category.name;
+    }
+    if (budget == null) {
+      budget = category.budget;
+    }
+    HTTPRequestBuilder().put(
+        path: "categories/${category.id}",
+        obj: CategoryDTO(name, budget, category.id),
+        returnType: Category);
+  }
+
   void removeItem(Prop<Expense> expense) {
     expendList.value = expendList.value.remove(expense);
     HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);

@@ -120,7 +120,8 @@ class HTTPRequestBuilder {
         print(object);
         return (Expense.fromJson(object["message"]));
       case Category:
-        return Category.fromJson(object);
+        print(object);
+        return (Category.fromJson(object["message"]));
     }
     return null;
   }

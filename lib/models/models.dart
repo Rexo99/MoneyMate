@@ -90,7 +90,6 @@ class Category implements Model {
   Category copyWith({
     String? name,
     int? budget,
-    List<Expense>? expenditureList,
   }) =>
       Category._(_id, name ?? this.name, budget ?? this.budget, userId);
 
