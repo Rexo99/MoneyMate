@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -91,7 +92,15 @@ class HTTPRequestBuilder {
         }
         return temp;
       case Category:
+        print(object);
         return Category.fromJson(object);
+      case List<Category>:
+        List<Category> temp = [];
+        for (var element in (object['message'] as List)) {
+          print(element);
+          temp.add(Category.fromJson(element));
+        }
+        return temp;
     }
     return null;
   }
@@ -111,7 +120,8 @@ class HTTPRequestBuilder {
         print(object);
         return (Expense.fromJson(object["message"]));
       case Category:
-        return Category.fromJson(object);
+        print(object);
+        return (Category.fromJson(object["message"]));
     }
     return null;
   }

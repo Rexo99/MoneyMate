@@ -12,6 +12,7 @@ class UserState extends InheritedWidget {
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
+  List<Category> categoryList = [];
   Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
@@ -31,6 +32,18 @@ class UserState extends InheritedWidget {
         returnType: List<Expense>)) as List<Expense>;
     for (Expense element in exps) {
       expendList.value = expendList.value.add(Prop(element));
+    }
+  }
+
+  //clears the categoryList and fills it with fresh data from the backend
+  Future<void> initListCategoryList() async {
+    categoryList.clear();
+    List<Category> exps = (await HTTPRequestBuilder().get(
+        path: "categories",
+        returnType: List<Category>)) as List<Category>;
+    for (Category element in exps) {
+      print(element);
+      categoryList.add(element);
     }
   }
 
@@ -62,6 +75,34 @@ class UserState extends InheritedWidget {
   }) {
     expendList.value = expendList.value
         .add(Prop(Expense(name, amount, DateTime.now(), 1)));
+  }
+
+  //Creates a Category and adds it to the [categoryList]
+  void addCategory({
+    required String name,
+    required int budget,
+  }) {
+    categoryList.add(new Category.create(name, budget));
+  }
+
+  void removeCategory(Category category) {
+    categoryList.remove(category);
+    HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
+  }
+
+  void updateCategory({required Category category, String? name, int? budget}) {
+    // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
+    // attributes, but it works tho *Grinning Face With Sweat emoji*
+    if (name == null) {
+      name = category.name;
+    }
+    if (budget == null) {
+      budget = category.budget;
+    }
+    HTTPRequestBuilder().put(
+        path: "categories/${category.id}",
+        obj: CategoryDTO(name, budget, category.id),
+        returnType: Category);
   }
 
   void removeItem(Prop<Expense> expense) {
