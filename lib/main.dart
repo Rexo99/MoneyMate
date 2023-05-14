@@ -143,6 +143,7 @@ class HudState extends State<Hud> {
                           if (context.mounted &&
                               UserState.of(context).expendList.value.isEmpty) {
                             UserState.of(context).initListExpenseList();
+                            UserState.of(context).initListCategoryList();
                           }
                           isDialOpen.value = false;
                         },
@@ -152,8 +153,7 @@ class HudState extends State<Hud> {
                       child: IconButton(
                         icon: const Icon(Icons.bug_report),
                         onPressed: () async {
-                          await UserState.of(context)
-                              .registerUser(name: "dannie1", password: "ee");
+                          UserState.of(context).categoryList.forEach((element) {print(element.name);});
                           isDialOpen.value = false;
                         },
                       ),

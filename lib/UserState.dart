@@ -12,6 +12,7 @@ class UserState extends InheritedWidget {
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
+  List<Category> categoryList = [];
   Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
@@ -31,6 +32,18 @@ class UserState extends InheritedWidget {
         returnType: List<Expense>)) as List<Expense>;
     for (Expense element in exps) {
       expendList.value = expendList.value.add(Prop(element));
+    }
+  }
+
+  //clears the categoryList and fills it with fresh data from the backend
+  Future<void> initListCategoryList() async {
+    categoryList.clear();
+    List<Category> exps = (await HTTPRequestBuilder().get(
+        path: "categories",
+        returnType: List<Category>)) as List<Category>;
+    for (Category element in exps) {
+      print(element);
+      categoryList.add(element);
     }
   }
 
@@ -60,6 +73,16 @@ class UserState extends InheritedWidget {
     required String name,
     required int amount,
   }) {
+    expendList.value = expendList.value
+        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
+  }
+
+  //Creates a Category and adds it to the [categoryList]
+  void addCategory({
+    required String name,
+    required int amount,
+  }) {
+    //categoryList.add(new Category(_id, name, budget, userId))
     expendList.value = expendList.value
         .add(Prop(Expense(name, amount, DateTime.now(), 1)));
   }
