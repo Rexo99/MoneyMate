@@ -11,6 +11,7 @@ class UserState extends InheritedWidget {
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
+
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
   Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
@@ -52,6 +53,8 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
+    initListExpenseList();
+    initListCategoryList();
   }
 
   Future<void> registerUser({
@@ -61,11 +64,11 @@ class UserState extends InheritedWidget {
     await HTTPRequestBuilder().register(name: name, password: password);
   }
 
-  //todo - implement
+
   Future<void> logoutUser() async {
     //await HTTPRequestBuilder().logout();
-
-    expendList.value.clear();
+    //todo - implement
+    throw UnimplementedError();
   }
 
   //Creates an Expense and adds it to the [expendList]
