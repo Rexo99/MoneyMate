@@ -57,45 +57,49 @@ class Category implements Model {
   int? _id;
 
   @override
-  get id => _id;
+  int? get id => _id;
   final String name;
   final int budget;
-  final int userId;
-  final List<Expense> expenditureList;
+  int? userId;
 
   Category(
-      this._id, this.name, this.budget, this.userId, this.expenditureList) {
+      this._id, this.name, this.budget, this.userId) {
     HTTPRequestBuilder()
         .createModel(
-            path: "expenditures",
-            tmp: CategoryDTO(name, budget, userId, expenditureList))
+            path: "categories",
+            tmp: CategoryDTO(name, budget, userId))
+        .then((value) => _id = value);
+  }
+
+  Category.create(this.name, this.budget) {
+    HTTPRequestBuilder()
+        .createModel(
+        path: "categories",
+        tmp: CategoryDTO(name, budget, _id))
         .then((value) => _id = value);
   }
 
   Category._(
-      this._id, this.name, this.budget, this.userId, this.expenditureList);
+      this._id, this.name, this.budget, this.userId);
 
   static Category fromJson(Map json) {
-    return Category._(json["id"], json["name"], json["budget"], json["userId"],
-        json["expenditureList"]);
+    return Category._(json["id"], json["name"], json["budget"], json["user_id"]);
   }
 
   @override
   Category copyWith({
     String? name,
     int? budget,
-    List<Expense>? expenditureList,
   }) =>
-      Category._(_id, name ?? this.name, budget ?? this.budget, userId,
-          expenditureList ?? this.expenditureList);
+      Category._(_id, name ?? this.name, budget ?? this.budget, userId);
 
   Category setName(String name) => copyWith(name: name);
 
   Category setBudget(int budget) => copyWith(budget: budget);
 
-  Category addExpenditure(Expense expenditure) {
+/*  Category addExpenditure(Expense expenditure) {
     List<Expense> expenditures = expenditureList;
     expenditures.add(expenditure);
     return copyWith(expenditureList: expenditures);
-  }
+  }*/
 }
