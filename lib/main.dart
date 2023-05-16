@@ -271,30 +271,3 @@ class HudState extends State<Hud> {
     );
   }
 }
-
-/* Useless class
-class TopBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget title;
-  final double height = 50;
-
-  const TopBar({super.key, this.title = const Text("No Title")});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: title,
-      actions: [
-        Builder(
-            builder: (BuildContext context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openEndDrawer(),
-                )
-        )
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => Size.fromHeight(height);
-}
- */
