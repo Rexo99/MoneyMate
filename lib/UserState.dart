@@ -33,7 +33,11 @@ class UserState extends InheritedWidget {
         returnType: List<Expense>)) as List<Expense>;
     for (Expense element in exps) {
       expendList.value = expendList.value.add(Prop(element));
+
     }
+    //print("list loaded. Hashcode ${expendList.value.hashCode}");
+    print(this.hashCode);
+
   }
 
   //clears the categoryList and fills it with fresh data from the backend
@@ -43,7 +47,6 @@ class UserState extends InheritedWidget {
         path: "categories",
         returnType: List<Category>)) as List<Category>;
     for (Category element in exps) {
-      print(element);
       categoryList.add(element);
     }
   }
@@ -62,6 +65,8 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().register(name: name, password: password);
+    initListExpenseList();
+    initListCategoryList();
   }
 
 
