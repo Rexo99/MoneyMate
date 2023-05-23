@@ -82,7 +82,6 @@ class CardListBuilder <T extends Prop<IList>> extends StatelessWidget {
               switch (cardType) {
                 case Expense:
                   ValueNotifier<Expense>? expense = objectList.value.getOrNull(index);
-                  print("Homepage: ${UserState.of(context).expendList.value.length}"); //Todo remove
                   if (expense != null) {
                     return ExpenseCard(expense);
                   }

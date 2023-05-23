@@ -37,10 +37,6 @@ class UserState extends InheritedWidget {
       expendList.value = expendList.value.add(Prop(element));
 
     }
-    //print("list loaded. Hashcode ${expendList.value.hashCode}");
-    print("UserState: ${expendList.value.length}");
-
-
   }
 
   //clears the categoryList and fills it with fresh data from the backend
