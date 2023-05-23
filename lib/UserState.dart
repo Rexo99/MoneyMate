@@ -7,7 +7,9 @@ import 'models/dtos.dart';
 import 'models/models.dart';
 
 class UserState extends InheritedWidget {
-  UserState({super.key, required super.child});
+  UserState({super.key, required super.child}){
+    print("moin");
+  }
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
@@ -36,7 +38,8 @@ class UserState extends InheritedWidget {
 
     }
     //print("list loaded. Hashcode ${expendList.value.hashCode}");
-    print(this.hashCode);
+    print("UserState: ${expendList.value.length}");
+
 
   }
 
@@ -134,6 +137,6 @@ class UserState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant UserState oldWidget) {
-    return builder != oldWidget.builder;
+    return expendList != oldWidget.expendList;
   }
 }

@@ -48,7 +48,7 @@ class MyApp extends StatefulWidget {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
-    return MaterialApp(
+    return UserState(child: MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
         colorSchemeSeed: _themeColor, useMaterial3: true,
@@ -57,8 +57,8 @@ class MyApp extends StatefulWidget {
         colorSchemeSeed: _themeColor, brightness: Brightness.dark, useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: UserState(child: Hud()),
-    );
+      home: Hud(),
+    ));
   }
   //used to change between light/dark/system mode
   void changeTheme(ThemeMode themeMode) {
