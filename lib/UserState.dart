@@ -7,9 +7,12 @@ import 'models/dtos.dart';
 import 'models/models.dart';
 
 class UserState extends InheritedWidget {
-  UserState({super.key, required super.child});
+  UserState({super.key, required super.child}){
+    print("moin");
+  }
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
+
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
@@ -32,6 +35,7 @@ class UserState extends InheritedWidget {
         returnType: List<Expense>)) as List<Expense>;
     for (Expense element in exps) {
       expendList.value = expendList.value.add(Prop(element));
+
     }
   }
 
@@ -42,7 +46,6 @@ class UserState extends InheritedWidget {
         path: "categories",
         returnType: List<Category>)) as List<Category>;
     for (Category element in exps) {
-      print(element);
       categoryList.add(element);
     }
   }
@@ -52,6 +55,8 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
+    initListExpenseList();
+    initListCategoryList();
   }
 
   Future<void> registerUser({
@@ -59,13 +64,15 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().register(name: name, password: password);
+    initListExpenseList();
+    initListCategoryList();
   }
 
-  //todo - implement
+
   Future<void> logoutUser() async {
     //await HTTPRequestBuilder().logout();
-
-    expendList.value.clear();
+    //todo - implement
+    throw UnimplementedError();
   }
 
   //Creates an Expense and adds it to the [expendList]
@@ -126,6 +133,6 @@ class UserState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant UserState oldWidget) {
-    return builder != oldWidget.builder;
+    return expendList != oldWidget.expendList;
   }
 }

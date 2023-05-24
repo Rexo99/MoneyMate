@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -14,9 +12,10 @@ class HTTPRequestBuilder {
       HTTPRequestBuilder._privateConstructor();
 
   late final int userId;
+  late final String username;
 
-  final String rootURL = "hinkelmanns.org";
-  late final String bearerToken;
+  final String _rootURL = "hinkelmanns.org";
+  late final String _bearerToken;
   bool _loggedIn = false;
 
   HTTPRequestBuilder._privateConstructor();
@@ -27,7 +26,7 @@ class HTTPRequestBuilder {
 
   Future<void> register(
       {required String name, required String password}) async {
-    Uri url = Uri.https(rootURL, "api/register");
+    Uri url = Uri.https(_rootURL, "api/register");
     var response =
         await http.post(url, body: {"name": name, "password": password});
     if (response.statusCode == 200) {
@@ -40,14 +39,15 @@ class HTTPRequestBuilder {
 
   Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
-      Uri url = Uri.https(rootURL, "api/login");
+      Uri url = Uri.https(_rootURL, "api/login");
       var response =
           await http.post(url, body: {"name": name, "password": password});
       if (response.statusCode == 200) {
-        bearerToken = response.body;
-        Map<String, dynamic> decodedToken = JwtDecoder.decode(bearerToken);
+        _bearerToken = response.body;
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(_bearerToken);
         userId = int.parse(decodedToken["id"]);
-        print("userID: $userId");
+        username = decodedToken["name"];
+        print("User: $username");
         _loggedIn = true;
       } else {
         print("Response body: ${response.body}");
@@ -58,11 +58,11 @@ class HTTPRequestBuilder {
 
   Future<int?> createModel<T extends DTO>(
       {required String path, required T tmp}) async {
-    Uri uri = Uri.https(rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
+      'Authorization': 'Bearer $_bearerToken',
     };
     final response = await http.post(uri, headers: headers, body: tmp.toJson());
 
@@ -73,11 +73,11 @@ class HTTPRequestBuilder {
   }
 
   Future<Object?> get({required String path, required Type returnType}) async {
-    Uri uri = Uri.https(rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
+      'Authorization': 'Bearer $_bearerToken',
     };
     final response = await http.get(uri, headers: headers);
     Map object = json.decode(response.body);
@@ -97,7 +97,6 @@ class HTTPRequestBuilder {
       case List<Category>:
         List<Category> temp = [];
         for (var element in (object['message'] as List)) {
-          print(element);
           temp.add(Category.fromJson(element));
         }
         return temp;
@@ -107,11 +106,11 @@ class HTTPRequestBuilder {
 
   Future<Model?> put<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.https(rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
+      'Authorization': 'Bearer $_bearerToken',
     };
     final response = await http.put(uri, headers: headers, body: obj.toJson());
     Map object = json.decode(response.body);
@@ -128,11 +127,11 @@ class HTTPRequestBuilder {
 
   Future<Model?> post<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.https(rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
+      'Authorization': 'Bearer $_bearerToken',
     };
     final response = await http.post(uri, headers: headers, body: obj.toJson());
     Map object = json.decode(response.body);
@@ -150,11 +149,11 @@ class HTTPRequestBuilder {
     Uri uri;
     switch (deleteType) {
       case Expense:
-        uri = Uri.https(rootURL,
+        uri = Uri.https(_rootURL,
             "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
         break;
       case Category:
-        uri = Uri.https(rootURL, "api/users/$userId/categories/$objId");
+        uri = Uri.https(_rootURL, "api/users/$userId/categories/$objId");
         break;
       default:
         throw ErrorDescription("$deleteType is not a valid Type");
@@ -162,11 +161,21 @@ class HTTPRequestBuilder {
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
+      'Authorization': 'Bearer $_bearerToken',
     };
     final response = await http.delete(uri, headers: headers);
     if (response.statusCode != 200) {
       throw ErrorDescription("$deleteType with id $objId not found");
+    }
+  }
+  bool getLoginState(){
+    return _loggedIn;
+  }
+  String? getUsername(){
+    if(_loggedIn){
+      return username;
+    } else {
+      return null;
     }
   }
 }
