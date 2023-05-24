@@ -127,16 +127,16 @@ class TotalExpense extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(30),
         child: Column(
           children: [
-            amount == null
+            amount == null || amount == 0.0
                 ? const Text(
-                    "__",
+                    "_ _",
                     style: TextStyle(fontSize: 40),
                   )
                 : Text(
-                    "$amount",
+                    "${amount}0€",
                     style: TextStyle(fontSize: 40),
                   ),
             Text(
