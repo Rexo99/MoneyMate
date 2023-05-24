@@ -10,41 +10,39 @@ import 'ExpenseOverview.dart';
 class Homepage extends StatelessWidget {
   late final ExpenseList expenseList;
 
-  Homepage({required BuildContext context,super.key}) {
-    expenseList = UserState
-        .of(context)
-        .expendList;
+  Homepage({required BuildContext context, super.key}) {
+    expenseList = UserState.of(context).expendList;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Center(
           child: Column(
-            children: [
-              HTTPRequestBuilder().getLoginState()
-              //Todo show last expenses and refresh on adding a new one
-                  ? CardListBuilder(
-                  objectList: expenseList,
-                  cardType: Expense,
-                  count: 3)
-                  : const Text("Please login"),
-              ElevatedButton(
-                  onPressed: () =>
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ExpenseOverview())),
-                  child: const Text("See All")),
-              $(expenseList, (p) => Row(mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TotalExpense(title: "Today", amount: expenseList.getTotalToday()),
-                  TotalExpense(title: "Month", amount: expenseList.getTotalMonth(),)
-                ],)
-              )
-            ],
-          )),
+        children: [
+          HTTPRequestBuilder().getLoginState()
+              ? $(expenseList, (p0) => CardListBuilder(
+                      objectList: expenseList, cardType: Expense, count: 3))
+              : const Text("Please login"),
+          ElevatedButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ExpenseOverview())),
+              child: const Text("See All")),
+          $(expenseList, (p) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TotalExpense(
+                          title: "Today", amount: expenseList.getTotalToday()),
+                      TotalExpense(
+                        title: "Month",
+                        amount: expenseList.getTotalMonth(),
+                      )
+                    ],
+                  ))
+        ],
+      )),
     );
   }
 }
@@ -77,41 +75,45 @@ class ExpenseCard extends StatelessWidget {
 /// Build a List of Card Widgets from a List
 /// [objectList] needs an [IList] of [Model]
 /// [cardType] needs a [Model]
-/// [count] of cards that should be build
+/// [count] of cards that should be build (default = 3)
 class CardListBuilder<T extends Prop<IList>> extends StatelessWidget {
   T objectList;
   Type cardType;
-  int count = 3;
+  int count;
 
-  CardListBuilder({required this.objectList,
-    required this.cardType,
-    required this.count,
-    super.key});
+  CardListBuilder(
+      {required this.objectList,
+      required this.cardType,
+      this.count = 3,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return SizedBox(
-            height: 300,
-            child: ListView.builder(
-                primary: true,
-                itemCount: 3,
-                itemBuilder: (BuildContext context, int index) {
-                  switch (cardType) {
-                    case Expense:
-                      ValueNotifier<Expense>? expense =
-                      objectList.value.getOrNull(index);
-                      if (expense != null) {
-                        return ExpenseCard(expense);
-                      }
-                      return null;
-                    case Category:
-                      throw UnimplementedError();
+      return SizedBox(
+        height: 300,
+        child: ListView.builder(
+            primary: true,
+            itemCount: 3,
+            itemBuilder: (BuildContext context, int index) {
+              switch (cardType) {
+                case Expense:
+                  /*ValueNotifier<Expense>? expense =
+                      objectList.value.getOrNull(index);*/
+                  int lastIndex = objectList.value.length - 1;
+                  ValueNotifier<Expense>? expense =
+                      objectList.value.getOrNull(lastIndex - index);
+                  if (expense != null) {
+                    return ExpenseCard(expense);
                   }
-                }),
-          );
-        });
+                  return null;
+                case Category:
+                  throw UnimplementedError();
+              }
+            }),
+      );
+    });
   }
 }
 
@@ -130,13 +132,13 @@ class TotalExpense extends StatelessWidget {
           children: [
             amount == null
                 ? const Text(
-              "__",
-              style: TextStyle(fontSize: 40),
-            )
+                    "__",
+                    style: TextStyle(fontSize: 40),
+                  )
                 : Text(
-              "$amount",
-              style: TextStyle(fontSize: 40),
-            ),
+                    "$amount",
+                    style: TextStyle(fontSize: 40),
+                  ),
             Text(
               title,
               style: const TextStyle(fontSize: 20),
