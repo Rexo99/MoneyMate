@@ -65,7 +65,7 @@ void updateExpensePopup(
                 const SnackBar(content: Text('Updated Expense')),
               );
               //Todo not the right context?
-              UserState.of(context).updateItem(
+              UserState.of(context).expendList.updateItem(
                   expense: expense,
                   name: name,
                   amount: int.parse(amount));
@@ -137,7 +137,7 @@ void createExpensePopup({ required BuildContext context}){
               ScaffoldMessenger.of(subcontext).showSnackBar(
                 const SnackBar(content: Text('Created Expense')),
               );
-              UserState.of(context).addItem(
+              UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: int.parse(amount));
               Navigator.pop(subcontext, 'OK');

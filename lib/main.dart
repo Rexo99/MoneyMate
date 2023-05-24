@@ -100,9 +100,9 @@ class HudState extends State<Hud> {
               onPageChanged: (newIndex) {
                 _currentIndex.value = newIndex;
               },
-              children: const [
-                Homepage(),
-                CategoriesOverview(),
+              children:[
+                Homepage(context: context),
+                const CategoriesOverview(),
               ],
             ),
             floatingActionButton: $(

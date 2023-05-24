@@ -1,9 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/DateTimeExtensions.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import '../state.dart';
-import '../util/Formatter.dart';
 import '../util/Popups.dart';
 
 class ExpenseOverview extends StatelessWidget {
@@ -42,12 +42,12 @@ class ListEntry extends StatelessWidget {
             $(
                 expense,
                     (e) => Text(
-                    "${e.name}  ${e.amount.toString()}  ${dateFormatter(e.date)}")),
+                    "${e.name}  ${e.amount.toString()}  ${e.date.dateFormatter()}")),
             MaterialButton(
                 child: const Text('Delete'),
                 color: Colors.red,
                 onPressed: () {
-                  UserState.of(context).removeItem(expense);
+                  UserState.of(context).expendList.removeItem(expense);
                 }),
           ]),
         ));
@@ -56,19 +56,19 @@ class ListEntry extends StatelessWidget {
 
 class ExpenseListView extends StatelessWidget {
   late final BuildContext context;
-  late final Prop<IList<Prop<Expense>>> expendList;
+  late final Prop<IList<Prop<Expense>>> expenseList;
 
   ExpenseListView({required this.context, super.key}) {
-    expendList = UserState.of(context).expendList;
+    expenseList = UserState.of(context).expendList;
   }
 
   @override
   Widget build(BuildContext context) {
     return $(
-        expendList,
+        expenseList,
             (expenses) => ListView.separated(
           padding: const EdgeInsets.all(8),
-          itemCount: expendList.value.length + 1,
+          itemCount: expenseList.value.length + 1,
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
               // return the header
@@ -81,7 +81,7 @@ class ExpenseListView extends StatelessWidget {
               );
             }
             index -= 1;
-            var exp = expendList.value.get(index);
+            var exp = expenseList.value.get(index);
             return ListEntry(expense: exp);
           },
           separatorBuilder: (BuildContext context, int index) =>
