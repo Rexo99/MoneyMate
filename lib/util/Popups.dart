@@ -1,6 +1,5 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
 import '../models/models.dart';
