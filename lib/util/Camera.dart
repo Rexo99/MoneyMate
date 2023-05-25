@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:path_provider/path_provider.dart';
 import '../pages/Homepage.dart';
 
@@ -249,4 +250,26 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
+}
+Future<String> imageToText(String path) async {
+  final InputImage inputImage = InputImage.fromFilePath(path);
+  final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+  final RecognizedText recognizedText =
+  await textRecognizer.processImage(inputImage);
+
+  for (TextBlock block in recognizedText.blocks) {
+    final String text = block.text;
+    final List<String> languages = block.recognizedLanguages;
+
+    for (TextLine line in block.lines) {
+      // Same getters as TextBlock
+      for (TextElement element in line.elements) {
+        // Same getters as TextBlock
+      }
+    }
+  }
+
+  textRecognizer.close();
+  return recognizedText.text;
 }

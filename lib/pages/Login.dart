@@ -64,7 +64,6 @@ class Login extends StatelessWidget {
                                 await UserState.of(context).loginUser(name: 'erik', password: 'test');
                                 //await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text); //todo - use this
                                 if(context.mounted) {
-                                  UserState.of(context).initListExpenseList();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Logged in!')),);
                                   Navigator.pop(context); // Navigate the user to the Home page
@@ -96,7 +95,7 @@ class Login extends StatelessWidget {
                           ],
                         ),
                         ElevatedButton(onPressed:() => Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => UserState(child: Hud())),),
+                          context, MaterialPageRoute(builder: (context) => Hud()),),
                             child: Text('Debug exit')), //todo - remove debug button
                     ]),
                 )

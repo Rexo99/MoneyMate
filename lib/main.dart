@@ -48,7 +48,7 @@ class MyApp extends StatefulWidget {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
-    return MaterialApp(
+    return UserState(child: MaterialApp(
       title: 'Money Mate',
       theme: ThemeData(
         colorSchemeSeed: _themeColor, useMaterial3: true,
@@ -57,8 +57,8 @@ class MyApp extends StatefulWidget {
         colorSchemeSeed: _themeColor, brightness: Brightness.dark, useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: UserState(child: Hud()),
-    );
+      home: Hud(),
+    ));
   }
   //used to change between light/dark/system mode
   void changeTheme(ThemeMode themeMode) {
@@ -89,8 +89,6 @@ class HudState extends State<Hud> {
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
-  String loginButtonText = 'Login'; //doesn't save value on page switch //todo - change value according to users loggedIn state
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -102,9 +100,9 @@ class HudState extends State<Hud> {
               onPageChanged: (newIndex) {
                 _currentIndex.value = newIndex;
               },
-              children: const [
-                Homepage(),
-                CategoriesOverview(),
+              children:[
+                Homepage(context: context),
+                const CategoriesOverview(),
               ],
             ),
             floatingActionButton: $(
@@ -118,8 +116,7 @@ class HudState extends State<Hud> {
                     child: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        UserState.of(context)
-                            .addItem(name: "Döner", amount: 3);
+                        createExpensePopup(context: context);
                         isDialOpen.value = false;
                       },
                     ),
@@ -129,6 +126,10 @@ class HudState extends State<Hud> {
                       icon: const Icon(Icons.add),
                       onPressed: () {
                         //Todo addCategory
+
+                        //UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
+                        //UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
+                        //UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, budget: 1234);
                         isDialOpen.value = false;
                       },
                     ),
@@ -136,24 +137,9 @@ class HudState extends State<Hud> {
                   ),
                   SpeedDialChild(
                       child: IconButton(
-                        icon: const Icon(Icons.login),
-                        onPressed: () async {
-                          await HTTPRequestBuilder()
-                              .login(name: "erik", password: "test");
-                          if (context.mounted &&
-                              UserState.of(context).expendList.value.isEmpty) {
-                            UserState.of(context).initListExpenseList();
-                          }
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "Login"),
-                  SpeedDialChild(
-                      child: IconButton(
                         icon: const Icon(Icons.bug_report),
                         onPressed: () async {
-                          await UserState.of(context)
-                              .registerUser(name: "dannie1", password: "ee");
+                          UserState.of(context).categoryList.forEach((element) {print(element.name);});
                           isDialOpen.value = false;
                         },
                       ),
@@ -171,75 +157,7 @@ class HudState extends State<Hud> {
                 ],
               ),
             ),
-            endDrawer: Drawer(
-              width: 250,
-              child: ListView(children: [
-                Icon(Icons.account_circle_outlined, size: 100),
-                ListTile(
-                  title: Text('User XXX', textAlign: TextAlign.center),
-                  subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    //Navigate to the Login-Screen
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
-
-                    //start of content that needs do be deleted //todo - find other way to find out if the user is logged in and change the value of loginButtonText accordingly
-                    if(loginButtonText == 'Login') {
-                      //todo - move login request to login screen
-                      await HTTPRequestBuilder().login(name: "erik", password: "test");
-                      print(UserState.of(context).expendList.value.isEmpty);
-                      if (context.mounted &&
-                          UserState.of(context).expendList.value.isEmpty) {
-                        UserState.of(context).initListExpenseList();
-                        loginButtonText = 'Logout';
-                      } else {
-                        //todo - implement logout
-                        UserState.of(context).logoutUser(); //not working yet
-                        loginButtonText = 'Login';
-                      }
-                    } //end of content that needs do be deleted
-                    },
-                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 40),
-                      Icon(Icons.login_outlined, size: 24.0),
-                      SizedBox(width: 10),
-                      Text('Login'),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
-                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 40),
-                      Icon(Icons.design_services_outlined, size: 24.0),
-                      SizedBox(width: 10),
-                      Text('Theme Settings'),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
-                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 40),
-                      Icon(Icons.info_outlined, size: 24.0),
-                      SizedBox(width: 10),
-                      Text('Info Screen'),
-                    ],
-                  ),
-                ),
-              ],
-              )
-            ),
+            endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
             bottomNavigationBar: $(
@@ -268,30 +186,90 @@ class HudState extends State<Hud> {
     );
   }
 }
-
-/* Useless class
-class TopBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget title;
-  final double height = 50;
-
-  const TopBar({super.key, this.title = const Text("No Title")});
-
+class MenuDrawer extends StatelessWidget{
+  Prop<bool> _loginState = Prop(HTTPRequestBuilder().getLoginState());
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: title,
-      actions: [
-        Builder(
-            builder: (BuildContext context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openEndDrawer(),
-                )
+    return Drawer(
+        width: 250,
+        child: ListView(children: [
+          const Icon(Icons.account_circle_outlined, size: 100),
+          $(_loginState, (p0) => _loginState.value
+            ? ListTile(
+                title: Text(HTTPRequestBuilder().username, textAlign: TextAlign.center),
+                subtitle: const Text('UserXXX@mail.com', textAlign: TextAlign.center))
+            : const ListTile(
+                title: Text('User XXX', textAlign: TextAlign.center),
+              subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center)),
+           ),
+          $(_loginState, (p0) => _loginState.value
+              ? ElevatedButton(
+            onPressed: () async {
+              //Navigate to the Login-Screen
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
+              UserState.of(context).logoutUser();
+            },
+            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                SizedBox(width: 40),
+                Icon(Icons.login_outlined, size: 24.0),
+                SizedBox(width: 10),
+                Text("logout"),
+              ],
+            )
+          )
+              :ElevatedButton(
+              onPressed: () async {
+                //Navigate to the Login-Screen
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
+                UserState.of(context).loginUser(name: "erik", password: "test");
+
+              },
+              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  SizedBox(width: 40),
+                  Icon(Icons.login_outlined, size: 24.0),
+                  SizedBox(width: 10),
+                  Text("login"),
+                ],
+              )
+          )
+          ),
+          ElevatedButton(
+            onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
+            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 40),
+                Icon(Icons.design_services_outlined, size: 24.0),
+                SizedBox(width: 10),
+                Text('Theme Settings'),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
+            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 40),
+                Icon(Icons.info_outlined, size: 24.0),
+                SizedBox(width: 10),
+                Text('Info Screen'),
+              ],
+            ),
+          ),
+        ],
         )
-      ],
     );
   }
 
-  @override
-  Size get preferredSize => Size.fromHeight(height);
 }
- */
+
+

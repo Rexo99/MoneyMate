@@ -63,7 +63,6 @@ class Register extends StatelessWidget {
                               if (_formKey.currentState!.validate()) {
                                 await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text);
                                 if(context.mounted) {
-                                  UserState.of(context).initListExpenseList();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Registered!')),);
                                   Navigator.pop(context); // Navigate the user to the Home page

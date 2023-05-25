@@ -1,116 +1,149 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:money_mate/models/ExpenseList.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import '../state.dart';
-import '../util/Formatter.dart';
-import '../util/Popups.dart';
+import 'ExpenseOverview.dart';
 
 class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+  late final ExpenseList expenseList;
+
+  Homepage({required BuildContext context, super.key}) {
+    expenseList = UserState.of(context).expendList;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: ExpenseListView(
-            context: context,
-          ),
-        ),
+      body: Center(
+          child: Column(
+        children: [
+          HTTPRequestBuilder().getLoginState()
+              ? $(expenseList, (p0) => CardListBuilder(
+                      objectList: expenseList, cardType: Expense, count: 3))
+              : const Text("Please login"),
+          ElevatedButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ExpenseOverview())),
+              child: const Text("See All")),
+          $(expenseList, (p) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TotalExpense(
+                          title: "Today", amount: expenseList.getTotalToday()),
+                      TotalExpense(
+                        title: "Month",
+                        amount: expenseList.getTotalMonth(),
+                      )
+                    ],
+                  ))
+        ],
+      )),
     );
   }
 }
 
-class ListEntry extends StatelessWidget {
+class ExpenseCard extends StatelessWidget {
   Prop<Expense> expense;
 
-  ListEntry({required this.expense, super.key});
+  ExpenseCard(this.expense, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onLongPress: () =>
-            expensePopup(expense: expense, context: context),
-        child: ListTile(
-          //return new ListTile(
-          leading: const CircleAvatar(
-            //Todo CategoryIcons
-            backgroundColor: Colors.blue,
-            child: Text("Icon"),
+    //Todo Wrapper for slide options
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          //Todo Display Timestamp
+          //Todo rearrange Textiles
+          ListTile(
+            leading: Icon(Icons.album),
+            title: Text(expense.value.name),
+            subtitle: Text("Amount: ${expense.value.amount}"),
           ),
-          title: Row(children: <Widget>[
-            $(
-                expense,
-                (e) => Text(
-                    "${e.name}  ${e.amount.toString()}  ${dateFormatter(e.date)}")),
-            MaterialButton(
-                child: const Text('Delete'),
-                color: Colors.red,
-                onPressed: () {
-                  UserState.of(context).removeItem(expense);
-                }),
-          ]),
+        ],
+      ),
+    );
+  }
+}
+
+/// Build a List of Card Widgets from a List
+/// [objectList] needs an [IList] of [Model]
+/// [cardType] needs a [Model]
+/// [count] of cards that should be build (default = 3)
+class CardListBuilder<T extends Prop<IList>> extends StatelessWidget {
+  T objectList;
+  Type cardType;
+  int count;
+
+  CardListBuilder(
+      {required this.objectList,
+      required this.cardType,
+      this.count = 3,
+      super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return SizedBox(
+        height: 300,
+        child: ListView.builder(
+            primary: true,
+            itemCount: 3,
+            itemBuilder: (BuildContext context, int index) {
+              switch (cardType) {
+                case Expense:
+                  /*ValueNotifier<Expense>? expense =
+                      objectList.value.getOrNull(index);*/
+                  int lastIndex = objectList.value.length - 1;
+                  ValueNotifier<Expense>? expense =
+                      objectList.value.getOrNull(lastIndex - index);
+                  if (expense != null) {
+                    return ExpenseCard(expense);
+                  }
+                  return null;
+                case Category:
+                  throw UnimplementedError();
+              }
+            }),
+      );
+    });
+  }
+}
+
+class TotalExpense extends StatelessWidget {
+  final String title;
+  double? amount;
+
+  TotalExpense({this.title = "none", this.amount, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(30),
+        child: Column(
+          children: [
+            amount == null || amount == 0.0
+                ? const Text(
+                    "_ _",
+                    style: TextStyle(fontSize: 40),
+                  )
+                : Text(
+                    "${amount}0€",
+                    style: TextStyle(fontSize: 40),
+                  ),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20),
+            ),
+          ],
         ));
   }
-}
-
-class ExpenseListView extends StatelessWidget {
-  late final BuildContext context;
-  late final Prop<IList<Prop<Expense>>> expendList;
-
-  ExpenseListView({required this.context, super.key}) {
-    expendList = UserState.of(context).expendList;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return $(
-        expendList,
-        (expenses) => ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: expendList.value.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  // return the header
-                  return Row(
-                    children: const [
-                      Text("Name       "),
-                      Text("Amount       "),
-                      Text("Date"),
-                    ],
-                  );
-                }
-                index -= 1;
-                var exp = expendList.value.get(index);
-                return ListEntry(expense: exp);
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-            ));
-  }
-}
-
-// Todo move anywhere else
-Future<String> imageToText(String path) async {
-  final InputImage inputImage = InputImage.fromFilePath(path);
-  final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-
-  final RecognizedText recognizedText =
-      await textRecognizer.processImage(inputImage);
-
-  for (TextBlock block in recognizedText.blocks) {
-    final String text = block.text;
-    final List<String> languages = block.recognizedLanguages;
-
-    for (TextLine line in block.lines) {
-      // Same getters as TextBlock
-      for (TextElement element in line.elements) {
-        // Same getters as TextBlock
-      }
-    }
-  }
-
-  textRecognizer.close();
-  return recognizedText.text;
 }
