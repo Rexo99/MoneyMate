@@ -85,7 +85,7 @@ void createExpensePopup({ required BuildContext context}){
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
-    builder: (BuildContext subcontext) => AlertDialog(
+    builder: (BuildContext subContext) => AlertDialog(
       title: const Text('Edit Expense'),
       content: Form(
         key: formKey,
@@ -128,19 +128,19 @@ void createExpensePopup({ required BuildContext context}){
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(subcontext, 'Cancel'),
+          onPressed: () => Navigator.pop(subContext, 'Cancel'),
           child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(subcontext).showSnackBar(
+              ScaffoldMessenger.of(subContext).showSnackBar(
                 const SnackBar(content: Text('Created Expense')),
               );
               UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: int.parse(amount));
-              Navigator.pop(subcontext, 'OK');
+              Navigator.pop(subContext, 'OK');
             }
           },
           child: const Text('OK'),
