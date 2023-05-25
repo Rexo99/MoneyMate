@@ -25,9 +25,8 @@ class Info extends StatelessWidget {
                   style: TextStyle(fontSize: 20)
               ),
               const SizedBox(height: 20),
-              Expanded(child:
                 Row(children: [
-                  Expanded(child:
+                  Flexible(child:
                     Column(children: [
                       GestureDetector(
                         onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
@@ -70,7 +69,6 @@ class Info extends StatelessWidget {
                     ],),
                   ),
                 ]),
-              ),
               const SizedBox(height: 30),
               ExpansionTile(
                 title: Text("Used Widgets"),
