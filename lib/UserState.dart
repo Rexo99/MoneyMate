@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 
+import 'models/ExpenseList.dart';
 import 'models/dtos.dart';
 import 'models/models.dart';
 
 class UserState extends InheritedWidget {
-  UserState({super.key, required super.child}){
-    print("moin");
-  }
+  UserState({super.key, required super.child});
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
 
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
-  Prop<IList<Prop<Expense>>> expendList = Prop(<Prop<Expense>>[].lockUnsafe);
+  ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+
 
   static UserState? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<UserState>();
@@ -27,17 +27,7 @@ class UserState extends InheritedWidget {
     return result!;
   }
 
-  //clears the expendList and fills it with fresh data from the backend
-  Future<void> initListExpenseList() async {
-    expendList.value.clear();
-    List<Expense> exps = (await HTTPRequestBuilder().get(
-        path: "expenditures", //todo - change to "expenses"
-        returnType: List<Expense>)) as List<Expense>;
-    for (Expense element in exps) {
-      expendList.value = expendList.value.add(Prop(element));
 
-    }
-  }
 
   //clears the categoryList and fills it with fresh data from the backend
   Future<void> initListCategoryList() async {
@@ -55,7 +45,7 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
-    initListExpenseList();
+    expendList.initListExpenseList();
     initListCategoryList();
   }
 
@@ -64,7 +54,7 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().register(name: name, password: password);
-    initListExpenseList();
+    expendList.initListExpenseList();
     initListCategoryList();
   }
 
@@ -75,14 +65,7 @@ class UserState extends InheritedWidget {
     throw UnimplementedError();
   }
 
-  //Creates an Expense and adds it to the [expendList]
-  void addItem({
-    required String name,
-    required int amount,
-  }) {
-    expendList.value = expendList.value
-        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
-  }
+
 
   //Creates a Category and adds it to the [categoryList]
   void addCategory({
@@ -110,25 +93,6 @@ class UserState extends InheritedWidget {
         path: "categories/${category.id}",
         obj: CategoryDTO(name, budget, category.id),
         returnType: Category);
-  }
-
-  void removeItem(Prop<Expense> expense) {
-    expendList.value = expendList.value.remove(expense);
-    HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);
-  }
-
-  void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
-    if (name != null) {
-      expense.value = expense.value.setName(name);
-    }
-    if (amount != null) {
-      expense.value = expense.value.setAmount(amount);
-    }
-    HTTPRequestBuilder().put(
-        path: "expenditures/${expense.value.id}",
-        obj: ExpenseDTO(expense.value.name, expense.value.amount,
-            expense.value.date, expense.value.categoryId),
-        returnType: Expense);
   }
 
   @override
