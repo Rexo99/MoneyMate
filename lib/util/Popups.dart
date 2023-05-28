@@ -164,8 +164,8 @@ void createExpensePopup({required BuildContext context}) {
                   name: name,
                   amount: int.parse(amount),
                   categoryId: categoryId);
-              Navigator.pop(subcontext, 'OK');
-                  amount: int.parse(amount));
+              Navigator.pop(subContext, 'OK');
+                  amount: int.parse(amount);
               Navigator.pop(subContext, 'OK');
             }
           },
