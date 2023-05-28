@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Register.dart';
@@ -62,17 +64,14 @@ class Login extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await UserState.of(context).loginUser(name: 'erik', password: 'test');
-                                //await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text); //todo - use this
-                                if(context.mounted) {
+                                await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
+                                HTTPRequestBuilder builder = HTTPRequestBuilder();
+
+                                if(builder.loggedIn) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Logged in!')),);
                                   Navigator.pop(context); // Navigate the user to the Home page
                                 }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please fill input')),
-                                );
                               }
                             },
                             child: const Text('Submit'),
