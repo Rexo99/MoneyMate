@@ -12,6 +12,7 @@ class Login extends StatelessWidget {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
 @override
   Widget build(BuildContext context) {
     return WillPopScope(
