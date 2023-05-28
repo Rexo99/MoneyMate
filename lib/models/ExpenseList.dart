@@ -15,9 +15,10 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
   void addExpense({
     required String name,
     required int amount,
+    required int categoryId
   }) {
     value = value
-        .add(Prop(Expense(name, amount, DateTime.now(), 1)));
+        .add(Prop(Expense(name, amount, DateTime.now(), categoryId)));
   }
 
   void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
