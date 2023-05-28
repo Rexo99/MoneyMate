@@ -20,7 +20,7 @@ class Homepage extends StatelessWidget {
       body: Center(
           child: Column(
         children: [
-          HTTPRequestBuilder().getLoginState()
+          HTTPRequestBuilder().loggedIn
               ? $(expenseList, (p0) => CardListBuilder(
                       objectList: expenseList, cardType: Expense, count: 3))
               : const Text("Please login"),
