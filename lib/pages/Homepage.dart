@@ -28,7 +28,7 @@ class Homepage extends StatelessWidget {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ExpenseOverview())),
+                      builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
           $(expenseList, (p) => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
