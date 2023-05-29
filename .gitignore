@@ -20,7 +20,7 @@ doc/api/
 *.js.map
 /.metadata
 /analysis_options.yaml
-/cash_crab.iml
+/money_mate.iml
 /.idea/libraries/Dart_Packages.xml
 /.idea/libraries/Flutter_Plugins.xml
 /.idea/libraries/KotlinJavaRuntime.xml
@@ -33,3 +33,4 @@ doc/api/
 /test/certs/public.pem
 /.flutter-plugins
 /.flutter-plugins-dependencies
+/android/cash_crab_android.iml
