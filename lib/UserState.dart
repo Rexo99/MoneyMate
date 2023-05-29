@@ -55,9 +55,9 @@ class UserState extends InheritedWidget {
   }
 
   Future<void> logoutUser() async {
-    //await HTTPRequestBuilder().logout();
-    //todo - implement
-    throw UnimplementedError();
+    categoryList.clear();
+    expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+    await builder.logout();
   }
 
   //Creates a Category and adds it to the [categoryList]

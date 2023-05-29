@@ -20,8 +20,10 @@ class Homepage extends StatelessWidget {
       body: Center(
           child: Column(
         children: [
-          HTTPRequestBuilder().getLoginState()
-              ? $(expenseList, (p0) => CardListBuilder(
+          HTTPRequestBuilder().loggedIn
+              ? $(
+                  expenseList,
+                  (p0) => CardListBuilder(
                       objectList: expenseList, cardType: Expense, count: 3))
               : const Text("Please login"),
           ElevatedButton(
@@ -30,15 +32,21 @@ class Homepage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => const ExpenseOverview())),
               child: const Text("See All")),
-          $(expenseList, (p) => Row(
+          $(
+              expenseList,
+              (p) => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TotalExpense(
-                          title: "Today", amount: expenseList.getTotalToday()),
-                      TotalExpense(
-                        title: "Month",
-                        amount: expenseList.getTotalMonth(),
-                      )
+                      HTTPRequestBuilder().loggedIn
+                          ? TotalExpense(
+                              title: "Total",
+                              amount: expenseList.getTotalToday())
+                          : TotalExpense(title: "Total", amount: 0),
+                      HTTPRequestBuilder().loggedIn
+                          ? TotalExpense(
+                              title: "Total",
+                              amount: expenseList.getTotalMonth())
+                          : TotalExpense(title: "Month", amount: 0)
                     ],
                   ))
         ],

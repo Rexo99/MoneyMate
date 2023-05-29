@@ -135,7 +135,9 @@ class HudState extends State<Hud> {
                     ),
                     label: "Add Category",
                   ),
+                  // TODO: remove this button when the app is finished
                   SpeedDialChild(
+                    visible: false,
                       child: IconButton(
                         icon: const Icon(Icons.bug_report),
                         onPressed: () async {
@@ -187,9 +189,9 @@ class HudState extends State<Hud> {
   }
 }
 class MenuDrawer extends StatelessWidget{
-  Prop<bool> _loginState = Prop(HTTPRequestBuilder().getLoginState());
   @override
   Widget build(BuildContext context) {
+    Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
     return Drawer(
         width: 250,
         child: ListView(children: [
@@ -222,9 +224,11 @@ class MenuDrawer extends StatelessWidget{
           )
               :ElevatedButton(
               onPressed: () async {
+                // Close drawer due to catch name and email from logged in user on successful login
+                Navigator.pop(context);
                 //Navigate to the Login-Screen
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
-                UserState.of(context).loginUser(name: "erik", password: "test");
+                //UserState.of(context).loginUser(name: "erik", password: "test");
 
               },
               style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
