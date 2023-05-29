@@ -47,6 +47,7 @@ dependencies:
   camera: ^0.9.3+1
   path_provider: ^2.0.14
   flutter_speed_dial: ^6.2.0
+  flutter_swipe_action_cell: ^3.1.1
 
 dev_dependencies:
   flutter_test:

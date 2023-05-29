@@ -88,7 +88,11 @@ class _ExpenseOverview extends State<ExpenseOverview> {
                 itemBuilder: (context, index) {
                   Prop<Expense> item =
                       items.isEmpty ? allItems.value[index] : items[index];
-                  return ExpenseCard(item);
+                  return $(item, (p1) => ExpenseCard(
+                    expense: item,
+                    index: index,
+                    context: context,
+                  ));
                 },
               )),
 
