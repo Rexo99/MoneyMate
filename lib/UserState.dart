@@ -15,7 +15,7 @@ class UserState extends InheritedWidget {
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
-  ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+  final ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
 
 
   static UserState? maybeOf(BuildContext context) =>

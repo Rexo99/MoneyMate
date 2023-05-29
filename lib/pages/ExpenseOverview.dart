@@ -9,6 +9,8 @@ import '../state.dart';
 import '../util/Popups.dart';
 
 class ExpenseOverview extends StatefulWidget {
+  const ExpenseOverview({super.key});
+
   @override
   State<StatefulWidget> createState() => _ExpenseOverview();
 }
@@ -18,8 +20,6 @@ class _ExpenseOverview extends State<ExpenseOverview> {
   var items = [];
   var searchHistory = [];
   final TextEditingController searchController = TextEditingController();
-
-
 
   @override
   void initState() {
@@ -77,12 +77,13 @@ class _ExpenseOverview extends State<ExpenseOverview> {
           child: Column(
             children: [
               SearchBar(
-                leading: Icon(Icons.search),
+                leading: const Icon(Icons.search),
                 controller: searchController,
                 hintText: "Search...",
               ),
               Expanded(
                   child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: items.isEmpty ? allItems.value.length : items.length,
                 itemBuilder: (context, index) {
                   Prop<Expense> item =
