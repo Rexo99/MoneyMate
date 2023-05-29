@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../UserState.dart';
 import '../main.dart';
@@ -17,6 +18,9 @@ class Login extends StatelessWidget {
   //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
 @override
   Widget build(BuildContext context) {
+  //Todo - remove default login
+  usernameController.text = "erik";
+  passwordController.text = "test";
     return WillPopScope(
         onWillPop: () async => false,
           child: Scaffold(
@@ -70,7 +74,8 @@ class Login extends StatelessWidget {
                                 if(builder.loggedIn) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Logged in!')),);
-                                  Navigator.pop(context); // Navigate the user to the Home page
+
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()));
                                 }
                               }
                             },
