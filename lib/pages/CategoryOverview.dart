@@ -1,7 +1,21 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import '../UserState.dart';
+import '../models/models.dart';
+import '../state.dart';
+import 'package:money_mate/pages/EditCategory.dart';
+import '../util/Popups.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({super.key});
+  // const CategoryCard({super.key});
+  late final BuildContext context;
+  late final List<Category> categoryListOverview;
+
+  CategoryCard({required this.context, super.key}) {
+    categoryListOverview = UserState.of(context).categoryList;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +33,19 @@ class CategoryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TextButton(
-                  child: const Text('BUY TICKETS'),
+                  child: const Text('Bearbeiten'),
                   onPressed: () {
-                    /* ... */
+                    /*Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditCategory(category: category,)),
+                    );*/
                   },
                 ),
                 const SizedBox(width: 8),
                 TextButton(
-                  child: const Text('LISTEN'),
+                  child: const Text('Löschen'),
                   onPressed: () {
-                    /* ... */
+                    /*DeleteCategoryPopup(category: category, context: context);*/
                   },
                 ),
                 const SizedBox(width: 8),
@@ -61,7 +78,7 @@ class CategoriesOverview extends StatelessWidget {
             primary: true,
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return CategoryCard();
+              return CategoryCard(context: context);
             }),
       );
     });

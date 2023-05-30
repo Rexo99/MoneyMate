@@ -23,13 +23,11 @@ class Homepage extends StatelessWidget {
       body: Center(
           child: Column(
         children: [
-          HTTPRequestBuilder().getLoginState()
+          HTTPRequestBuilder().loggedIn
               ? $(
                   expenseList,
                   (p0) => CardListBuilder(
-                      objectList: expenseList.findNewest(3),
-                      cardType: Expense,
-                      count: 3))
+                      objectList: expenseList.findNewest(3), cardType: Expense, count: 3))
               : const Text("Please login"),
           ElevatedButton(
               onPressed: () => Navigator.push(context,
@@ -40,12 +38,16 @@ class Homepage extends StatelessWidget {
               (p) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TotalExpense(
-                          title: "Today", amount: expenseList.getTotalToday()),
-                      TotalExpense(
-                        title: "Month",
-                        amount: expenseList.getTotalMonth(),
-                      )
+                      HTTPRequestBuilder().loggedIn
+                          ? TotalExpense(
+                              title: "Total",
+                              amount: expenseList.getTotalToday())
+                          : TotalExpense(title: "Total", amount: 0),
+                      HTTPRequestBuilder().loggedIn
+                          ? TotalExpense(
+                              title: "Total",
+                              amount: expenseList.getTotalMonth())
+                          : TotalExpense(title: "Month", amount: 0)
                     ],
                   ))
         ],

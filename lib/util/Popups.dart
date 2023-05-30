@@ -84,7 +84,7 @@ void createExpensePopup({required BuildContext context}) {
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
-    builder: (BuildContext subcontext) => AlertDialog(
+    builder: (BuildContext subContext) => AlertDialog(
       title: const Text('Edit Expense'),
       content: Form(
         key: formKey,
@@ -151,20 +151,22 @@ void createExpensePopup({required BuildContext context}) {
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.pop(subcontext, 'Cancel'),
+          onPressed: () => Navigator.pop(subContext, 'Cancel'),
           child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(subcontext).showSnackBar(
+              ScaffoldMessenger.of(subContext).showSnackBar(
                 const SnackBar(content: Text('Created Expense')),
               );
               UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: int.parse(amount),
                   categoryId: categoryId);
-              Navigator.pop(subcontext, 'OK');
+              Navigator.pop(subContext, 'OK');
+                  amount: int.parse(amount);
+              Navigator.pop(subContext, 'OK');
             }
           },
           child: const Text('OK'),
@@ -173,6 +175,32 @@ void createExpensePopup({required BuildContext context}) {
     ),
   );
 }
+
+void DeleteCategoryPopup({ required Category category, required BuildContext context}){
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('Kategorie löschen'),
+          content: const Text('Alle in der Kategorie gespeicherten Daten werden gelöscht'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Abbrechen'),
+              child: const Text('Abbrechen'),
+            ),
+            TextButton(
+              onPressed: () {
+                UserState.of(context).removeCategory(category);
+                  Navigator.pop(subContext, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+  );
+}
+
+
 
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
@@ -214,114 +242,92 @@ void colorPicker(
 
   showDialog<String>(
     context: context,
-    builder: (BuildContext subContext) => AlertDialog(
-      title: const Text('Theme Settings'),
-      content: Expanded(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          SizedBox(height: 25),
-          Text('Choose your Theme Color', textAlign: TextAlign.center),
-          SizedBox(height: 10),
-          //todo - find a way to highlight the selected button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[0]),
-                  child: Text('Red', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[0], shape: CircleBorder())),
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[1]),
-                  child: Text('Purple', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[1], shape: CircleBorder())),
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[2]),
-                  child: Text('Blue', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[2], shape: CircleBorder())),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[3]),
-                  child: Text('Green', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[3], shape: CircleBorder())),
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[4]),
-                  child: Text('Yellow', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[4], shape: CircleBorder())),
-              FilledButton(
-                  onPressed: () =>
-                      MyApp.of(context).changeThemeColor(_colors[5]),
-                  child: Text('Brown', textScaleFactor: .9),
-                  style: FilledButton.styleFrom(
-                      backgroundColor: _colors[5], shape: CircleBorder())),
-            ],
-          ),
-          SizedBox(height: 25),
-          Divider(),
-          SizedBox(height: 25),
-          Text('Choose your Theme Mode', textAlign: TextAlign.center),
-          SizedBox(height: 10),
-          Center(
-              child: ToggleButtons(
-            children: [
-              Icon(Icons.light_mode),
-              Icon(Icons.dark_mode),
-              Icon(Icons.app_shortcut)
-            ],
-            isSelected: _selection,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            onPressed: (int index) {
-              // The button that is tapped is set to true, and the others to false.
-              for (int i = 0; i < _selection.length; i++) {
-                _selection[i] = i == index;
-              }
-              switch (index) {
-                case 0:
-                  MyApp.of(context).changeTheme(ThemeMode.light);
-                  break;
-                case 1:
-                  MyApp.of(context).changeTheme(ThemeMode.dark);
-                  break;
-                case 2:
-                  MyApp.of(context).changeTheme(ThemeMode.system);
-                  break;
-              }
-            },
-          )),
-          SizedBox(height: 25),
-        ]),
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            MyApp.of(context).changeThemeColor(currentColor);
-            MyApp.of(context).changeTheme(currentThemeMode);
-            Navigator.pop(subContext, 'Cancel');
-          },
-          child: const Text('Cancel'),
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('Theme Settings'),
+          content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 25),
+                Text('Choose your Theme Color', textAlign: TextAlign.center),
+                SizedBox(height: 10),
+                //todo - find a way to highlight the selected button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[0]),
+                        child: Text('Red', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[0], shape: CircleBorder())),
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[1]),
+                        child: Text('Purple', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[1], shape: CircleBorder())
+                    ),
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[2]),
+                        child: Text('Blue', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[2], shape: CircleBorder())
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[3]),
+                        child: Text('Green', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[3], shape: CircleBorder())),
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[4]),
+                        child: Text('Yellow', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[4], shape: CircleBorder())),
+                    FilledButton(
+                        onPressed: () => MyApp.of(context).changeThemeColor(_colors[5]),
+                        child: Text('Brown', textScaleFactor: .9), style: FilledButton.styleFrom(backgroundColor: _colors[5], shape: CircleBorder())),
+                  ],
+                ),
+                SizedBox(height: 25),
+                Divider(),
+                SizedBox(height: 25),
+                Text('Choose your Theme Mode', textAlign: TextAlign.center),
+                SizedBox(height: 10),
+                Center(
+                    child: ToggleButtons(
+                      children: [Icon(Icons.light_mode), Icon(Icons.dark_mode), Icon(Icons.app_shortcut)],
+                      isSelected: _selection,
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      onPressed: (int index) {
+                        // The button that is tapped is set to true, and the others to false.
+                        for (int i = 0; i < _selection.length; i++) {
+                          _selection[i] = i == index;
+                        }
+                        switch(index){
+                          case 0: MyApp.of(context).changeTheme(ThemeMode.light);
+                          break;
+                          case 1: MyApp.of(context).changeTheme(ThemeMode.dark);
+                          break;
+                          case 2: MyApp.of(context).changeTheme(ThemeMode.system);
+                          break;
+                        }
+                      },
+                    )
+                ),
+                SizedBox(height: 25),
+            ]),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                MyApp.of(context).changeThemeColor(currentColor);
+                MyApp.of(context).changeTheme(currentThemeMode);
+                Navigator.pop(subContext, 'Cancel');},
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                //todo - maybe save chosen color to account here?
+                Navigator.pop(subContext, 'Confirm');
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () {
-            //todo - maybe save chosen color to account here?
-            Navigator.pop(subContext, 'Confirm');
-          },
-          child: const Text('Confirm'),
-        ),
-      ],
-    ),
   );
 }
 

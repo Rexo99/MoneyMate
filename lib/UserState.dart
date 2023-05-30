@@ -2,7 +2,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
-
 import 'models/ExpenseList.dart';
 import 'models/dtos.dart';
 import 'models/models.dart';
@@ -17,7 +16,6 @@ class UserState extends InheritedWidget {
   List<Category> categoryList = [];
   final ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
 
-
   static UserState? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<UserState>();
 
@@ -26,8 +24,6 @@ class UserState extends InheritedWidget {
     assert(result != null, 'No UserState found in context');
     return result!;
   }
-
-
 
   //clears the categoryList and fills it with fresh data from the backend
   Future<void> initListCategoryList() async {
@@ -58,14 +54,11 @@ class UserState extends InheritedWidget {
     initListCategoryList();
   }
 
-
   Future<void> logoutUser() async {
-    //await HTTPRequestBuilder().logout();
-    //todo - implement
-    throw UnimplementedError();
+    categoryList.clear();
+    expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+    await builder.logout();
   }
-
-
 
   //Creates a Category and adds it to the [categoryList]
   void addCategory({

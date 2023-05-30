@@ -11,11 +11,12 @@ class HTTPRequestBuilder {
   static final HTTPRequestBuilder _instance =
       HTTPRequestBuilder._privateConstructor();
 
-  late final int userId;
-  late final String username;
+  // Variables were final, but I had to remove the final keyword to make the logout function work
+  late int userId;
+  late String username;
+  late String _bearerToken;
 
   final String _rootURL = "hinkelmanns.org";
-  late final String _bearerToken;
   bool _loggedIn = false;
 
   HTTPRequestBuilder._privateConstructor();
@@ -54,6 +55,13 @@ class HTTPRequestBuilder {
       }
       print('Login: Response status: ${response.statusCode}');
     }
+  }
+
+  logout() {
+    userId = -1;
+    username = "";
+    _loggedIn = false;
+    _bearerToken = "";
   }
 
   Future<int?> createModel<T extends DTO>(
@@ -168,9 +176,12 @@ class HTTPRequestBuilder {
       throw ErrorDescription("$deleteType with id $objId not found");
     }
   }
-  bool getLoginState(){
-    return _loggedIn;
-  }
+  bool get loggedIn => _loggedIn;
+
+  set loggedIn(bool state) => _loggedIn = state;
+
+
+
   String? getUsername(){
     if(_loggedIn){
       return username;
