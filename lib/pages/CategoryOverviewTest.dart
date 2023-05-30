@@ -8,7 +8,7 @@ import '../state.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/Popups.dart';
 
-class CategoryOverviewTest extends StatelessWidget {
+/*class CategoryOverviewTest extends StatelessWidget {
   const CategoryOverviewTest({super.key});
 
   @override
@@ -21,7 +21,7 @@ class CategoryOverviewTest extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 /*class ListEntry extends StatelessWidget {
   Prop<Expense> expense;
@@ -110,6 +110,7 @@ class CategoryOverviewTest extends StatelessWidget {
   }
 }*/
 
+/*
 class ListEntry extends StatelessWidget {
   List<Category> categoryList;
 
@@ -191,4 +192,4 @@ class CategoryListView extends StatelessWidget {
           const Divider(),
         ));
   }
-}
+}*/
