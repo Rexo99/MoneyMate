@@ -76,11 +76,12 @@ class _ExpenseOverview extends State<ExpenseOverview> {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Column(
             children: [
+              Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),child:
               SearchBar(
                 leading: const Icon(Icons.search),
                 controller: searchController,
                 hintText: "Search...",
-              ),
+              ),),
               Expanded(
                   child: ListView.builder(
                 physics: const BouncingScrollPhysics(),

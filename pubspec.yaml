@@ -40,7 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.5
   fast_immutable_collections: ^8.2.0
-  intl: ^0.18.0
+  intl: ^0.18.1
   encrypt: ^5.0.1
   jwt_decoder: ^2.0.1
   google_mlkit_text_recognition: ^0.5.0
