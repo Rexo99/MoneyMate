@@ -87,12 +87,25 @@ class Info extends StatelessWidget {
                 title: Text('Used Flutter-Packages'),
                 children: <Widget>[
                   ListTile(
-                    title: Text('Package 1'),
-                    subtitle: Text('Used for XXX'),
+                    title: Text('Flutter Launcher Icons'),
+                    subtitle: Text('Used for generating and setting App-Icons'),
                   ),
                   ListTile(
                     title: Text('Package 2'),
                     subtitle: Text('Used for XXX'),
+                  )
+                ],
+              ),
+              ExpansionTile(
+                title: Text('Copyright'),
+                children: <Widget>[
+                  ListTile(
+                    title: Text('App Icon'),
+                    subtitle: Text('Euro icons created by Smashicons - Flaticon'),
+                  ),
+                  ListTile(
+                    title: Text('Icon n'),
+                    subtitle: Text('Name'),
                   )
                 ],
               ),
