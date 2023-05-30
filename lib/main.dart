@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
+import 'package:money_mate/pages/AddCategory.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
@@ -103,6 +104,8 @@ class HudState extends State<Hud> {
               children:[
                 Homepage(context: context),
                 const CategoriesOverview(),
+                // Test für Weiterleitung auf AddCategory
+                // const AddCategory(),
               ],
             ),
             floatingActionButton: $(
@@ -156,8 +159,18 @@ class HudState extends State<Hud> {
                         },
                       ),
                       label: "Open Camera"),
+                  SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.category),
+                        onPressed: ()  {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
+                          isDialOpen.value = false;
+                        },
+                      ),
+                      label: "Add Category"),
                 ],
               ),
+
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
@@ -174,7 +187,7 @@ class HudState extends State<Hud> {
                         ),
                         BottomNavigationBarItem(
                             icon: Icon(Icons.inventory_2_outlined),
-                            label: "Categories"),
+                            label: "Categories-Test"),
                       ],
                       onTap: (newIndex) {
                         _pageController.animateToPage(newIndex,

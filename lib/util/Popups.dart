@@ -176,6 +176,32 @@ void createExpensePopup({required BuildContext context}) {
   );
 }
 
+void DeleteCategoryPopup({ required Category category, required BuildContext context}){
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('Kategorie löschen'),
+          content: const Text('Alle in der Kategorie gespeicherten Daten werden gelöscht'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Abbrechen'),
+              child: const Text('Abbrechen'),
+            ),
+            TextButton(
+              onPressed: () {
+                UserState.of(context).removeCategory(category);
+                  Navigator.pop(subContext, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+  );
+}
+
+
+
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
     context: context,
