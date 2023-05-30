@@ -19,7 +19,7 @@ class Info extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 20),
-              Text("Das MoneyMate Team:",
+              Text("The MoneyMate team:",
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20)

@@ -211,11 +211,11 @@ class MenuDrawer extends StatelessWidget{
           const Icon(Icons.account_circle_outlined, size: 100),
           $(_loginState, (p0) => _loginState.value
             ? ListTile(
-                title: Text(HTTPRequestBuilder().username, textAlign: TextAlign.center),
-                subtitle: const Text('UserXXX@mail.com', textAlign: TextAlign.center))
+                title: Text(HTTPRequestBuilder().username[0].toUpperCase() + HTTPRequestBuilder().username.substring(1), textAlign: TextAlign.center),
+                subtitle: const Text('', textAlign: TextAlign.center))
             : const ListTile(
-                title: Text('User XXX', textAlign: TextAlign.center),
-              subtitle: Text('UserXXX@mail.com', textAlign: TextAlign.center)),
+                title: Text('Hey!', textAlign: TextAlign.center),
+              subtitle: Text('', textAlign: TextAlign.center)),
            ),
           $(_loginState, (p0) => _loginState.value
               ? ElevatedButton(
@@ -231,7 +231,7 @@ class MenuDrawer extends StatelessWidget{
                 SizedBox(width: 40),
                 Icon(Icons.login_outlined, size: 24.0),
                 SizedBox(width: 10),
-                Text("logout"),
+                Text("Logout"),
               ],
             )
           )
@@ -251,7 +251,7 @@ class MenuDrawer extends StatelessWidget{
                   SizedBox(width: 40),
                   Icon(Icons.login_outlined, size: 24.0),
                   SizedBox(width: 10),
-                  Text("login"),
+                  Text("Login"),
                 ],
               )
           )
