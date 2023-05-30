@@ -179,7 +179,8 @@ class HudState extends State<Hud> {
                 _currentIndex,
                 (int index) => BottomNavigationBar(
                       currentIndex: _currentIndex.value,
-                      unselectedItemColor: Colors.black,
+                      selectedItemColor: MyApp.of(context)._themeColor,
+                      unselectedItemColor: Colors.grey,
                       items: const [
                         BottomNavigationBarItem(
                           icon: Icon(Icons.euro_outlined),
