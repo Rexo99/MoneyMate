@@ -27,7 +27,9 @@ class Homepage extends StatelessWidget {
               ? $(
                   expenseList,
                   (p0) => CardListBuilder(
-                      objectList: expenseList.findNewest(3), cardType: Expense, count: 3))
+                      objectList: expenseList.findNewest(3),
+                      cardType: Expense,
+                      count: 3))
               : const Text("Please login"),
           ElevatedButton(
               onPressed: () => Navigator.push(context,
@@ -113,9 +115,17 @@ class ExpenseCard extends StatelessWidget {
             //Todo Display Timestamp
             //Todo rearrange Textiles
             ListTile(
-              leading: Icon(Icons.album),
+              leading: const Icon(Icons.album),
               title: Text(expense.value.name),
-              subtitle: Row(children: [Text("Amount: ${expense.value.amount}"),Text("Date: ${expense.value.date.dateFormatter}")],),
+              subtitle: Row(
+                children: [
+                  Text("Amount: ${expense.value.amount}"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text("Date: ${expense.value.date.dateFormatter()}"),
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -153,11 +163,13 @@ class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
                 case Expense:
                   Prop<Expense>? expense = objectList.getOrNull(index);
                   if (expense != null) {
-                    return $(expense, (p1) => ExpenseCard(
-                      expense: expense,
-                      index: index,
-                      context: context,
-                    ));
+                    return $(
+                        expense,
+                        (p1) => ExpenseCard(
+                              expense: expense,
+                              index: index,
+                              context: context,
+                            ));
                   }
                   return null;
                 case Category:
