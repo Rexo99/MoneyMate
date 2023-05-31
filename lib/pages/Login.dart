@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Register.dart';
@@ -17,7 +15,6 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
-  final LocalStorage storage = new LocalStorage('MoneyMate');
   final _formKey = GlobalKey<FormState>();
   bool staySignedIn = false;
   TextEditingController usernameController = TextEditingController();
@@ -26,9 +23,10 @@ class _Login extends State<Login> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (storage.getItem("staySignedIn") == true) {
-        usernameController.text = storage.getItem("username");
-        passwordController.text = storage.getItem("password");
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getBool("staySignedIn") ?? false) {
+        usernameController.text = prefs.getString("username") ?? "";
+        passwordController.text = prefs.getString("password") ?? "";
         await UserState.of(context).loginUser(name: usernameController.text, password: passwordController.text);
 
         Navigator.push(
@@ -95,6 +93,7 @@ class _Login extends State<Login> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+                          final SharedPreferences prefs = await SharedPreferences.getInstance();
                           if (_formKey.currentState!.validate()) {
                             await UserState.of(context).loginUser(
                                 name: usernameController.value.text,
@@ -107,15 +106,13 @@ class _Login extends State<Login> {
                               );
 
                               if (staySignedIn) {
-                                storage.setItem("staySignedIn", true);
-                                storage.setItem(
-                                    "username", usernameController.value.text);
-                                storage.setItem(
-                                    "password", passwordController.value.text);
+                                await prefs.setBool("staySignedIn", true);
+                                await prefs.setString("username", usernameController.value.text);
+                                await prefs.setString("password", passwordController.value.text);
                               } else {
-                                storage.setItem("staySignedIn", false);
-                                storage.setItem("username", "");
-                                storage.setItem("password", "");
+                                await prefs.setBool("staySignedIn", false);
+                                await prefs.setString("username", "");
+                                await prefs.setString("password", "");
                               }
                               Navigator.push(
                                   context,

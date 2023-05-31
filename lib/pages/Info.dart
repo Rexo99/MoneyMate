@@ -91,8 +91,8 @@ class Info extends StatelessWidget {
                     subtitle: Text('Used for generating and setting App-Icons'),
                   ),
                   ListTile(
-                    title: Text('Package 2'),
-                    subtitle: Text('Used for XXX'),
+                    title: Text('Shared preferences plugin'),
+                    subtitle: Text('Used for saving user data'),
                   )
                 ],
               ),
