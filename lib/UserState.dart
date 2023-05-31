@@ -14,7 +14,7 @@ class UserState extends InheritedWidget {
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
-  ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+  final ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<UserState>();
@@ -41,7 +41,7 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
-    expendList.initListExpenseList();
+    await expendList.initListExpenseList();
     initListCategoryList();
   }
 
@@ -56,7 +56,7 @@ class UserState extends InheritedWidget {
 
   Future<void> logoutUser() async {
     categoryList.clear();
-    expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
+    //expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
     await builder.logout();
   }
 

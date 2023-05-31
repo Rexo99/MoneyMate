@@ -228,9 +228,9 @@ class MenuDrawer extends StatelessWidget{
               UserState.of(context).logoutUser();
             },
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
+              children: [
                 SizedBox(width: 40),
                 Icon(Icons.login_outlined, size: 24.0),
                 SizedBox(width: 10),
@@ -248,9 +248,9 @@ class MenuDrawer extends StatelessWidget{
 
               },
               style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
+                children: [
                   SizedBox(width: 40),
                   Icon(Icons.login_outlined, size: 24.0),
                   SizedBox(width: 10),
@@ -262,7 +262,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -275,7 +275,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
