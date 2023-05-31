@@ -103,9 +103,7 @@ class HudState extends State<Hud> {
               },
               children:[
                 Homepage(context: context),
-                const CategoriesOverview(),
-                // Test für Weiterleitung auf AddCategory
-                // const AddCategory(),
+                const CategoryOverview(),
               ],
             ),
             floatingActionButton: $(
@@ -126,13 +124,9 @@ class HudState extends State<Hud> {
                     label: "Add Expense",
                   ) : SpeedDialChild(
                     child: IconButton(
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(Icons.category),
                       onPressed: () {
-                        //Todo addCategory
-
-                        //UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
-                        //UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
-                        //UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, budget: 1234);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
                         isDialOpen.value = false;
                       },
                     ),
@@ -159,7 +153,7 @@ class HudState extends State<Hud> {
                         },
                       ),
                       label: "Open Camera"),
-                  SpeedDialChild(
+                  /*SpeedDialChild(
                       child: IconButton(
                         icon: const Icon(Icons.category),
                         onPressed: ()  {
@@ -167,7 +161,15 @@ class HudState extends State<Hud> {
                           isDialOpen.value = false;
                         },
                       ),
-                      label: "Add Category"),
+                      label: "Add Category"),*/
+                 /* SpeedDialChild(
+                      child: IconButton(
+                        icon: const Icon(Icons.local_grocery_store),
+                        onPressed: ()  {
+                          UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
+                        },
+                      ),
+                      label: "Test"),*/
                 ],
               ),
 
@@ -188,7 +190,7 @@ class HudState extends State<Hud> {
                         ),
                         BottomNavigationBarItem(
                             icon: Icon(Icons.inventory_2_outlined),
-                            label: "Categories-Test"),
+                            label: "Categories"),
                       ],
                       onTap: (newIndex) {
                         _pageController.animateToPage(newIndex,

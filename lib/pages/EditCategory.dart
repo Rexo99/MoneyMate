@@ -1,9 +1,8 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import 'package:flutter/services.dart';
-import '../main.dart';
+
 
 
 class EditCategory extends StatelessWidget {
@@ -11,20 +10,16 @@ class EditCategory extends StatelessWidget {
   Category category;
   EditCategory({required this.category, super.key});
 
-
-
-  /*late final List<Category> categoryListOverview;
-
-  EditCategory({required BuildContext context, super.key}) {
-    categoryListOverview = UserState.of(context).categoryList;
-  }*/
-
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = category.name;
+    budgetController.text = category.budget.toString();
+    String name = category.name;
+    String budget = category.budget.toString();
     return Scaffold(
       body: Form (
         key: _formKey,
@@ -33,6 +28,7 @@ class EditCategory extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextFormField(
+              // To-Do set value from the given Category
               controller: nameController,
               decoration: InputDecoration(
                 border: UnderlineInputBorder(),
@@ -49,6 +45,7 @@ class EditCategory extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextFormField(
+              // To-Do set value from the given Category
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: budgetController,
@@ -176,7 +173,8 @@ class EditCategory extends StatelessWidget {
                       (
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text));
+                          UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text));
+                          // UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, name: nameController.value.text, budget: int.parse(budgetController.text));
                           Navigator.pop(context, 'OK');
                         }
                       },
@@ -184,7 +182,7 @@ class EditCategory extends StatelessWidget {
                         Icons.download ,
                         size: 24.0,
                       ),
-                      label: Text('Hinzufügen'), // <-- Text
+                      label: Text('Change'), // <-- Text
                     ),
                   ],
                 )

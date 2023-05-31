@@ -1,7 +1,4 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:money_mate/models/models.dart';
-import 'package:money_mate/pages/CategoryOverview.dart';
 import '../UserState.dart';
 import 'package:flutter/services.dart';
 import '../main.dart';
@@ -180,7 +177,8 @@ class AddCategory extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text));
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesOverview()),);
+                       // Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesOverview()),);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
                     }
                   },
                   icon: Icon( // <-- Icon

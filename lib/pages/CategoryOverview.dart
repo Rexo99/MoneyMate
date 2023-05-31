@@ -1,21 +1,28 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import '../UserState.dart';
 import '../models/models.dart';
-import '../state.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/Popups.dart';
 
-class CategoryCard extends StatelessWidget {
-  // const CategoryCard({super.key});
-  late final BuildContext context;
-  late final List<Category> categoryListOverview;
+class CategoryOverview extends StatelessWidget {
+  const CategoryOverview({super.key});
 
-  CategoryCard({required this.context, super.key}) {
-    categoryListOverview = UserState.of(context).categoryList;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CategoryListView(
+          context: context,
+        ),
+      ),
+    );
   }
+}
 
+class CategoryCard extends StatelessWidget {
+  Category category;
 
+  CategoryCard({required this.category, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +31,10 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const ListTile(
+             ListTile(
               leading: Icon(Icons.album),
-              title: Text('The Enchanted Nightingale'),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              title: Text(category.name),
+              subtitle: Text(category.budget.toString()),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -35,17 +42,17 @@ class CategoryCard extends StatelessWidget {
                 TextButton(
                   child: const Text('Bearbeiten'),
                   onPressed: () {
-                    /*Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => EditCategory(category: category,)),
-                    );*/
+                    );
                   },
                 ),
                 const SizedBox(width: 8),
                 TextButton(
                   child: const Text('Löschen'),
                   onPressed: () {
-                    /*DeleteCategoryPopup(category: category, context: context);*/
+                    DeleteCategoryPopup(category: category, context: context);
                   },
                 ),
                 const SizedBox(width: 8),
@@ -58,19 +65,28 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
-class CategoriesOverview extends StatelessWidget {
-  const CategoriesOverview({super.key});
+/*
+class CategoryListView extends StatelessWidget {
+  // const CategoriesOverview({super.key});
+  late final BuildContext context;
+  late final List<Category> categoryListOverview;
+
+  CategoryListView({required this.context, super.key}) {
+    categoryListOverview = UserState.of(context).categoryList;
+    }
 
   @override
   Widget build(BuildContext context) {
-    /*return ListView(
+    */
+/*return ListView(
       padding: const EdgeInsets.all(20.0),
       children: const <Widget>[
         CategoriesOverview(),
         CategoriesOverview(),
 
       ],
-    );*/
+    );*//*
+
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SizedBox(
@@ -78,10 +94,47 @@ class CategoriesOverview extends StatelessWidget {
             primary: true,
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return CategoryCard(context: context);
+              return CategoryCard(category: category);
             }),
       );
     });
+  }
+}
+
+
+*/
+
+
+class CategoryListView extends StatelessWidget {
+  // const CategoriesOverview({super.key});
+  late final BuildContext context;
+  late final List<Category> categoryListOverview;
+
+  CategoryListView({required this.context, super.key}) {
+    categoryListOverview = UserState.of(context).categoryList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: categoryListOverview.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              // return the header
+              return Row(
+                children: const [
+                  Text("Please Add a Category"),
+                ],
+              );
+            }
+            index -= 1;
+            var cats = categoryListOverview[index];
+            return CategoryCard(category: cats);
+          },
+          // separatorBuilder: (BuildContext context, int index) =>
+          // const Divider(),
+        );
   }
 }
 
