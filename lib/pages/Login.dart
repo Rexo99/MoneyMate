@@ -25,9 +25,19 @@ class _Login extends State<Login> {
   //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
   @override
   Widget build(BuildContext context) {
-    //Todo - remove default login
-    usernameController.text = "erik";
-    passwordController.text = "test";
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (storage.getItem("staySignedIn") == true) {
+        usernameController.text = storage.getItem("username");
+        passwordController.text = storage.getItem("password");
+        await UserState.of(context).loginUser(name: usernameController.text, password: passwordController.text);
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Hud()));
+      }
+    });
+
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(

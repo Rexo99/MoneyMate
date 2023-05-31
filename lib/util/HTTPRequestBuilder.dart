@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:localstorage/localstorage.dart';
 
 import '../models/dtos.dart';
 import '../models/models.dart';
@@ -58,10 +59,13 @@ class HTTPRequestBuilder {
   }
 
   logout() {
+    LocalStorage storage = new LocalStorage('MoneyMate');
+
     userId = -1;
     username = "";
     _loggedIn = false;
     _bearerToken = "";
+    storage.clear();
   }
 
   Future<int?> createModel<T extends DTO>(
