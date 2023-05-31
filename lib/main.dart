@@ -58,7 +58,7 @@ class MyApp extends StatefulWidget {
         colorSchemeSeed: _themeColor, brightness: Brightness.dark, useMaterial3: true,
       ),
       themeMode: _themeMode,
-      home: Hud(),
+      home: Login(title: 'Login',),
     ));
   }
   //used to change between light/dark/system mode
