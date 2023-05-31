@@ -6,15 +6,20 @@ import '../UserState.dart';
 import '../main.dart';
 import 'Register.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   Login({super.key, required this.title});
 
   final String title;
 
+  @override
+  _Login createState() => _Login();
+
+}
+class _Login extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  bool staySignedIn = false;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
 @override
   Widget build(BuildContext context) {
@@ -63,7 +68,20 @@ class Login extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Checkbox(
+                                value: staySignedIn,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    staySignedIn = value!;
+                                  });
+                                },
+                              ),
+                              Text('Stay signed in?')
+                            ]),
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
