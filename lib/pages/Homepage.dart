@@ -154,7 +154,7 @@ class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SizedBox(
-        height: 300,
+        height: 250,
         child: ListView.builder(
             primary: true,
             itemCount: 3,
@@ -192,21 +192,21 @@ class TotalExpense extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(15),
         child: Column(
           children: [
             amount == null || amount == 0.0
                 ? const Text(
                     "_ _",
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 30),
                   )
                 : Text(
                     "${amount}0€",
-                    style: const TextStyle(fontSize: 40),
+                    style: const TextStyle(fontSize: 30),
                   ),
             Text(
               title,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 15),
             ),
           ],
         ));
