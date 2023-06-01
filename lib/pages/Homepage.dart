@@ -44,13 +44,13 @@ class Homepage extends StatelessWidget {
                     children: [
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
-                              title: "Total",
+                              title: "Today",
                               amount: expenseList.getTotalToday()
                       )
-                          : TotalExpense(title: "Total", amount: 0),
+                          : TotalExpense(title: "Today", amount: 0),
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
-                              title: "Total",
+                              title: "Month",
                               amount: expenseList.getTotalMonth()
                       )
                           : TotalExpense(title: "Month", amount: 0)
