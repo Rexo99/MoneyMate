@@ -21,7 +21,8 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
+          child:
+          Column(
         children: [
           HTTPRequestBuilder().loggedIn
               ? $(
@@ -37,21 +38,26 @@ class Homepage extends StatelessWidget {
               child: const Text("See All")),
           $(
               expenseList,
-              (p) => Column(
+              (p) => Expanded(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Total",
-                              amount: expenseList.getTotalToday())
+                              amount: expenseList.getTotalToday()
+                      )
                           : TotalExpense(title: "Total", amount: 0),
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Total",
-                              amount: expenseList.getTotalMonth())
+                              amount: expenseList.getTotalMonth()
+                      )
                           : TotalExpense(title: "Month", amount: 0)
                     ],
-                  ))
+                  )
+              )
+          )
         ],
       )),
     );
@@ -192,17 +198,17 @@ class TotalExpense extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(15),
         child: Column(
           children: [
             amount == null || amount == 0.0
                 ? const Text(
                     "_ _",
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 35),
                   )
                 : Text(
                     "${amount}0€",
-                    style: const TextStyle(fontSize: 40),
+                    style: const TextStyle(fontSize: 35),
                   ),
             Text(
               title,
