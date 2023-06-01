@@ -21,8 +21,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child:
-          Column(
+          child: Column(
         children: [
           HTTPRequestBuilder().loggedIn
               ? $(
@@ -38,26 +37,21 @@ class Homepage extends StatelessWidget {
               child: const Text("See All")),
           $(
               expenseList,
-              (p) => Expanded(
-                  child: Column(
+              (p) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Today",
-                              amount: expenseList.getTotalToday()
-                      )
+                              amount: expenseList.getTotalToday())
                           : TotalExpense(title: "Today", amount: 0),
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Month",
-                              amount: expenseList.getTotalMonth()
-                      )
+                              amount: expenseList.getTotalMonth())
                           : TotalExpense(title: "Month", amount: 0)
                     ],
-                  )
-              )
-          )
+                  ))
         ],
       )),
     );
