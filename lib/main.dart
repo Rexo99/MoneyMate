@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
@@ -228,7 +229,7 @@ class MenuDrawer extends StatelessWidget{
               UserState.of(context).logoutUser();
             },
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -248,7 +249,7 @@ class MenuDrawer extends StatelessWidget{
 
               },
               style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 40),
@@ -262,7 +263,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -275,7 +276,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),

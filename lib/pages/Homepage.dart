@@ -21,7 +21,8 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
+          child:
+          Column(
         children: [
           HTTPRequestBuilder().loggedIn
               ? $(
@@ -37,21 +38,26 @@ class Homepage extends StatelessWidget {
               child: const Text("See All")),
           $(
               expenseList,
-              (p) => Column(
+              (p) => Expanded(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
-                              title: "Total",
-                              amount: expenseList.getTotalToday())
-                          : TotalExpense(title: "Total", amount: 0),
+                              title: "Today",
+                              amount: expenseList.getTotalToday()
+                      )
+                          : TotalExpense(title: "Today", amount: 0),
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
-                              title: "Total",
-                              amount: expenseList.getTotalMonth())
+                              title: "Month",
+                              amount: expenseList.getTotalMonth()
+                      )
                           : TotalExpense(title: "Month", amount: 0)
                     ],
-                  ))
+                  )
+              )
+          )
         ],
       )),
     );
@@ -112,7 +118,6 @@ class ExpenseCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            //Todo Display Timestamp
             //Todo rearrange Textiles
             ListTile(
               leading: const Icon(Icons.album),

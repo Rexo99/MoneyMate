@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/dtos.dart';
 import '../models/models.dart';
 
@@ -57,11 +56,14 @@ class HTTPRequestBuilder {
     }
   }
 
-  logout() {
+  logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     userId = -1;
     username = "";
     _loggedIn = false;
     _bearerToken = "";
+    prefs.clear();
   }
 
   Future<int?> createModel<T extends DTO>(
