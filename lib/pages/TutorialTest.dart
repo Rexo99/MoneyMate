@@ -1,11 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../UserState.dart';
-import '../main.dart';
 import '../state.dart';
 import '../util/CameraNew.dart';
 import '../util/HTTPRequestBuilder.dart';
@@ -41,6 +38,7 @@ class TutorialTestState extends State<TutorialTest> {
 
   GlobalKey keyBottomNavigation1 = GlobalKey();
   GlobalKey keyBottomNavigation2 = GlobalKey();
+  GlobalKey keyBottomNavigation3 = GlobalKey();
 
   @override
   void initState() {
@@ -61,14 +59,14 @@ class TutorialTestState extends State<TutorialTest> {
             body: PageView(
               onPageChanged: (newIndex) {},
               children: [
-                Homepage(context: context),
-                const CategoryOverview(),
+                Homepage(context: context, foreignKey: keyButton),
+                CategoryOverview(),
               ],
             ),
             floatingActionButton: $(
               _currentIndex, (p0) =>
                 SpeedDial(
-                  key: keyButton1,
+                  key: keyBottomNavigation3,
                   // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                   animatedIcon: AnimatedIcons.menu_close,
                   spaceBetweenChildren: 10,
@@ -179,8 +177,8 @@ class TutorialTestState extends State<TutorialTest> {
       onClickTargetWithTapPosition: (target, tapDetails) {
         print("target: $target");
         print(
-            "clicked at position local: ${tapDetails
-                .localPosition} - global: ${tapDetails.globalPosition}");
+            "clicked at position local: ${
+                tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
       },
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
@@ -224,7 +222,6 @@ class TutorialTestState extends State<TutorialTest> {
         ],
       ),
     );
-
     targets.add(
       TargetFocus(
         identify: "keyBottomNavigation2",
@@ -256,14 +253,13 @@ class TutorialTestState extends State<TutorialTest> {
         ],
       ),
     );
-    //todo  - change speedial to bottomNavigationbar key
     targets.add(
       TargetFocus(
-        identify: "Target 0",
-        keyTarget: keyButton1,
+        identify: "keyBottomNavigation3",
+        keyTarget: keyBottomNavigation3,
         contents: [
           TargetContent(
-            align: ContentAlign.bottom,
+            align: ContentAlign.top,
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -273,14 +269,14 @@ class TutorialTestState extends State<TutorialTest> {
                     "SpeedDial",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.red,
                         fontSize: 35.0),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
                       "Add new expenses etc. here.",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.red),
                     ),
                   ),
                 ],
@@ -290,6 +286,40 @@ class TutorialTestState extends State<TutorialTest> {
         ],
       ),
     );
+    targets.add(TargetFocus(
+      identify: "keyButton",
+      keyTarget: keyButton,
+      shape: ShapeLightFocus.Circle,
+      //radius: 50
+      contents: [
+        TargetContent(
+          align: ContentAlign.bottom,
+          builder: (context, controller) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const <Widget>[
+                Text(
+                  "Expenses",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 35.0
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    "Click here to see a list of all your expenses.",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    ));
     return targets;
   }
 }
