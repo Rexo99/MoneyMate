@@ -9,6 +9,7 @@ import 'package:money_mate/pages/AddCategory.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
+import 'package:money_mate/pages/TutorialTest.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -283,6 +284,19 @@ class MenuDrawer extends StatelessWidget{
                 Icon(Icons.info_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Info Screen'),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialTest())),
+            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 40),
+                Icon(Icons.departure_board, size: 24.0),
+                SizedBox(width: 10),
+                Text('Tutorial Test'),
               ],
             ),
           ),
