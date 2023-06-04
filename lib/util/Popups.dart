@@ -228,20 +228,9 @@ void colorPicker(
     {required Color currentColor,
     required ThemeMode currentThemeMode,
     required BuildContext context}) {
-  List<Color> _colors = [
-    Colors.red,
-    Colors.purple,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.brown
-  ];
-  final List<bool> _selection = <bool>[
-    false,
-    false,
-    true
-  ]; //List for switching app design //todo - load user settings for app design mode (system mode is standard)
-  //List <Color> _DesiredColors = [Colors.amber, Color.fromARGB(100, 253, 112, 165), Color.fromARGB(100, 50, 113, 60), Colors.teal]; //todo - create custom color palette
+  List<Color> _colors = MyApp.of(context).getThemeColors();
+  List<bool> _selection = List.generate(3, (index) => false); //List for switching app design //todo - load user settings for app design mode (system mode is standard)
+  _selection[MyApp.of(context).getThemeModes().indexOf(MyApp.of(context).getCurrentThemeMode())] = true;
 
   showDialog<String>(
     context: context,
@@ -334,6 +323,7 @@ void colorPicker(
   );
 }
 
+/*
 //Just the colorPicker, nothing else:
 void colorPicker2(
     {required Color currentColor, required BuildContext context}) {
@@ -404,3 +394,4 @@ void colorPicker2(
     ),
   );
 }
+ */

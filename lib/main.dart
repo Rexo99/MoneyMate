@@ -14,6 +14,7 @@ import 'package:money_mate/state.dart';
 import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'UserState.dart';
 
@@ -39,10 +40,9 @@ class MyApp extends StatefulWidget {
   class _MyAppState extends State<MyApp> {
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
-    Widget _startWidget = Login(title: 'Login');
 
     @override
-    void initState() {
+    void initState()  {
       //todo - load app settings on initialization
       super.initState();
     }
@@ -63,24 +63,101 @@ class MyApp extends StatefulWidget {
           useMaterial3: true,
         ),
         themeMode: _themeMode,
-        home: _startWidget,
+        //home: _startWidget,
+        home: new LoadingScreen(),
       ));
     }
 
     //used to change between light/dark/system mode
-    void changeTheme(ThemeMode themeMode) {
+    Future<void> changeTheme(ThemeMode themeMode) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('themeMode', getThemeModes().indexOf(themeMode));
       setState(() {
         _themeMode = themeMode;
       });
     }
 
+    ThemeMode getCurrentThemeMode() {
+      return _themeMode;
+    }
+
+    List<ThemeMode> getThemeModes() {
+      return <ThemeMode> [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
+    }
+
     //used to change themeColor //todo - figure out how to create a whole color palette instead of using a color as a seed
-    void changeThemeColor(Color color) {
+    Future<void> changeThemeColor(Color color) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('themeColor', getThemeColors().indexOf(color));
       setState(() {
         _themeColor = color;
       });
     }
+
+    List<Color> getThemeColors() {
+      return <Color> [
+        Colors.red,
+        Color(0xff6750a4),
+        Colors.blue,
+        Colors.green,
+        Colors.yellow,
+        Colors.brown
+      ];
+    }
   }
+
+class LoadingScreen extends StatefulWidget {
+  @override
+  LoadingScreenState createState() => new LoadingScreenState();
+}
+
+class LoadingScreenState extends State<LoadingScreen> {
+
+  @override
+  void initState() {
+    checkFirstSeen();
+    checkTheme();
+    super.initState();
+  }
+
+  //todo - add more to loading screen (like loading animation etc.)
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      body: new Center(
+        child: new Text('Loading...'),
+      ),
+    );
+  }
+
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('tutorialSeen') ?? false);
+
+    if (_seen) {
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => Login(title: 'Login')));
+    } else {
+      await prefs.setBool('tutorialSeen', true);
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => TutorialTest()));
+    }
+  }
+
+  Future<void> checkTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int? themeMode = prefs.getInt('themeMode');
+    if(themeMode != null) {
+      MyApp.of(context).changeTheme(MyApp.of(context).getThemeModes().elementAt(themeMode));
+    }
+
+    int? themeColor = prefs.getInt('themeColor');
+    if(themeColor != null) {
+      MyApp.of(context).changeThemeColor(MyApp.of(context).getThemeColors().elementAt(themeColor));
+    }
+  }
+}
 
 class Hud extends StatefulWidget {
   @override
