@@ -73,7 +73,8 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
   /// Sorts the list of DateTimes in descending order and returns the [count] newest DateTimes
   IList<Prop<Expense>> findNewest(int count) {
     if (value.isEmpty) {
-      throw Exception('The list of DateTimes is empty.');
+      return value;
+      //throw Exception('The list of DateTimes is empty.');
     }
 
     //expenseList.value.sort(); // Sort in descending order

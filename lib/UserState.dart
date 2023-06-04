@@ -50,8 +50,6 @@ class UserState extends InheritedWidget {
     required String password,
   }) async {
     await HTTPRequestBuilder().register(name: name, password: password);
-    expendList.initListExpenseList();
-    initListCategoryList();
   }
 
   Future<void> logoutUser() async {

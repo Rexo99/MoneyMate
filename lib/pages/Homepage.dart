@@ -13,7 +13,7 @@ import 'ExpenseOverview.dart';
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
-  Key tutorialKey = new GlobalKey(); //Used as an identifier for the tutorial
+  Key tutorialKey = GlobalKey(); //Used as an identifier for the tutorial
 
   Homepage({required BuildContext context, super.key/*, foreignKey*/}) {
     expenseList = UserState.of(context).expendList;
