@@ -9,13 +9,11 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/pages/TutorialTest.dart';
-import 'package:money_mate/pages/TutorialTest2.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
