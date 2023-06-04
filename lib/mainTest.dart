@@ -1,4 +1,4 @@
-/*
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +18,7 @@ import 'package:money_mate/util/Popups.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'UserState.dart';
 
-Future<void> main() async {
+Future<void> mainTest() async {
   //Initialize for Camera
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -40,6 +40,7 @@ class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   class _MyAppState extends State<MyApp> {
     late TutorialCoachMark tutorialCoachMark;
+
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
     Widget _startWidget = Login(title: 'Login');
@@ -497,7 +498,5 @@ class MenuDrawer extends StatelessWidget{
     );
   }
 }
-
- */
 
 
