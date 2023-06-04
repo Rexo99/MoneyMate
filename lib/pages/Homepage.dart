@@ -15,10 +15,10 @@ class Homepage extends StatelessWidget {
 
   Key tutorialKey = new GlobalKey(); //Used as an identifier for the tutorial
 
-  Homepage({required BuildContext context, super.key, foreignKey}) {
+  Homepage({required BuildContext context, super.key/*, foreignKey*/}) {
     expenseList = UserState.of(context).expendList;
 
-    tutorialKey = foreignKey;
+    //tutorialKey = foreignKey;
   }
 
   @override
@@ -36,7 +36,7 @@ class Homepage extends StatelessWidget {
                       count: 3))
               : const Text("Please login"),
           ElevatedButton(
-            key: tutorialKey,
+            //key: tutorialKey,
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
