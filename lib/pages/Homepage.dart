@@ -13,8 +13,12 @@ import 'ExpenseOverview.dart';
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
-  Homepage({required BuildContext context, super.key}) {
+  Key tutorialKey = new GlobalKey(); //Used as an identifier for the tutorial
+
+  Homepage({required BuildContext context, super.key/*, foreignKey*/}) {
     expenseList = UserState.of(context).expendList;
+
+    //tutorialKey = foreignKey;
   }
 
   @override
@@ -32,6 +36,7 @@ class Homepage extends StatelessWidget {
                       count: 3))
               : const Text("Please login"),
           ElevatedButton(
+            //key: tutorialKey,
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
