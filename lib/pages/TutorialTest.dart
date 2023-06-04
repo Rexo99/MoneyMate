@@ -28,9 +28,7 @@ class TutorialTestState extends State<TutorialTest> {
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   /// _title dependant on _currentIndex and well update on change
-  late final ComputedProp<
-      String> _title = ComputedProp(() => _titleList[_currentIndex.value],
-      [_currentIndex]);
+  late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
   GlobalKey keyButton = GlobalKey();
@@ -46,7 +44,6 @@ class TutorialTestState extends State<TutorialTest> {
     Future.delayed(Duration.zero, showTutorial);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,10 +122,7 @@ class TutorialTestState extends State<TutorialTest> {
 
             ),
             endDrawer: MenuDrawer(),
-            floatingActionButtonLocation: FloatingActionButtonLocation
-                .miniCenterDocked,
-
-            /// BottomNavigation bar will be rebuild when _currentIndex get changed
+            floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             bottomNavigationBar: $(
                 _currentIndex,
                     (int index) =>
@@ -193,7 +187,7 @@ class TutorialTestState extends State<TutorialTest> {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
-        identify: "keyBottomNavigation1",
+        identify: "Expense Tab",
         keyTarget: keyBottomNavigation1,
         alignSkip: Alignment.topRight,
         contents: [
@@ -224,7 +218,7 @@ class TutorialTestState extends State<TutorialTest> {
     );
     targets.add(
       TargetFocus(
-        identify: "keyBottomNavigation2",
+        identify: "Category Tab",
         keyTarget: keyBottomNavigation2,
         alignSkip: Alignment.topRight,
         contents: [
@@ -255,7 +249,7 @@ class TutorialTestState extends State<TutorialTest> {
     );
     targets.add(
       TargetFocus(
-        identify: "keyBottomNavigation3",
+        identify: "SpeedDial",
         keyTarget: keyBottomNavigation3,
         contents: [
           TargetContent(
@@ -287,7 +281,7 @@ class TutorialTestState extends State<TutorialTest> {
       ),
     );
     targets.add(TargetFocus(
-      identify: "keyButton",
+      identify: "ExpenseOverview",
       keyTarget: keyButton,
       shape: ShapeLightFocus.Circle,
       //radius: 50

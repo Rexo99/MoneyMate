@@ -10,6 +10,7 @@ import '../models/models.dart';
 import '../state.dart';
 import 'ExpenseOverview.dart';
 
+//todo - create dummy HomePage by using the HUD for the tutorial?
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
