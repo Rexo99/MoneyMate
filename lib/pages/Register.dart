@@ -65,7 +65,10 @@ class Register extends StatelessWidget {
                                 if(context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Registered!')),);
-                                  Navigator.pop(context); // Navigate the user to the Home page
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Hud()));// Navigate the user to the Home page
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
