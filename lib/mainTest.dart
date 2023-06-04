@@ -296,7 +296,7 @@ class HudState extends State<Hud> {
                 _currentIndex.value = newIndex;
               },
               children:[
-                Homepage(context: context, foreignKey: MyApp.of(context)._keyList[3]),
+                Homepage(context: context/*, foreignKey: MyApp.of(context)._keyList[3]*/),
                 const CategoryOverview(),
               ],
             ),
