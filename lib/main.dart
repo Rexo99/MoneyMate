@@ -9,6 +9,8 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/pages/TutorialTest.dart';
+import 'package:money_mate/pages/TutorialTest2.dart';
+import 'package:money_mate/pages/TutorialTest3.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -122,7 +124,7 @@ class LoadingScreenState extends State<LoadingScreen> {
     super.initState();
   }
 
-  //todo - add more to loading screen (like loading animation etc.)
+  //todo - check whether loading animation is laggy or not when deployed
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -194,6 +196,28 @@ class HudState extends State<Hud> {
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
+  //todo - make tutorial return itself as a widget that can be used as an overlay
+  OverlayEntry? entry;
+  void showOverlay() {
+    entry = OverlayEntry(builder: (context) => Positioned(
+        left: 20, top: 40,
+        child: ElevatedButton.icon(icon: Icon(Icons.ac_unit), label: Text('Test'),
+          onPressed: () {
+            removeOverlay();
+          },
+        )
+    )
+    );
+
+    final overlay = Overlay.of(context)!;
+    overlay.insert(entry!);
+  }
+
+  void removeOverlay() {
+    entry?.remove();
+    entry = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -257,6 +281,17 @@ class HudState extends State<Hud> {
                         },
                       ),
                       label: "Open Camera"),
+                  // TODO: remove this button when the app is finished
+                  SpeedDialChild(
+                      visible: true,
+                      child: IconButton(
+                        icon: const Icon(Icons.bug_report),
+                        onPressed: () async {
+                          showOverlay();
+                          isDialOpen.value = false;
+                        },
+                      ),
+                      label: "OverlayButton"),
                   /*SpeedDialChild(
                       child: IconButton(
                         icon: const Icon(Icons.category),
