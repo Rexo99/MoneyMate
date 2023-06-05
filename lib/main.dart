@@ -20,10 +20,13 @@ Future<void> main() async {
   //Initialize for Camera
   WidgetsFlutterBinding.ensureInitialized();
 
+  //todo - load theme settings here so that they never load incorrectly?
+
   //await dotenv.load(fileName: '.env');
   Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -39,11 +42,7 @@ class MyApp extends StatefulWidget {
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
 
-    @override
-    void initState()  {
-      //todo - load app settings on initialization
-      super.initState();
-    }
+    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
 
     @override
     Widget build(BuildContext context) {
@@ -61,12 +60,11 @@ class MyApp extends StatefulWidget {
           useMaterial3: true,
         ),
         themeMode: _themeMode,
-        //home: _startWidget,
         home: new LoadingScreen(),
       ));
     }
 
-    //used to change between light/dark/system mode
+    ///Used to change between light/dark/system theme
     Future<void> changeTheme(ThemeMode themeMode) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('themeMode', getThemeModes().indexOf(themeMode));
@@ -83,7 +81,7 @@ class MyApp extends StatefulWidget {
       return <ThemeMode> [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
     }
 
-    //used to change themeColor //todo - figure out how to create a whole color palette instead of using a color as a seed
+    ///Used to change themeColor - todo - figure out how to create a whole color palette instead of using a color as a seed
     Future<void> changeThemeColor(Color color) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('themeColor', getThemeColors().indexOf(color));
@@ -92,15 +90,21 @@ class MyApp extends StatefulWidget {
       });
     }
 
+    ///Returns the list of available theme colors. Only stored here so they can be changed easily
     List<Color> getThemeColors() {
       return <Color> [
-        Colors.red,
+        Colors.redAccent,
         Color(0xff6750a4),
         Colors.blue,
         Colors.green,
-        Colors.yellow,
+        Colors.amberAccent,
         Colors.brown
       ];
+    }
+
+    ///Returns the GlobalKeys generated where they are needed to reference widgets to the tutorial
+    List<GlobalKey> getTutorialKeys() {
+      return _tutorialKeys;
     }
   }
 
@@ -110,11 +114,11 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class LoadingScreenState extends State<LoadingScreen> {
-
   @override
   void initState() {
-    checkFirstSeen();
     checkTheme();
+    checkFirstSeen();
+
     super.initState();
   }
 
@@ -122,17 +126,34 @@ class LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Center(
-        child: new Text('Loading...'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text('Loading...',
+              style: TextStyle(fontSize: 50),
+            ),
+            new SizedBox(
+              width: 100.0,
+              height: 100.0,
+              child: CircularProgressIndicator(
+                color: Colors.black,
+                strokeWidth: 6,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
+  ///Checks SharedPreferences whether the app is started for the first time after installing or not
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('tutorialSeen') ?? false);
 
     if (_seen) {
+      await Future.delayed(const Duration(seconds: 1));
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => Login(title: 'Login')));
     } else {
@@ -142,6 +163,7 @@ class LoadingScreenState extends State<LoadingScreen> {
     }
   }
 
+  ///Checks SharedPreferences which theme should be applied
   Future<void> checkTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
