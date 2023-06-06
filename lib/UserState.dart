@@ -36,6 +36,7 @@ class UserState extends InheritedWidget {
     }
   }
 
+  // Logs in the user and fills the [expendList] and [categoryList] with data from the backend
   Future<void> loginUser({
     required String name,
     required String password,
@@ -45,6 +46,7 @@ class UserState extends InheritedWidget {
     initListCategoryList();
   }
 
+  // Registers a user with the backend
   Future<void> registerUser({
     required String name,
     required String password,
@@ -52,6 +54,7 @@ class UserState extends InheritedWidget {
     await HTTPRequestBuilder().register(name: name, password: password);
   }
 
+  //Logs out the user and clears the data
   Future<void> logoutUser() async {
     categoryList.clear();
     await builder.logout();
@@ -65,11 +68,13 @@ class UserState extends InheritedWidget {
     categoryList.add(new Category.create(name, budget));
   }
 
+  // Removes a category from the [categoryList] and backend
   void removeCategory(Category category) {
     categoryList.remove(category);
     HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
   }
 
+  // Updates a category on the [categoryList] and backend
   void updateCategory({required Category category, String? name, int? budget}) {
     // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
     // attributes, but it works tho *Grinning Face With Sweat emoji*

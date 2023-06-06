@@ -26,8 +26,9 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Column(
-        children: [
-          HTTPRequestBuilder().loggedIn
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              HTTPRequestBuilder().loggedIn
               ? $(
                   expenseList,
                   (p0) => CardListBuilder(
@@ -35,14 +36,14 @@ class Homepage extends StatelessWidget {
                       cardType: Expense,
                       count: 3))
               : const Text("Please login"),
-          ElevatedButton(
-            //key: tutorialKey,
+            ElevatedButton(
+              //key: tutorialKey,
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
-          $(
-              expenseList,
-              (p) => Column(
+              $(
+                expenseList,
+                (p) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       HTTPRequestBuilder().loggedIn
