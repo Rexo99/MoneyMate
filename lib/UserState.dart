@@ -54,7 +54,6 @@ class UserState extends InheritedWidget {
 
   Future<void> logoutUser() async {
     categoryList.clear();
-    //expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
     await builder.logout();
   }
 

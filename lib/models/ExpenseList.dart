@@ -61,7 +61,7 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
 
   //clears the expendList and fills it with fresh data from the backend
   Future<void> initListExpenseList() async {
-    value.clear();
+    value = value.clear();
     List<Expense> exps = (await HTTPRequestBuilder().get(
         path: "expenditures", //todo - change to "expenses"
         returnType: List<Expense>)) as List<Expense>;
