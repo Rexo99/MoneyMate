@@ -66,6 +66,7 @@ class UserState extends InheritedWidget {
     required int budget,
   }) {
     categoryList.add(new Category.create(name, budget));
+    initListCategoryList();
   }
 
   // Removes a category from the [categoryList] and backend
