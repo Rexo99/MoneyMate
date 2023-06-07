@@ -40,14 +40,10 @@ class MyApp extends StatefulWidget {
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
     Widget _startPage = Login(title: 'Login');
-
-    //todo - check if adding debugLabels is necessary (probably not)
-    //List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
-    List<GlobalKey> _tutorialKeys = [new GlobalKey(debugLabel: 'test'), new GlobalKey(debugLabel: 'test2'), new GlobalKey(debugLabel: 'test3'), new GlobalKey(debugLabel: 'test4'), new GlobalKey(debugLabel: 'test5')];
+    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
 
     @override
     void initState() {
-      //todo - make sure these are finished before build method starts
       checkTheme();
       checkFirstSeen();
       super.initState();
@@ -84,14 +80,18 @@ class MyApp extends StatefulWidget {
 
       int? themeMode = prefs.getInt('themeMode');
       if(themeMode != null) {
-        _themeMode = getThemeModes().elementAt(themeMode);
-        print(_themeMode);
+        setState(() {
+          _themeMode = getThemeModes().elementAt(themeMode);
+        });
+        print(_themeMode); //todo - remove prints
       }
 
       int? themeColor = prefs.getInt('themeColor');
       if(themeColor != null) {
-        _themeColor = getThemeColors().elementAt(themeColor);
-        print(_themeColor);
+        setState(() {
+          _themeColor = getThemeColors().elementAt(themeColor);
+        });
+        print(_themeColor); //todo - remove prints
       }
     }
 
@@ -99,6 +99,8 @@ class MyApp extends StatefulWidget {
     Future checkFirstSeen() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool _seen = (prefs.getBool('tutorialSeen') ?? false);
+
+      //todo - remove prints
       print('Tutorial seen = ');
       print(_seen);
 
@@ -223,16 +225,15 @@ class HudState extends State<Hud> {
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
-  //todo - find use for overlay
-  OverlayEntry? entry;
-
   @override
   void initState() {
     super.initState();
 
     //todo - check value stored in MyApp whether the tutorial should be called or not
-
   }
+
+  //todo - find use for overlay
+  OverlayEntry? entry;
 
   void showOverlay() {
     entry = OverlayEntry(builder: (context) => Positioned(
