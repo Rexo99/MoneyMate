@@ -41,11 +41,13 @@ class MyApp extends StatefulWidget {
     Color _themeColor = Color(0xff6750a4);
     Widget _startPage = Login(title: 'Login');
 
+    //todo - check if adding debugLabels is necessary (probably not)
     //List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
     List<GlobalKey> _tutorialKeys = [new GlobalKey(debugLabel: 'test'), new GlobalKey(debugLabel: 'test2'), new GlobalKey(debugLabel: 'test3'), new GlobalKey(debugLabel: 'test4'), new GlobalKey(debugLabel: 'test5')];
 
     @override
     void initState() {
+      //todo - make sure these are finished before build method starts
       checkTheme();
       checkFirstSeen();
       super.initState();
@@ -53,9 +55,11 @@ class MyApp extends StatefulWidget {
 
     @override
     Widget build(BuildContext context) {
+      //todo - remove prints
       print('START BUILD');
       print(_themeMode);
       print(_themeColor);
+
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
