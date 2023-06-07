@@ -17,8 +17,7 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     required int amount,
     required int categoryId
   }) {
-    value = value
-        .add(Prop(Expense(name, amount, DateTime.now(), categoryId)));
+    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId)));
   }
 
   void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
@@ -65,6 +64,8 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     List<Expense> exps = (await HTTPRequestBuilder().get(
         path: "expenditures", //todo - change to "expenses"
         returnType: List<Expense>)) as List<Expense>;
+
+    exps.sort((a, b) => b.date.compareTo(a.date));
     for (Expense element in exps) {
       value = value.add(Prop(element));
     }

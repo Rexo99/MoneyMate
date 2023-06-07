@@ -52,7 +52,7 @@ class CategoryCard extends StatelessWidget {
                 TextButton(
                   child: const Text('Löschen'),
                   onPressed: () {
-                    DeleteCategoryPopup(category: category, context: context);
+                    deleteCategoryPopup(category: category, context: context);
                   },
                 ),
                 const SizedBox(width: 8),
