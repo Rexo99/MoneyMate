@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:money_mate/main.dart';
 import 'package:money_mate/models/ExpenseList.dart';
 import 'package:money_mate/util/DateTimeExtensions.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -14,12 +15,8 @@ import 'ExpenseOverview.dart';
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
-  Key tutorialKey = new GlobalKey(); //Used as an identifier for the tutorial
-
-  Homepage({required BuildContext context, super.key/*, foreignKey*/}) {
+  Homepage({required BuildContext context, super.key}) {
     expenseList = UserState.of(context).expendList;
-
-    //tutorialKey = foreignKey;
   }
 
   @override
@@ -37,7 +34,7 @@ class Homepage extends StatelessWidget {
                       count: 3))
               : const Text("Please login"),
           ElevatedButton(
-            //key: tutorialKey,
+              key: MyApp.of(context).getTutorialKeys()[3],
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),

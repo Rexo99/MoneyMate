@@ -8,9 +8,7 @@ import 'package:money_mate/pages/AddCategory.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
-import 'package:money_mate/pages/TutorialTest.dart';
-import 'package:money_mate/pages/TutorialTest2.dart';
-import 'package:money_mate/pages/TutorialTest3.dart';
+import 'package:money_mate/pages/Tutorial.dart';
 import 'package:money_mate/state.dart';
 import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -21,8 +19,6 @@ import 'UserState.dart';
 Future<void> main() async {
   //Initialize for Camera
   WidgetsFlutterBinding.ensureInitialized();
-
-  //todo - load theme settings here so that they never load incorrectly?
 
   //await dotenv.load(fileName: '.env');
   Intl.defaultLocale = 'pt_BR';
@@ -43,11 +39,23 @@ class MyApp extends StatefulWidget {
   class _MyAppState extends State<MyApp> {
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
+    Widget _startPage = Login(title: 'Login');
 
-    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
+    //List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
+    List<GlobalKey> _tutorialKeys = [new GlobalKey(debugLabel: 'test'), new GlobalKey(debugLabel: 'test2'), new GlobalKey(debugLabel: 'test3'), new GlobalKey(debugLabel: 'test4'), new GlobalKey(debugLabel: 'test5')];
+
+    @override
+    void initState() {
+      checkTheme();
+      checkFirstSeen();
+      super.initState();
+    }
 
     @override
     Widget build(BuildContext context) {
+      print('START BUILD');
+      print(_themeMode);
+      print(_themeColor);
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
@@ -62,8 +70,40 @@ class MyApp extends StatefulWidget {
           useMaterial3: true,
         ),
         themeMode: _themeMode,
-        home: new LoadingScreen(),
+        home: _startPage,
       ));
+    }
+
+    ///Checks SharedPreferences which theme should be applied
+    Future<void> checkTheme() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      int? themeMode = prefs.getInt('themeMode');
+      if(themeMode != null) {
+        _themeMode = getThemeModes().elementAt(themeMode);
+        print(_themeMode);
+      }
+
+      int? themeColor = prefs.getInt('themeColor');
+      if(themeColor != null) {
+        _themeColor = getThemeColors().elementAt(themeColor);
+        print(_themeColor);
+      }
+    }
+
+    ///Checks SharedPreferences whether the app is started for the first time after installing or not
+    Future checkFirstSeen() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool _seen = (prefs.getBool('tutorialSeen') ?? false);
+      print('Tutorial seen = ');
+      print(_seen);
+
+      if (_seen) {
+        _startPage = Login(title: 'Login');
+      } else {
+        await prefs.setBool('tutorialSeen', true);
+        _startPage = Hud();
+        }
     }
 
     ///Used to change between light/dark/system theme
@@ -110,6 +150,7 @@ class MyApp extends StatefulWidget {
     }
   }
 
+  /*
 class LoadingScreen extends StatefulWidget {
   @override
   LoadingScreenState createState() => new LoadingScreenState();
@@ -118,9 +159,7 @@ class LoadingScreen extends StatefulWidget {
 class LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
-    checkTheme();
     checkFirstSeen();
-
     super.initState();
   }
 
@@ -152,34 +191,16 @@ class LoadingScreenState extends State<LoadingScreen> {
   ///Checks SharedPreferences whether the app is started for the first time after installing or not
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _seen = (prefs.getBool('tutorialSeen') ?? false);
 
-    if (_seen) {
+    if (true) {
       await Future.delayed(const Duration(seconds: 1));
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => Login(title: 'Login')));
-    } else {
+      await Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => Hud()));
       await prefs.setBool('tutorialSeen', true);
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => TutorialTest()));
-    }
-  }
-
-  ///Checks SharedPreferences which theme should be applied
-  Future<void> checkTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    int? themeMode = prefs.getInt('themeMode');
-    if(themeMode != null) {
-      MyApp.of(context).changeTheme(MyApp.of(context).getThemeModes().elementAt(themeMode));
-    }
-
-    int? themeColor = prefs.getInt('themeColor');
-    if(themeColor != null) {
-      MyApp.of(context).changeThemeColor(MyApp.of(context).getThemeColors().elementAt(themeColor));
     }
   }
 }
+   */
 
 class Hud extends StatefulWidget {
   @override
@@ -192,12 +213,23 @@ class HudState extends State<Hud> {
   final List<String> _titleList = ["Home", "Categories"];
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
+  Tutorial _tutorial = Tutorial();
+
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
-  //todo - make tutorial return itself as a widget that can be used as an overlay
+  //todo - find use for overlay
   OverlayEntry? entry;
+
+  @override
+  void initState() {
+    super.initState();
+
+    //todo - check value stored in MyApp whether the tutorial should be called or not
+
+  }
+
   void showOverlay() {
     entry = OverlayEntry(builder: (context) => Positioned(
         left: 20, top: 40,
@@ -209,7 +241,7 @@ class HudState extends State<Hud> {
     )
     );
 
-    final overlay = Overlay.of(context)!;
+    final overlay = Overlay.of(context);
     overlay.insert(entry!);
   }
 
@@ -230,12 +262,13 @@ class HudState extends State<Hud> {
                 _currentIndex.value = newIndex;
               },
               children:[
-                Homepage(context: context/*, foreignKey: new GlobalKey(),*/),
+                Homepage(context: context),
                 const CategoryOverview(),
               ],
             ),
             floatingActionButton: $(
               _currentIndex, (p0) => SpeedDial(
+              key: MyApp.of(context).getTutorialKeys()[2],
                 // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                 animatedIcon: AnimatedIcons.menu_close,
                 spaceBetweenChildren: 10,
@@ -285,13 +318,24 @@ class HudState extends State<Hud> {
                   SpeedDialChild(
                       visible: true,
                       child: IconButton(
-                        icon: const Icon(Icons.bug_report),
+                        icon: const Icon(Icons.settings_overscan_sharp),
                         onPressed: () async {
                           showOverlay();
                           isDialOpen.value = false;
                         },
                       ),
                       label: "OverlayButton"),
+                  SpeedDialChild(
+                    visible: true,
+                    child: IconButton(
+                      icon: const Icon(Icons.info_sharp),
+                      onPressed: () async {
+                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+                        _tutorial.showTutorial(context);
+                        isDialOpen.value = false;
+                      },
+                    ),
+                    label: "TutorialButton"),
                   /*SpeedDialChild(
                       child: IconButton(
                         icon: const Icon(Icons.category),
@@ -324,11 +368,11 @@ class HudState extends State<Hud> {
                       unselectedItemColor: Colors.grey,
                       items: [
                         BottomNavigationBarItem(
-                          icon: Icon(Icons.euro_outlined),
+                          icon: Icon(Icons.euro_outlined, key: MyApp.of(context).getTutorialKeys()[0]),
                           label: "Expenses",
                         ),
                         BottomNavigationBarItem(
-                            icon: Icon(Icons.inventory_2_outlined),
+                            icon: Icon(Icons.inventory_2_outlined, key: MyApp.of(context).getTutorialKeys()[1]),
                             label: "Categories"),
                       ],
                       onTap: (newIndex) {
@@ -421,19 +465,6 @@ class MenuDrawer extends StatelessWidget{
                 Icon(Icons.info_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Info Screen'),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TutorialTest())),
-            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 40),
-                Icon(Icons.departure_board, size: 24.0),
-                SizedBox(width: 10),
-                Text('Tutorial Test'),
               ],
             ),
           ),
