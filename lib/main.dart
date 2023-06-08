@@ -37,9 +37,12 @@ class MyApp extends StatefulWidget {
 
   // This widget is the root of your application.
   class _MyAppState extends State<MyApp> {
+    ///Default values for loading the app
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
     Widget _startPage = Login(title: 'Login');
+
+    ///Tutorial related
     List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
     bool _loadTutorial = false;
 
@@ -52,11 +55,6 @@ class MyApp extends StatefulWidget {
 
     @override
     Widget build(BuildContext context) {
-      //todo - remove prints
-      print('START BUILD');
-      print(_themeMode);
-      print(_themeColor);
-
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
@@ -84,7 +82,6 @@ class MyApp extends StatefulWidget {
         setState(() {
           _themeMode = getThemeModes().elementAt(themeMode);
         });
-        print(_themeMode); //todo - remove prints
       }
 
       int? themeColor = prefs.getInt('themeColor');
@@ -92,7 +89,6 @@ class MyApp extends StatefulWidget {
         setState(() {
           _themeColor = getThemeColors().elementAt(themeColor);
         });
-        print(_themeColor); //todo - remove prints
       }
     }
 
@@ -100,10 +96,6 @@ class MyApp extends StatefulWidget {
     Future checkFirstSeen() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? _seen = (prefs.getBool('tutorialSeen'));
-
-      //todo - remove prints
-      print('Tutorial seen = ');
-      print(_seen);
 
       if(_seen != null) {
         if (_seen) {
@@ -233,34 +225,11 @@ class HudState extends State<Hud> {
   void initState() {
     super.initState();
 
-    //todo - test if this works
+    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
       _tutorial.showTutorial(context);
     }
-  }
-
-  //todo - find use for overlay
-  OverlayEntry? entry;
-
-  void showOverlay() {
-    entry = OverlayEntry(builder: (context) => Positioned(
-        left: 20, top: 40,
-        child: ElevatedButton.icon(icon: Icon(Icons.ac_unit), label: Text('Test'),
-          onPressed: () {
-            removeOverlay();
-          },
-        )
-    )
-    );
-
-    final overlay = Overlay.of(context);
-    overlay.insert(entry!);
-  }
-
-  void removeOverlay() {
-    entry?.remove();
-    entry = null;
   }
 
   @override
@@ -333,7 +302,7 @@ class HudState extends State<Hud> {
                       child: IconButton(
                         icon: const Icon(Icons.settings_overscan_sharp),
                         onPressed: () async {
-                          showOverlay();
+                          _tutorial.showOverlay(context);
                           isDialOpen.value = false;
                         },
                       ),

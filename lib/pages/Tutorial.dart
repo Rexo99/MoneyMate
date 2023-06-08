@@ -203,4 +203,24 @@ class Tutorial {
     ));
     return targets;
   }
+
+  void showOverlay(context/*, OverlayEntry entry*/) {
+    OverlayEntry? entry;
+    entry = OverlayEntry(builder: (context) => Positioned(
+        left: 20, top: 40,
+        child: ElevatedButton.icon(icon: Icon(Icons.ac_unit), label: Text('Test'),
+          onPressed: () {
+            removeOverlay(entry!);
+          },
+        )
+    )
+    );
+
+    final overlay = Overlay.of(context);
+    overlay.insert(entry);
+  }
+
+  void removeOverlay(OverlayEntry entry) {
+    entry.remove();
+  }
 }
