@@ -38,7 +38,7 @@ class Info extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('Info Page \n''Login Page', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [Text('Info Page \n Login Page View \n Tutorial \n Adjustable App Theme' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       ListTile(
@@ -74,12 +74,24 @@ class Info extends StatelessWidget {
                 title: Text("Used Widgets"),
                 children: <Widget>[
                   ListTile(
-                    title: Text('Widget 1'),
-                    subtitle: Text('Used for XXX'),
+                    title: Text('Expansion Tile'),
+                    subtitle: Text("Tile that can be opened and closed to show and hide it's content"),
                   ),
                   ListTile(
-                    title: Text('Widget 2'),
-                    subtitle: Text('Used for XXX'),
+                    title: Text('List Tile'),
+                    subtitle: Text('Tile for displaying text. Useful because of title and subtitle attributes'),
+                  ),
+                  ListTile(
+                    title: Text('Toggle Buttons'),
+                    subtitle: Text('An arrangement of buttons that highlight the currently selected button'),
+                  ),
+                  ListTile(
+                    title: Text('Divider'),
+                    subtitle: Text('Draws a horizontal line across the screen'),
+                  ),
+                  ListTile(
+                    title: Text('Widget'),
+                    subtitle: Text('Used for'),
                   )
                 ],
               ),
@@ -93,6 +105,10 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('Shared preferences plugin'),
                     subtitle: Text('Used for saving user data'),
+                  ),
+                  ListTile(
+                    title: Text('TutorialCoachMark plugin'),
+                    subtitle: Text('Used for creating and displaying the Tutorial'),
                   )
                 ],
               ),
