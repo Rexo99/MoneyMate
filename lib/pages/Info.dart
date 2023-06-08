@@ -19,7 +19,7 @@ class Info extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 20),
-              Text("The MoneyMate team:",
+              const Text("The MoneyMate team:",
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20)
@@ -29,19 +29,19 @@ class Info extends StatelessWidget {
                   Flexible(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
-                        child: Icon(Icons.account_circle_outlined, size: 90),
+                        onTap: () => infoPopup(featureList: [const Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
-                      ListTile(
+                      const ListTile(
                         title: Text('Daniel Ottolien', textAlign: TextAlign.center),
                         subtitle: Text('1629292', textAlign: TextAlign.center),
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('Info Page \n Login Page View \n Tutorial \n Adjustable App Theme' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
-                        child: Icon(Icons.account_circle_outlined, size: 90),
+                        onTap: () => infoPopup(featureList: [const Text('Info Page \n Login Page View \n Tutorial \n Adjustable App Theme' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
-                      ListTile(
+                      const ListTile(
                         title: Text('Dorian Zimmermann', textAlign: TextAlign.center),
                         subtitle: Text('1671737', textAlign: TextAlign.center)
                       ),
@@ -50,19 +50,19 @@ class Info extends StatelessWidget {
                   Expanded(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
-                        child: Icon(Icons.account_circle_outlined, size: 90),
+                        onTap: () => infoPopup(featureList: [const Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
-                      ListTile(
+                      const ListTile(
                           title: Text('Dannie Krösche', textAlign: TextAlign.center),
                           subtitle: Text('1629522', textAlign: TextAlign.center)
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
-                        child: Icon(Icons.account_circle_outlined, size: 90),
+                        onTap: () => infoPopup(featureList: [const Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
-                      ListTile(
+                      const ListTile(
                           title: Text('Erik Hinkelmanns', textAlign: TextAlign.center),
                           subtitle: Text('1583861', textAlign: TextAlign.center)
                       ),
@@ -70,49 +70,49 @@ class Info extends StatelessWidget {
                   ),
                 ]),
               const SizedBox(height: 30),
-              ExpansionTile(
+              const ExpansionTile(
                 title: Text("Used Widgets"),
                 children: <Widget>[
                   ListTile(
-                    title: Text('Expansion Tile'),
+                    title: Text('Expansion Tile', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text("Tile that can be opened and closed to show and hide it's content"),
                   ),
                   ListTile(
-                    title: Text('List Tile'),
+                    title: Text('List Tile', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Tile for displaying text. Useful because of title and subtitle attributes'),
                   ),
                   ListTile(
-                    title: Text('Toggle Buttons'),
+                    title: Text('Toggle Buttons', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('An arrangement of buttons that highlight the currently selected button'),
                   ),
                   ListTile(
-                    title: Text('Divider'),
+                    title: Text('Divider', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Draws a horizontal line across the screen'),
                   ),
                   ListTile(
-                    title: Text('Widget'),
+                    title: Text('Widget', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for'),
                   )
                 ],
               ),
-              ExpansionTile(
+              const ExpansionTile(
                 title: Text('Used Flutter-Packages'),
                 children: <Widget>[
                   ListTile(
-                    title: Text('Flutter Launcher Icons'),
+                    title: Text('Flutter Launcher Icons', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for generating and setting App-Icons'),
                   ),
                   ListTile(
-                    title: Text('Shared preferences plugin'),
+                    title: Text('Shared preferences', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for saving user data'),
                   ),
                   ListTile(
-                    title: Text('TutorialCoachMark plugin'),
+                    title: Text('TutorialCoachMark', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for creating and displaying the Tutorial'),
                   )
                 ],
               ),
-              ExpansionTile(
+              const ExpansionTile(
                 title: Text('Copyright'),
                 children: <Widget>[
                   ListTile(
