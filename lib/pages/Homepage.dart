@@ -89,17 +89,30 @@ class ExpenseCard extends StatelessWidget {
       selectedForegroundColor: Colors.black.withAlpha(30),
       trailingActions: [
         SwipeAction(
-            title: "delete",
+            content: _getIconButton(Colors.red, Icons.delete),
             backgroundRadius: 10,
             performsFirstActionWithFullSwipe: true,
-            nestedAction: SwipeNestedAction(title: "confirm"),
+            nestedAction: SwipeNestedAction(
+              content: Container(
+                child: OverflowBox(
+                  maxWidth: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('confirm',
+                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             onTap: (handler) async {
               await handler(true);
               expenseList.removeItem(expense);
             }),
         SwipeAction(
-            title: "Update",
-            color: Colors.grey,
+            content: _getIconButton(Colors.green, Icons.mode_edit),
+            color: Colors.green,
             backgroundRadius: 10,
             onTap: (handler) {
               updateExpensePopup(expense: expense, context: context);
@@ -134,6 +147,23 @@ class ExpenseCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _getIconButton(color, icon) {
+  return Container(
+    width: 50,
+    height: 50,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25),
+
+      /// set you real bg color in your content
+      color: color,
+    ),
+    child: Icon(
+      icon,
+      color: Colors.white,
+    ),
+  );
 }
 
 /// Build a List of Card Widgets from a List
