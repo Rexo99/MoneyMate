@@ -176,6 +176,7 @@ class HudState extends State<Hud> {
 
     //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
+      MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
       _tutorial.showTutorial(context);
     }
