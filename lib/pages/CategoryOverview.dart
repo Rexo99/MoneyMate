@@ -40,7 +40,7 @@ class CategoryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TextButton(
-                  child: const Text('Bearbeiten'),
+                  child: const Text('Edit'),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -50,9 +50,9 @@ class CategoryCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 TextButton(
-                  child: const Text('Löschen'),
+                  child: const Text('Delete'),
                   onPressed: () {
-                    DeleteCategoryPopup(category: category, context: context);
+                    deleteCategoryPopup(category: category, context: context);
                   },
                 ),
                 const SizedBox(width: 8),

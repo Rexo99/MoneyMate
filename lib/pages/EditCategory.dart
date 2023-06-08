@@ -51,7 +51,7 @@ class EditCategory extends StatelessWidget {
               controller: budgetController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Betrag',
+                hintText: 'Budget',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -179,7 +179,7 @@ class EditCategory extends StatelessWidget {
                         }
                       },
                       icon: Icon( // <-- Icon
-                        Icons.download ,
+                        Icons.save_as_outlined ,
                         size: 24.0,
                       ),
                       label: Text('Change'), // <-- Text

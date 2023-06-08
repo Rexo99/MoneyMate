@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
-import 'package:money_mate/main.dart';
 import 'package:money_mate/models/ExpenseList.dart';
 import 'package:money_mate/util/DateTimeExtensions.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -11,7 +10,6 @@ import '../models/models.dart';
 import '../state.dart';
 import 'ExpenseOverview.dart';
 
-//todo - create dummy HomePage by using the HUD for the tutorial?
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
@@ -24,8 +22,9 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Column(
-        children: [
-          HTTPRequestBuilder().loggedIn
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              HTTPRequestBuilder().loggedIn
               ? $(
                   expenseList,
                   (p0) => CardListBuilder(
@@ -38,9 +37,9 @@ class Homepage extends StatelessWidget {
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
-          $(
-              expenseList,
-              (p) => Column(
+              $(
+                expenseList,
+                (p) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       HTTPRequestBuilder().loggedIn

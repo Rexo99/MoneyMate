@@ -17,8 +17,7 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     required int amount,
     required int categoryId
   }) {
-    value = value
-        .add(Prop(Expense(name, amount, DateTime.now(), categoryId)));
+    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId)));
   }
 
   void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
@@ -61,10 +60,12 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
 
   //clears the expendList and fills it with fresh data from the backend
   Future<void> initListExpenseList() async {
-    value.clear();
+    value = value.clear();
     List<Expense> exps = (await HTTPRequestBuilder().get(
         path: "expenditures", //todo - change to "expenses"
         returnType: List<Expense>)) as List<Expense>;
+
+    exps.sort((a, b) => b.date.compareTo(a.date));
     for (Expense element in exps) {
       value = value.add(Prop(element));
     }
@@ -73,7 +74,8 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
   /// Sorts the list of DateTimes in descending order and returns the [count] newest DateTimes
   IList<Prop<Expense>> findNewest(int count) {
     if (value.isEmpty) {
-      throw Exception('The list of DateTimes is empty.');
+      return value;
+      //throw Exception('The list of DateTimes is empty.');
     }
 
     //expenseList.value.sort(); // Sort in descending order

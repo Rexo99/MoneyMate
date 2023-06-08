@@ -114,10 +114,12 @@ class _Login extends State<Login> {
                                 await prefs.setString("username", "");
                                 await prefs.setString("password", "");
                               }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Hud()));
+                              if(context.mounted) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Hud()));
+                              }
                             }
                           }
                         },

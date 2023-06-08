@@ -36,7 +36,7 @@ class AddCategory extends StatelessWidget {
                 controller: nameController,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
-                  hintText: 'Kategorienname',
+                  hintText: 'Name',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -54,7 +54,7 @@ class AddCategory extends StatelessWidget {
             controller: budgetController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Betrag',
+              hintText: 'Budget',
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -182,10 +182,10 @@ class AddCategory extends StatelessWidget {
                     }
                   },
                   icon: Icon( // <-- Icon
-                    Icons.download ,
+                    Icons.add ,
                     size: 24.0,
                   ),
-                  label: Text('Hinzufügen'), // <-- Text
+                  label: Text('Add'), // <-- Text
                 ),
               ],
             )

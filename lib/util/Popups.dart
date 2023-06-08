@@ -177,7 +177,7 @@ void createExpensePopup({required BuildContext context}) {
   );
 }
 
-void DeleteCategoryPopup({ required Category category, required BuildContext context}){
+void deleteCategoryPopup({ required Category category, required BuildContext context}){
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) =>
