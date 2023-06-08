@@ -23,7 +23,6 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               HTTPRequestBuilder().loggedIn
               ? $(
@@ -33,7 +32,7 @@ class Homepage extends StatelessWidget {
                       cardType: Expense,
                       count: 3))
               : const Text("Please login"),
-          ElevatedButton(
+              ElevatedButton(
               key: MyApp.of(context).getTutorialKeys()[3],
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
@@ -171,7 +170,7 @@ Widget _getIconButton(color, icon) {
 /// [cardType] needs a [Model]
 /// [count] of cards that should be build (default = 3)
 class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
-  T objectList;
+  final T objectList;
   final Type cardType;
   final int count;
 
