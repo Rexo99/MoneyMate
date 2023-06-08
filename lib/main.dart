@@ -70,6 +70,7 @@ class MyApp extends StatefulWidget {
         ),
         themeMode: _themeMode,
         home: _startPage,
+        debugShowCheckedModeBanner: false,
       ));
     }
 
