@@ -153,58 +153,6 @@ class MyApp extends StatefulWidget {
     }
   }
 
-  /*
-class LoadingScreen extends StatefulWidget {
-  @override
-  LoadingScreenState createState() => new LoadingScreenState();
-}
-
-class LoadingScreenState extends State<LoadingScreen> {
-  @override
-  void initState() {
-    checkFirstSeen();
-    super.initState();
-  }
-
-  //todo - check whether loading animation is laggy or not when deployed
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text('Loading...',
-              style: TextStyle(fontSize: 50),
-            ),
-            new SizedBox(
-              width: 100.0,
-              height: 100.0,
-              child: CircularProgressIndicator(
-                color: Colors.black,
-                strokeWidth: 6,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  ///Checks SharedPreferences whether the app is started for the first time after installing or not
-  Future checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (true) {
-      await Future.delayed(const Duration(seconds: 1));
-      await Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => Hud()));
-      await prefs.setBool('tutorialSeen', true);
-    }
-  }
-}
-   */
-
 class Hud extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => HudState();
