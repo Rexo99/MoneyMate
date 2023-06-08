@@ -41,6 +41,7 @@ class MyApp extends StatefulWidget {
     Color _themeColor = Color(0xff6750a4);
     Widget _startPage = Login(title: 'Login');
     List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
+    bool _loadTutorial = false;
 
     @override
     void initState() {
@@ -98,18 +99,21 @@ class MyApp extends StatefulWidget {
     ///Checks SharedPreferences whether the app is started for the first time after installing or not
     Future checkFirstSeen() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool _seen = (prefs.getBool('tutorialSeen') ?? false);
+      bool? _seen = (prefs.getBool('tutorialSeen'));
 
       //todo - remove prints
       print('Tutorial seen = ');
       print(_seen);
 
-      if (_seen) {
-        _startPage = Login(title: 'Login');
+      if(_seen != null) {
+        if (_seen) {
+          _startPage = Login(title: 'Login');
+        }
       } else {
         await prefs.setBool('tutorialSeen', true);
+        _loadTutorial = true;
         _startPage = Hud();
-        }
+      }
     }
 
     ///Used to change between light/dark/system theme
@@ -229,7 +233,11 @@ class HudState extends State<Hud> {
   void initState() {
     super.initState();
 
-    //todo - check value stored in MyApp whether the tutorial should be called or not
+    //todo - test if this works
+    if(MyApp.of(context)._loadTutorial) {
+      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+      _tutorial.showTutorial(context);
+    }
   }
 
   //todo - find use for overlay
