@@ -85,7 +85,7 @@ void createExpensePopup({required BuildContext context}) {
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) => AlertDialog(
-      title: const Text('Edit Expense'),
+      title: const Text('Add Expense'),
       content: Form(
         key: formKey,
         child: Column(
