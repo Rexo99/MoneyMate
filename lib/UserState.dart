@@ -74,7 +74,8 @@ class UserState extends InheritedWidget {
   Future<void> removeCategory(Category category) async {
     categoryList.remove(category);
     await HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
-    initListCategoryList();
+    await initListCategoryList();
+    await expendList.initListExpenseList();
   }
 
   // Updates a category on the [categoryList] and backend
