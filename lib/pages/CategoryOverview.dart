@@ -124,7 +124,7 @@ class CategoryListView extends StatelessWidget {
               // return the header
               return Row(
                 children: const [
-                  Text("Please add a category"),
+                  Text("Your categories:"),
                 ],
               );
             }

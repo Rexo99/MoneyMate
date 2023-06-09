@@ -189,12 +189,12 @@ void deleteCategoryPopup({ required Category category, required BuildContext con
     context: context,
     builder: (BuildContext subContext) =>
         AlertDialog(
-          title: const Text('Kategorie löschen'),
-          content: const Text('Alle in der Kategorie gespeicherten Daten werden gelöscht'),
+          title: const Text('Delete category'),
+          content: const Text('All data in this category will be lost!'),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.pop(context, 'Abbrechen'),
-              child: const Text('Abbrechen'),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
