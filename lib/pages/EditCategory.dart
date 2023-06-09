@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../UserState.dart';
+import '../main.dart';
 import '../models/models.dart';
 import 'package:flutter/services.dart';
 
@@ -175,7 +176,7 @@ class EditCategory extends StatelessWidget {
                         if (_formKey.currentState!.validate()) {
                           UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text));
                           // UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, name: nameController.value.text, budget: int.parse(budgetController.text));
-                          Navigator.pop(context, 'OK');
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
                         }
                       },
                       icon: Icon( // <-- Icon

@@ -61,22 +61,24 @@ class UserState extends InheritedWidget {
   }
 
   //Creates a Category and adds it to the [categoryList]
-  void addCategory({
+  Future<void> addCategory({
     required String name,
     required int budget,
-  }) {
-    categoryList.add(new Category.create(name, budget));
-    initListCategoryList();
+  }) async {
+    Category cat = new Category.create(name, budget);
+    await cat.create();
+    categoryList.add(cat);
   }
 
   // Removes a category from the [categoryList] and backend
-  void removeCategory(Category category) {
+  Future<void> removeCategory(Category category) async {
     categoryList.remove(category);
-    HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
+    await HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
+    initListCategoryList();
   }
 
   // Updates a category on the [categoryList] and backend
-  void updateCategory({required Category category, String? name, int? budget}) {
+  Future<void> updateCategory({required Category category, String? name, int? budget}) async {
     // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
     // attributes, but it works tho *Grinning Face With Sweat emoji*
     if (name == null) {
@@ -85,10 +87,11 @@ class UserState extends InheritedWidget {
     if (budget == null) {
       budget = category.budget;
     }
-    HTTPRequestBuilder().put(
+    await HTTPRequestBuilder().put(
         path: "categories/${category.id}",
         obj: CategoryDTO(name, budget, category.id),
         returnType: Category);
+    initListCategoryList();
   }
 
   @override

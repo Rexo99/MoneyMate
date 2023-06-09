@@ -71,19 +71,21 @@ class Category implements Model {
         .then((value) => _id = value);
   }
 
-  Category.create(this.name, this.budget) {
-    HTTPRequestBuilder()
-        .createModel(
-        path: "categories",
-        tmp: CategoryDTO(name, budget, _id))
-        .then((value) => _id = value);
-  }
+  Category.create(this.name, this.budget);
 
   Category._(
       this._id, this.name, this.budget, this.userId);
 
   static Category fromJson(Map json) {
     return Category._(json["id"], json["name"], json["budget"], json["user_id"]);
+  }
+
+  create() async {
+    await HTTPRequestBuilder()
+        .createModel(
+        path: "categories",
+        tmp: CategoryDTO(name, budget, userId))
+        .then((value) => _id = value);
   }
 
   @override

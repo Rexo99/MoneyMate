@@ -201,7 +201,7 @@ void deleteCategoryPopup({ required Category category, required BuildContext con
                 // UserState.of(context).removeCategory(category);
                 // UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
                 UserState.of(context).removeCategory(category);
-                  Navigator.pop(subContext, 'OK');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
               },
               child: const Text('OK'),
             ),

@@ -174,9 +174,10 @@ class AddCategory extends StatelessWidget {
                 ),
                 ElevatedButton.icon
                   (
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text));
+                      await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text));
+                      await UserState.of(context).initListCategoryList();
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesOverview()),);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
                     }
