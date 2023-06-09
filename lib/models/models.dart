@@ -20,7 +20,7 @@ class Expense implements Model {
   @override
   int? get id => _id;
   final String name;
-  final int amount;
+  final num amount;
   final DateTime date;
   final int categoryId;
 
@@ -42,14 +42,14 @@ class Expense implements Model {
   @override
   Expense copyWith({
     String? name,
-    int? amount,
+    num? amount,
   }) =>
       Expense._(
           id, name ?? this.name, amount ?? this.amount, date, categoryId);
 
   Expense setName(String name) => copyWith(name: name);
 
-  Expense setAmount(int amount) => copyWith(amount: amount);
+  Expense setAmount(num amount) => copyWith(amount: amount);
 }
 
 class Category implements Model {

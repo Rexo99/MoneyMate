@@ -34,7 +34,7 @@ class CategoryCard extends StatelessWidget {
              ListTile(
               leading: Icon(Icons.album),
               title: Text(category.name),
-              subtitle: Text(category.budget.toString()),
+              subtitle: Text(category.budget.toString() + ' €'),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -124,7 +124,7 @@ class CategoryListView extends StatelessWidget {
               // return the header
               return Row(
                 children: const [
-                  Text("Please Add a Category"),
+                  Text("Please add a category"),
                 ],
               );
             }

@@ -11,7 +11,7 @@ abstract class DTO {
 class ExpenseDTO extends DTO {
   @override
   final String name;
-  final int amount;
+  final num amount;
   final int categoryId;
   final DateTime dateTime;
 

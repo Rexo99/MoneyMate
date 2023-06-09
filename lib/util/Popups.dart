@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
 import '../models/models.dart';
@@ -34,6 +35,9 @@ void updateExpensePopup(
               },
             ),
             TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+              ],
               decoration: const InputDecoration(
                 icon: Icon(Icons.euro),
                 labelText: 'Amount',
@@ -42,7 +46,7 @@ void updateExpensePopup(
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a number';
-                } else if (int.tryParse(value) == null) {
+                } else if (num.tryParse(value) == null) {
                   return "Please enter a valid number";
                 } else {
                   amount = value;
@@ -66,7 +70,7 @@ void updateExpensePopup(
               );
               //Todo not the right context?
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: int.parse(amount));
+                  expense: expense, name: name, amount: double.parse(amount));
               Navigator.pop(subContext, 'OK');
             }
           },
@@ -106,6 +110,9 @@ void createExpensePopup({required BuildContext context}) {
               },
             ),
             TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+              ],
               decoration: const InputDecoration(
                 icon: Icon(Icons.euro),
                 hintText: 'Amount of your Expense',
@@ -114,7 +121,7 @@ void createExpensePopup({required BuildContext context}) {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Pleas enter a number';
-                } else if (int.tryParse(value) == null) {
+                } else if (double.tryParse(value) == null) {
                   return "Pleas enter a valid number";
                 } else {
                   amount = value;
@@ -162,7 +169,7 @@ void createExpensePopup({required BuildContext context}) {
               );
               UserState.of(context).expendList.addExpense(
                   name: name,
-                  amount: int.parse(amount),
+                  amount: num.parse(amount),
                   categoryId: categoryId);
               Navigator.push(
                   context,

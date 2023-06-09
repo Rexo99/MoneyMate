@@ -14,13 +14,13 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
   //Creates an Expense and adds it to the [expendList]
   void addExpense({
     required String name,
-    required int amount,
+    required num amount,
     required int categoryId
   }) {
     value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId)));
   }
 
-  void updateItem({required Prop<Expense> expense, String? name, int? amount}) {
+  void updateItem({required Prop<Expense> expense, String? name, num? amount}) {
     if (name != null) {
       expense.value = expense.value.setName(name);
     }
@@ -39,8 +39,8 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);
   }
 
-  double getTotalToday(){
-    double total = 0;
+  num getTotalToday(){
+    num total = 0;
     for (var expense in value) {
       if(expense.value.date.isToday()){
         total += expense.value.amount;
@@ -48,8 +48,8 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     }
     return total;
   }
-  double getTotalMonth(){
-    double total = 0;
+  num getTotalMonth(){
+    num total = 0;
     for (var expense in value) {
       if(expense.value.date.inMonth()){
         total += expense.value.amount;

@@ -132,7 +132,7 @@ class ListEntry extends StatelessWidget {
             $(
                 expense,
                 (e) => Text(
-                    "${e.name}  ${e.amount.toString()}  ${e.date.dateFormatter()}")),
+                    "${e.name}  ${e.amount.toString()} ${e.date.dateFormatter()}")),
             MaterialButton(
                 child: const Text('Delete'),
                 color: Colors.red,

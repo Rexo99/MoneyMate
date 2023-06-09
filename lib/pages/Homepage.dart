@@ -45,12 +45,12 @@ class Homepage extends StatelessWidget {
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Today",
-                              amount: expenseList.getTotalToday())
+                              amount: num.tryParse(expenseList.getTotalToday().toStringAsFixed(1)))
                           : TotalExpense(title: "Today", amount: 0),
                       HTTPRequestBuilder().loggedIn
                           ? TotalExpense(
                               title: "Month",
-                              amount: expenseList.getTotalMonth())
+                              amount: num.tryParse(expenseList.getTotalMonth().toStringAsFixed(1)))
                           : TotalExpense(title: "Month", amount: 0)
                     ],
                   ))
@@ -133,7 +133,7 @@ class ExpenseCard extends StatelessWidget {
               title: Text(expense.value.name),
               subtitle: Row(
                 children: [
-                  Text("Amount: ${expense.value.amount}"),
+                  Text("Amount: ${expense.value.amount} €"),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text("Date: ${expense.value.date.dateFormatter()}"),
@@ -215,7 +215,7 @@ class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
 
 class TotalExpense extends StatelessWidget {
   final String title;
-  final double? amount;
+  final num? amount;
 
   const TotalExpense({this.title = "none", this.amount, super.key});
 
@@ -232,7 +232,7 @@ class TotalExpense extends StatelessWidget {
                     style: TextStyle(fontSize: 30),
                   )
                 : Text(
-                    "${amount}0€",
+                    "${amount}0 €",
                     style: const TextStyle(fontSize: 30),
                   ),
             Text(
