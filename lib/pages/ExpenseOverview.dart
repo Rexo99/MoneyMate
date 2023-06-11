@@ -5,7 +5,7 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/util/DateTimeExtensions.dart';
 import '../UserState.dart';
 import '../models/models.dart';
-import '../state.dart';
+import '../util/StateManagement.dart';
 import '../util/Popups.dart';
 
 class ExpenseOverview extends StatefulWidget {

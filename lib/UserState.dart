@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:money_mate/state.dart';
+import 'package:money_mate/util/StateManagement.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'models/ExpenseList.dart';
 import 'models/dtos.dart';

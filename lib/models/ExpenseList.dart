@@ -2,7 +2,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:money_mate/util/DateTimeExtensions.dart';
 
-import '../state.dart';
+import '../util/StateManagement.dart';
 import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 import 'models.dart';

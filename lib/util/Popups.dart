@@ -4,8 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
 import '../models/models.dart';
-import '../state.dart';
+import 'StateManagement.dart';
 
+/// A popup that allows the user to change the name and amount of an expense.
 void updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) {
   String name = expense.value.name;
@@ -80,6 +81,7 @@ void updateExpensePopup(
     ),
   );
 }
+
 
 void createExpensePopup({required BuildContext context}) {
   String name = "";

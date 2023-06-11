@@ -8,7 +8,7 @@ import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import '../UserState.dart';
 import '../models/models.dart';
-import '../state.dart';
+import '../util/StateManagement.dart';
 import 'ExpenseOverview.dart';
 
 class Homepage extends StatelessWidget {
