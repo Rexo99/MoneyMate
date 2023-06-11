@@ -59,7 +59,7 @@ class Info extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('HUD \n Homepage \n ExpenseOverview \n models(expense) \n dtos(expense) \n Popups(ExpensePop) \n DateTimeExtensions \n HTTPRequestBuilder \n UserState', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
@@ -109,6 +109,26 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('TutorialCoachMark', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for creating and displaying the Tutorial'),
+                  ),
+                  ListTile(
+                    title: Text('jwt_decoder', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for decoding the jwt_token and read protected Data from it'),
+                  ),
+                  ListTile(
+                    title: Text('http', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for send https requests to the backend and read the responses'),
+                  ),
+                  ListTile(
+                    title: Text('fast_immutable_collections', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for creating immutable lists'),
+                  ),
+                  ListTile(
+                    title: Text('flutter_speed_dial', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for creating a collapsable menu on for  the floatingActionButton widget'),
+                  ),
+                  ListTile(
+                    title: Text('flutter_swipe_action_cell', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for creating the slide menu for each expense in your list'),
                   )
                 ],
               ),
