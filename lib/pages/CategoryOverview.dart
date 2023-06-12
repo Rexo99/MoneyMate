@@ -32,7 +32,7 @@ class CategoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
              ListTile(
-              leading: Icon(Icons.album),
+              leading: Icon(Icons.local_grocery_store),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
             ),
