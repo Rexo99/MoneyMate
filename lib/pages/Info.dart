@@ -136,11 +136,11 @@ class Info extends StatelessWidget {
                 title: Text('Copyright'),
                 children: <Widget>[
                   ListTile(
-                    title: Text('App Icon'),
+                    title: Text('App Icon', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Euro icons created by Smashicons - Flaticon'),
                   ),
                   ListTile(
-                    title: Text('Icon n'),
+                    title: Text('Icon n', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Name'),
                   )
                 ],
