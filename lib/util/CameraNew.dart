@@ -16,7 +16,7 @@ class TakePictureScreen extends StatefulWidget {
   TakePictureScreenState createState() => TakePictureScreenState();
 }
 
-class TakePictureScreenState extends State<TakePictureScreen> {
+class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindingObserver {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -29,11 +29,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       enableAudio: false,
     );
     _initializeControllerFuture = _controller.initialize();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -73,7 +75,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
               ),
             );
           } catch (e) {
-            print(e);
+            //print(e);
           }
         },
         child: const Icon(Icons.camera_alt),
