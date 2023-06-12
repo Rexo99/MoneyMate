@@ -11,8 +11,8 @@ class Tutorial {
     finished = false;
     try {
       tutorialCoachMark.show(context: context);
-      showOverlay(context);
-    } catch(exception) {
+      //showOverlay(context); //todo - delete line
+    } catch (exception) {
       finished = true;
       print('Exception occurred while showing the tutorial');
       print(exception.toString()); //todo - remove line
@@ -63,15 +63,15 @@ class Tutorial {
                 children: const <Widget>[
                   Text("Expenses tab",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35
+                        color: Colors.white,
+                        fontSize: 35
                     ),
                   ),
                   Text('Here you can view your expenses',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20
-                  ),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 250)
@@ -188,7 +188,8 @@ class Tutorial {
     ));
     targets.add(TargetFocus(
       identify: "MenuDrawer",
-      targetPosition: TargetPosition(Size.square(30), Offset(372, 38)), //todo - hardcode position for Pixel 2 or find a way to reference the menuDrawer with a key
+      targetPosition: TargetPosition(Size.square(30), Offset(372, 38)),
+      //todo - hardcode position for Pixel 2 or find a way to reference the menuDrawer with a key
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -223,6 +224,7 @@ class Tutorial {
     return targets;
   }
 
+/* todo - delete block
   ///The Overlay is used to exit the 'demo mode' that mimics an existing account, so that new users can try out the app, before creating an own account
   void showOverlay(context) {
     OverlayEntry? entry;
@@ -245,4 +247,5 @@ class Tutorial {
   void removeOverlay(OverlayEntry entry) {
     entry.remove();
   }
+   */
 }
