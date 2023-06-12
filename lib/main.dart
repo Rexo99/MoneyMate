@@ -245,7 +245,7 @@ class HudState extends State<Hud> {
                       label: "Open Camera"),
                   //todo - remove button
                   SpeedDialChild(
-                    visible: true,
+                    visible: false,
                     child: IconButton(
                       icon: const Icon(Icons.info_sharp),
                       onPressed: () async {
