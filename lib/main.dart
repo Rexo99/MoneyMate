@@ -43,11 +43,12 @@ class MyApp extends StatefulWidget {
     Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
-    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey());
+    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial'));
     bool _loadTutorial = false;
 
     @override
     void initState() {
+      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
       checkTheme();
       checkFirstSeen();
       super.initState();
