@@ -48,9 +48,9 @@ class MyApp extends StatefulWidget {
 
     @override
     void initState() {
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
-      checkTheme();
       checkFirstSeen();
+      checkTheme();
+      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
       super.initState();
     }
 
@@ -75,6 +75,18 @@ class MyApp extends StatefulWidget {
       ));
     }
 
+    ///Checks SharedPreferences whether the app is started for the first time after installing or not
+    Future checkFirstSeen() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool? _seen = (prefs.getBool('tutorialSeen'));
+
+      if(_seen == null) {
+        _loadTutorial = true;
+        _startPage = Hud();
+        await prefs.setBool('tutorialSeen', true);
+      }
+    }
+
     ///Checks SharedPreferences which theme should be applied
     Future<void> checkTheme() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -91,22 +103,6 @@ class MyApp extends StatefulWidget {
         setState(() {
           _themeColor = getThemeColors().elementAt(themeColor);
         });
-      }
-    }
-
-    ///Checks SharedPreferences whether the app is started for the first time after installing or not
-    Future checkFirstSeen() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool? _seen = (prefs.getBool('tutorialSeen'));
-
-      if(_seen != null) {
-        if (_seen) {
-          _startPage = Login(title: 'Login');
-        }
-      } else {
-        await prefs.setBool('tutorialSeen', true);
-        _loadTutorial = true;
-        _startPage = Hud();
       }
     }
 
