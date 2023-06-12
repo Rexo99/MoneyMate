@@ -176,6 +176,7 @@ class HudState extends State<Hud> {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
       _tutorial.showTutorial(context);
+      _tutorial.showOverlay(context);
     }
   }
 
@@ -245,7 +246,7 @@ class HudState extends State<Hud> {
                       label: "Open Camera"),
                   // TODO: remove this button when the app is finished
                   SpeedDialChild(
-                      visible: true,
+                      visible: false,
                       child: IconButton(
                         icon: const Icon(Icons.settings_overscan_sharp),
                         onPressed: () async {
@@ -261,6 +262,7 @@ class HudState extends State<Hud> {
                       onPressed: () async {
                         _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
                         _tutorial.showTutorial(context);
+                        _tutorial.showOverlay(context);
                         isDialOpen.value = false;
                       },
                     ),

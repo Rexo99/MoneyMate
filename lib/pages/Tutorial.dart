@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'Login.dart';
+
 class Tutorial {
   late TutorialCoachMark tutorialCoachMark;
+  bool finished = false;
 
   void showTutorial(BuildContext context) {
+    finished = false;
     try {
       tutorialCoachMark.show(context: context);
     } catch(exception) {
+      finished = true;
       print('Exception occurred while showing the tutorial');
       print(exception.toString()); //todo - remove line
     }
@@ -21,6 +26,7 @@ class Tutorial {
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
+        finished = true;
         print("Tutorial finished");
       },
       onClickTarget: (target) {
@@ -212,9 +218,11 @@ class Tutorial {
     OverlayEntry? entry;
     entry = OverlayEntry(builder: (context) => Positioned(
         left: 20, top: 40,
-        child: ElevatedButton.icon(icon: Icon(Icons.ac_unit), label: Text('Test'),
+        child: ElevatedButton.icon(icon: Icon(Icons.exit_to_app), label: Text('End Demo'),
           onPressed: () {
             removeOverlay(entry!);
+            //todo - assumption that tutorials can only be started automatically, when the user is not yet registered/logged in
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
           },
         )
     )
