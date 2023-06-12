@@ -129,6 +129,14 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('flutter_swipe_action_cell', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for creating the slide menu for each expense in your list'),
+                  ),
+                  ListTile(
+                    title: Text('connectivity_plus', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for checking the network status of the current device'),
+                  ),
+                  ListTile(
+                    title: Text('fl_chart', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used for data visualization'),
                   )
                 ],
               ),
