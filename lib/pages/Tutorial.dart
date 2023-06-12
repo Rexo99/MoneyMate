@@ -71,7 +71,9 @@ class Tutorial {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20
-                  ),),
+                  ),
+                    textAlign: TextAlign.center,
+                  ),
                   SizedBox(height: 250)
                 ],
               );
@@ -104,7 +106,9 @@ class Tutorial {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
-                    ),),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   SizedBox(height: 250)
                 ],
               );
@@ -123,7 +127,7 @@ class Tutorial {
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: const <Widget>[
                   Text(
                     "SpeedDial",
@@ -136,7 +140,8 @@ class Tutorial {
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
                       "Add new expenses etc. here.",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: 250)
@@ -171,7 +176,8 @@ class Tutorial {
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
                     "Click here to see a list of all your expenses.",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center,
                   ),
                 )
               ],
@@ -204,7 +210,8 @@ class Tutorial {
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
                     "Tap this icon to open a drawer, from where you can logout, change how the app looks and more.",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
