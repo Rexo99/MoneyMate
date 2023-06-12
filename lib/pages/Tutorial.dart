@@ -5,7 +5,12 @@ class Tutorial {
   late TutorialCoachMark tutorialCoachMark;
 
   void showTutorial(BuildContext context) {
-    tutorialCoachMark.show(context: context);
+    try {
+      tutorialCoachMark.show(context: context);
+    } catch(exception) {
+      print('Exception occurred while showing the tutorial');
+      print(exception.toString()); //todo - remove line
+    }
   }
 
   void createTutorial(List<GlobalKey> keys) {
@@ -16,16 +21,13 @@ class Tutorial {
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
-        print("finish");
+        print("Tutorial finished");
       },
       onClickTarget: (target) {
         print('onClickTarget: $target');
       },
       onClickTargetWithTapPosition: (target, tapDetails) {
         print("target: $target");
-        print(
-            "clicked at position local: ${
-                tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
       },
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
@@ -40,7 +42,7 @@ class Tutorial {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
-        identify: "test",
+        identify: "Expense Tab",
         keyTarget: keys[0],
         alignSkip: Alignment.topRight,
         contents: [
@@ -71,7 +73,7 @@ class Tutorial {
     );
     targets.add(
       TargetFocus(
-        identify: "test2",
+        identify: "Category Tab",
         keyTarget: keys[1],
         alignSkip: Alignment.topRight,
         contents: [
@@ -102,7 +104,7 @@ class Tutorial {
     );
     targets.add(
       TargetFocus(
-        identify: "test3",
+        identify: "SpeedDial",
         keyTarget: keys[2],
         contents: [
           TargetContent(
@@ -134,7 +136,7 @@ class Tutorial {
       ),
     );
     targets.add(TargetFocus(
-      identify: "test4",
+      identify: "See All",
       keyTarget: keys[3],
       shape: ShapeLightFocus.Circle,
       //radius: 50
@@ -167,6 +169,7 @@ class Tutorial {
         ),
       ],
     ));
+    /*
     targets.add(TargetFocus(
       identify: "test5",
       keyTarget: keys[4],
@@ -201,6 +204,7 @@ class Tutorial {
         ),
       ],
     ));
+    */
     return targets;
   }
 
