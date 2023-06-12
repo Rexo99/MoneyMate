@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -53,7 +55,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       appBar: AppBar(title: const Text('Take a picture')),
       // You must wait until the controller is initialized before displaying the camera preview.
       // Use a FutureBuilder to display a loading spinner until the controller has finished initializing.
-      body: FutureBuilder<void>(
+      body: SizedBox.expand(child: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -64,6 +66,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             return const Center(child: CircularProgressIndicator());
           }
         },
+      )
       ),
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
@@ -109,11 +112,12 @@ class DisplayPictureScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Display the Picture')),
       // The image is stored as a file on the device. Use the `Image.file` constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
+      body: SizedBox.expand(child: Image.file(File(imagePath))),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //todo - disposing doesn't work
-          Navigator.pop(context);
+          //Navigator.pop(context);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Hud()),);
           TakePictureScreenState().dispose();
           },
         child: Text('Done'),
