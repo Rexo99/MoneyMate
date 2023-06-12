@@ -176,7 +176,7 @@ class HudState extends State<Hud> {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
       _tutorial.showTutorial(context);
-      _tutorial.showOverlay(context);
+      //_tutorial.showOverlay(context);
     }
   }
 

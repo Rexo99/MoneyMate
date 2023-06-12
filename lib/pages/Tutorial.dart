@@ -11,6 +11,7 @@ class Tutorial {
     finished = false;
     try {
       tutorialCoachMark.show(context: context);
+      showOverlay(context);
     } catch(exception) {
       finished = true;
       print('Exception occurred while showing the tutorial');
@@ -181,7 +182,6 @@ class Tutorial {
     ));
     targets.add(TargetFocus(
       identify: "MenuDrawer",
-      //keyTarget: keys[4],
       targetPosition: TargetPosition(Size.square(30), Offset(372, 38)), //todo - hardcode position for Pixel 2 or find a way to reference the menuDrawer with a key
       contents: [
         TargetContent(
@@ -191,7 +191,7 @@ class Tutorial {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const <Widget>[
-                //SizedBox(height: 150),
+                SizedBox(height: 125),
                 Text(
                   "Drawer",
                   style: TextStyle(
@@ -203,7 +203,7 @@ class Tutorial {
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
-                    "Click here to see a list of all your expenses.",
+                    "Tap this icon to open a drawer, from where you can logout, change how the app looks and more.",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -217,7 +217,7 @@ class Tutorial {
   }
 
   ///The Overlay is used to exit the 'demo mode' that mimics an existing account, so that new users can try out the app, before creating an own account
-  void showOverlay(context/*, OverlayEntry entry*/) {
+  void showOverlay(context) {
     OverlayEntry? entry;
     entry = OverlayEntry(builder: (context) => Positioned(
         left: 10, top: 100,
@@ -228,7 +228,7 @@ class Tutorial {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
           },
         )
-    )
+      )
     );
 
     final overlay = Overlay.of(context);
