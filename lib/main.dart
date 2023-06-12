@@ -246,7 +246,7 @@ class HudState extends State<Hud> {
                       label: "Open Camera"),
                   // TODO: remove this button when the app is finished
                   SpeedDialChild(
-                      visible: false,
+                      visible: true,
                       child: IconButton(
                         icon: const Icon(Icons.settings_overscan_sharp),
                         onPressed: () async {
@@ -255,6 +255,7 @@ class HudState extends State<Hud> {
                         },
                       ),
                       label: "OverlayButton"),
+                  //todo - remove button
                   SpeedDialChild(
                     visible: true,
                     child: IconButton(
@@ -288,7 +289,7 @@ class HudState extends State<Hud> {
               ),
 
             ),
-            endDrawer: MenuDrawer(),
+            endDrawer: SizedBox(child: MenuDrawer(), key: MyApp.of(context).getTutorialKeys()[4]),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
             bottomNavigationBar: $(

@@ -51,6 +51,7 @@ class Tutorial {
         identify: "Expense Tab",
         keyTarget: keys[0],
         alignSkip: Alignment.topRight,
+        paddingFocus: 26,
         contents: [
           TargetContent(
             align: ContentAlign.top,
@@ -69,7 +70,8 @@ class Tutorial {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20
-                  ),)
+                  ),),
+                  SizedBox(height: 250)
                 ],
               );
             },
@@ -82,6 +84,7 @@ class Tutorial {
         identify: "Category Tab",
         keyTarget: keys[1],
         alignSkip: Alignment.topRight,
+        paddingFocus: 26,
         contents: [
           TargetContent(
             align: ContentAlign.top,
@@ -100,7 +103,8 @@ class Tutorial {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
-                    ),)
+                    ),),
+                  SizedBox(height: 250)
                 ],
               );
             },
@@ -124,16 +128,17 @@ class Tutorial {
                     "SpeedDial",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: Colors.white,
                         fontSize: 35.0),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
                       "Add new expenses etc. here.",
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  SizedBox(height: 250)
                 ],
               );
             },
@@ -144,8 +149,6 @@ class Tutorial {
     targets.add(TargetFocus(
       identify: "See All",
       keyTarget: keys[3],
-      shape: ShapeLightFocus.Circle,
-      //radius: 50
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -154,6 +157,7 @@ class Tutorial {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const <Widget>[
+                SizedBox(height: 125),
                 Text(
                   "Expenses",
                   style: TextStyle(
@@ -168,19 +172,17 @@ class Tutorial {
                     "Click here to see a list of all your expenses.",
                     style: TextStyle(color: Colors.white),
                   ),
-                ),
+                )
               ],
             );
           },
         ),
       ],
     ));
-    /*
     targets.add(TargetFocus(
-      identify: "test5",
-      keyTarget: keys[4],
-      shape: ShapeLightFocus.Circle,
-      //radius: 50
+      identify: "MenuDrawer",
+      //keyTarget: keys[4],
+      targetPosition: TargetPosition(Size.square(30), Offset(372, 38)), //todo - hardcode position for Pixel 2 or find a way to reference the menuDrawer with a key
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -189,8 +191,9 @@ class Tutorial {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const <Widget>[
+                //SizedBox(height: 150),
                 Text(
-                  "Expenses",
+                  "Drawer",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -210,15 +213,15 @@ class Tutorial {
         ),
       ],
     ));
-    */
     return targets;
   }
 
+  ///The Overlay is used to exit the 'demo mode' that mimics an existing account, so that new users can try out the app, before creating an own account
   void showOverlay(context/*, OverlayEntry entry*/) {
     OverlayEntry? entry;
     entry = OverlayEntry(builder: (context) => Positioned(
-        left: 20, top: 40,
-        child: ElevatedButton.icon(icon: Icon(Icons.exit_to_app), label: Text('End Demo'),
+        left: 10, top: 100,
+        child: ElevatedButton.icon(icon: Icon(Icons.exit_to_app), label: Text('End \n Demo', textAlign: TextAlign.center,),
           onPressed: () {
             removeOverlay(entry!);
             //todo - assumption that tutorials can only be started automatically, when the user is not yet registered/logged in
