@@ -104,9 +104,9 @@ class Register extends StatelessWidget {
                             )
                           ],
                         ),
-                        ElevatedButton(onPressed:() => Navigator.push(
+                        Visibility(child: ElevatedButton(onPressed:() => Navigator.push(
                           context, MaterialPageRoute(builder: (context) => UserState(child: Hud())),),
-                            child: Text('Debug exit')), //todo - remove debug button
+                            child: Text('Debug exit')), visible: false), //todo - remove debug button
                         SizedBox(height: 30),
                     ]),
                 )

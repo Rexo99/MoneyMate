@@ -149,12 +149,12 @@ class _Login extends State<Login> {
                         )
                       ],
                     ),
-                    ElevatedButton(
+                    Visibility(child: ElevatedButton(
                         onPressed: () => Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Hud()),
+                              MaterialPageRoute(builder: (context) => MyApp()),
                             ),
-                        child: Text('Debug exit')), //todo - remove debug button
+                        child: Text('Debug exit')), visible: false,), //todo - remove debug button
                   ]),
                 ))));
   }
