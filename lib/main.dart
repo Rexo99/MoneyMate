@@ -80,7 +80,7 @@ class MyApp extends StatefulWidget {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? _seen = (prefs.getBool('tutorialSeen'));
 
-      if(_seen == null) {
+      if(_seen == null || _seen == false) {
         _loadTutorial = true;
         _startPage = Hud();
         await prefs.setBool('tutorialSeen', true);
