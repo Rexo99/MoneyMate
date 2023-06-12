@@ -234,6 +234,7 @@ class HudState extends State<Hud> {
                       ),
                       label: "DevelopmentButton"),
                   SpeedDialChild(
+                      visible: _currentIndex.value == 0,
                       child: IconButton(
                         icon: const Icon(Icons.camera),
                         onPressed: ()  async {
