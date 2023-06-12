@@ -43,7 +43,7 @@ class UserState extends InheritedWidget {
   }) async {
     await HTTPRequestBuilder().login(name: name, password: password);
     await expendList.initListExpenseList();
-    initListCategoryList();
+    await initListCategoryList();
   }
 
   // Registers a user with the backend
