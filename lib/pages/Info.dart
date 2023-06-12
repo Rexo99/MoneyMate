@@ -50,7 +50,7 @@ class Info extends StatelessWidget {
                   Expanded(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('Category (business logic) \n App icons \n Login assistance (stay signed in, auto-login, business logic) \n Expense assistance (sorting, decimal) \n Backend assistance (error handling) \n Quality assurance (fine-tuning, testing, debugging)', textAlign: TextAlign.center)], context: context), /*todo fill list*/
+                        onTap: () => infoPopup(featureList: [const Text('Category (business logic) \n App icons \n Login/register assistance (stay signed in, auto-login, login/register facade) \n Expense assistance (sorting, decimal) \n Backend assistance (error handling) \n Quality assurance (fine-tuning, testing, debugging)', textAlign: TextAlign.center)], context: context), /*todo fill list*/
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
