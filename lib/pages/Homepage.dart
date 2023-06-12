@@ -129,7 +129,7 @@ class ExpenseCard extends StatelessWidget {
           children: <Widget>[
             //Todo rearrange Textiles
             ListTile(
-              leading: const Icon(Icons.album),
+              leading: const Icon(Icons.local_grocery_store),
               title: Text(expense.value.name),
               subtitle: Row(
                 children: [
