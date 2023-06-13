@@ -48,8 +48,7 @@ class MyApp extends StatefulWidget {
 
     @override
     void initState() {
-      print('initState');
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
+      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial'));
       checkFirstSeen();
       checkTheme();
       super.initState();
@@ -175,7 +174,7 @@ class HudState extends State<Hud> {
 
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
-      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys(), context);
+      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
       _tutorial.showTutorial(context);
     }
   }
@@ -247,11 +246,11 @@ class HudState extends State<Hud> {
                       label: "Open Camera"),
                   //todo - remove button
                   SpeedDialChild(
-                    visible: false,
+                    visible: true,
                     child: IconButton(
                       icon: const Icon(Icons.info_sharp),
                       onPressed: () async {
-                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys(), context);
+                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
                         _tutorial.showTutorial(context);
                         isDialOpen.value = false;
                       },
