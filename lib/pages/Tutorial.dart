@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import '../main.dart';
 import 'Login.dart';
 
 class Tutorial {
   late TutorialCoachMark tutorialCoachMark;
+  late final double _screenWidth;
+  late final double _screenHeight;
   bool finished = false;
 
   void showTutorial(BuildContext context) {
@@ -19,7 +22,10 @@ class Tutorial {
     }
   }
 
-  void createTutorial(List<GlobalKey> keys) {
+  void createTutorial(List<GlobalKey> keys, context) {
+    _screenWidth = MediaQuery.of(context).size.width;
+    _screenHeight = MediaQuery.of(context).size.height;
+    print(_screenWidth);
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(keys),
       colorShadow: Colors.black12,
@@ -49,67 +55,39 @@ class Tutorial {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
-        identify: "Expense Tab",
-        keyTarget: keys[0],
+        identify: "Introduction",
+        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -10)),
         alignSkip: Alignment.topRight,
-        paddingFocus: 26,
+        paddingFocus: 0,
+        radius: 0,
+        focusAnimationDuration: Duration(milliseconds: 1),
+        unFocusAnimationDuration: Duration(milliseconds: 1),
         contents: [
           TargetContent(
-            align: ContentAlign.top,
+            align: ContentAlign.bottom,
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text("Expenses tab",
+                children: <Widget>[
+                  SizedBox(height: 150),
+                  Text("Welcome to MoneyMate!",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 35
+                        fontSize: 40
                     ),
+                      textAlign: TextAlign.center
                   ),
-                  Text('Here you can view your expenses',
+                  SizedBox(height: 35),
+                  Text("Here's a quick rundown of what you can do with this App",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 250)
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: "Category Tab",
-        keyTarget: keys[1],
-        alignSkip: Alignment.topRight,
-        paddingFocus: 26,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text("Categories tab",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35
-                    ),
-                  ),
-                  Text('Here you can view your categories',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 250)
+                  SizedBox(height: 40),
+                  ElevatedButton(onPressed: () => tutorialCoachMark.next(), child: Text('Continue')),
                 ],
               );
             },
@@ -120,7 +98,8 @@ class Tutorial {
     targets.add(
       TargetFocus(
         identify: "SpeedDial",
-        keyTarget: keys[2],
+        //keyTarget: keys[2],
+        targetPosition: TargetPosition(Size.square(25), Offset(_screenWidth * 0.473, _screenHeight * 0.89)),
         contents: [
           TargetContent(
             align: ContentAlign.top,
@@ -139,7 +118,7 @@ class Tutorial {
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Add new expenses etc. here.",
+                      "Conveniently add new expenses or categories here",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
@@ -152,9 +131,82 @@ class Tutorial {
         ],
       ),
     );
+    targets.add(
+      TargetFocus(
+        identify: "Expense Tab",
+        //keyTarget: keys[0],
+        targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.239, _screenHeight * 0.94)),
+        alignSkip: Alignment.topRight,
+        paddingFocus: 26,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Text("Expenses tab",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35
+                    ),
+                  ),
+                  Text('Here you can view your most recent expenses, as well as your daily and monthly spendings',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 250)
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+    targets.add(
+      TargetFocus(
+        identify: "Category Tab",
+        //keyTarget: keys[1],
+        targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.742, _screenHeight * 0.94)),
+        alignSkip: Alignment.topRight,
+        paddingFocus: 26,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Text("Categories tab",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35
+                    ),
+                  ),
+                  Text('Here you can view all of your categories',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 250)
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
     targets.add(TargetFocus(
       identify: "See All",
-      keyTarget: keys[3],
+      //keyTarget: keys[3],
+      targetPosition: TargetPosition(Size.square(40), Offset(_screenWidth * 0.45, _screenHeight * 0.455)),
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -188,8 +240,8 @@ class Tutorial {
     ));
     targets.add(TargetFocus(
       identify: "MenuDrawer",
-      targetPosition: TargetPosition(Size.square(30), Offset(372, 38)),
-      //todo - hardcode position for Pixel 2 or find a way to reference the menuDrawer with a key
+        targetPosition: TargetPosition(Size.square(30), Offset(_screenWidth * 0.906, 38)),
+      //targetPosition: TargetPosition(Size.square(30), Offset(372, 38)),
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -210,7 +262,7 @@ class Tutorial {
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
-                    "Tap this icon to open a drawer, from where you can logout, change how the app looks and more.",
+                    "Tap this icon to open a drawer, \n from where you can logout, \n change how the app looks \n and more.",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center,
                   ),

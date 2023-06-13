@@ -129,7 +129,7 @@ class _Login extends State<Login> {
                     SizedBox(height: 20),
                     Text('Have no Account?', textAlign: TextAlign.center),
                     GestureDetector(
-                      onTap: () => Navigator.push(
+                      onTap: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Register(title: 'Register')),

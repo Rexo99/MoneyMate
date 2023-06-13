@@ -43,14 +43,15 @@ class MyApp extends StatefulWidget {
     Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
-    List<GlobalKey> _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial'));
+    late final List<GlobalKey> _tutorialKeys;
     bool _loadTutorial = false;
 
     @override
     void initState() {
+      print('initState');
+      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
       checkFirstSeen();
       checkTheme();
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - seems to fix globalKey bug? (idea is that when reloading/updating the app, that the keys update too)
       super.initState();
     }
 
@@ -171,10 +172,9 @@ class HudState extends State<Hud> {
   void initState() {
     super.initState();
 
-    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
-      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys(), context);
       _tutorial.showTutorial(context);
     }
   }
@@ -197,7 +197,7 @@ class HudState extends State<Hud> {
             ),
             floatingActionButton: $(
               _currentIndex, (p0) => SpeedDial(
-              key: MyApp.of(context).getTutorialKeys()[2],
+              //key: MyApp.of(context).getTutorialKeys()[2],
                 // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                 animatedIcon: AnimatedIcons.menu_close,
                 spaceBetweenChildren: 10,
@@ -250,7 +250,7 @@ class HudState extends State<Hud> {
                     child: IconButton(
                       icon: const Icon(Icons.info_sharp),
                       onPressed: () async {
-                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys(), context);
                         _tutorial.showTutorial(context);
                         isDialOpen.value = false;
                       },
@@ -277,7 +277,7 @@ class HudState extends State<Hud> {
               ),
 
             ),
-            endDrawer: SizedBox(child: MenuDrawer(), key: MyApp.of(context).getTutorialKeys()[4]),
+            endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
             bottomNavigationBar: $(
@@ -288,11 +288,11 @@ class HudState extends State<Hud> {
                       unselectedItemColor: Colors.grey,
                       items: [
                         BottomNavigationBarItem(
-                          icon: Icon(Icons.euro_outlined, key: MyApp.of(context).getTutorialKeys()[0]),
+                          icon: Icon(Icons.euro_outlined, /*key: MyApp.of(context).getTutorialKeys()[0]*/),
                           label: "Expenses",
                         ),
                         BottomNavigationBarItem(
-                            icon: Icon(Icons.inventory_2_outlined, key: MyApp.of(context).getTutorialKeys()[1]),
+                            icon: Icon(Icons.inventory_2_outlined, /*key: MyApp.of(context).getTutorialKeys()[1]*/),
                             label: "Categories"),
                       ],
                       onTap: (newIndex) {
