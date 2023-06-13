@@ -107,6 +107,7 @@ class MyApp extends StatefulWidget {
       }
     }
 
+    //todo - instead of using setState() maybe rerun the app with runApp(MyApp)? Or find a way to reload the HomePage when reloading the app, like with the initState() function
     ///Used to change between light/dark/system theme
     Future<void> changeTheme(ThemeMode themeMode) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -191,8 +192,8 @@ class HudState extends State<Hud> {
                 _currentIndex.value = newIndex;
               },
               children:[
-                Homepage(context: context),
-                const CategoryOverview(),
+                new Homepage(context: context),
+                new CategoryOverview(),
               ],
             ),
             floatingActionButton: $(

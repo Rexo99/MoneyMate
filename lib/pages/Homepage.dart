@@ -11,6 +11,7 @@ import '../models/models.dart';
 import '../util/StateManagement.dart';
 import 'ExpenseOverview.dart';
 
+//todo - fix that when MyApp is refreshed upon theme change that homePage doesnt clear
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 

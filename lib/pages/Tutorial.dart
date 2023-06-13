@@ -51,6 +51,7 @@ class Tutorial {
     );
   }
 
+  //todo - save position of required widget in mains build() and reference them here? Alternatively hardcode tutorial locations for pixel 2 or try getting the usable screen margin
   List<TargetFocus> _createTargets(List<GlobalKey> keys) {
     List<TargetFocus> targets = [];
     targets.add(
