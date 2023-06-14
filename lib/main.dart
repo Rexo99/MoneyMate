@@ -171,7 +171,6 @@ class HudState extends State<Hud> {
   @override
   void initState() {
     super.initState();
-
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
@@ -256,23 +255,6 @@ class HudState extends State<Hud> {
                       },
                     ),
                     label: "TutorialButton"),
-                  /*SpeedDialChild(
-                      child: IconButton(
-                        icon: const Icon(Icons.category),
-                        onPressed: ()  {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "Add Category"),*/
-                 /* SpeedDialChild(
-                      child: IconButton(
-                        icon: const Icon(Icons.local_grocery_store),
-                        onPressed: ()  {
-                          UserState.of(context).addCategory(name: "nameTestLol2", budget: 100);
-                        },
-                      ),
-                      label: "Test"),*/
                 ],
               ),
 

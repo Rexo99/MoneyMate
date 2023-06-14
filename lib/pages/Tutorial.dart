@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-class Tutorial {
+class TutorialTest extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => Tutorial();
+}
+
+class Tutorial extends State {
   late TutorialCoachMark tutorialCoachMark;
   late double _screenWidth;
   late double _screenHeight;
@@ -11,7 +16,6 @@ class Tutorial {
     finished = false;
     try {
       tutorialCoachMark.show(context: context);
-      //showOverlay(context); //todo - delete line
     } catch (exception) {
       finished = true;
       print('Exception occurred while showing the tutorial');
@@ -20,16 +24,20 @@ class Tutorial {
   }
 
   void createTutorial(List<GlobalKey> keys) {
+    //todo - remove following lines
     _screenWidth = WidgetsBinding.instance.renderView.size.width;
     _screenHeight = WidgetsBinding.instance.renderView.size.height;
+    print(WidgetsBinding.instance.renderView.configuration);
     print(_screenWidth);
     print(_screenHeight);
+
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(keys),
       colorShadow: Colors.black12,
       textSkip: "SKIP",
       paddingFocus: 10,
       opacityShadow: 0.8,
+      showSkipInLastTarget: false,
       onFinish: () {
         finished = true;
         print("Tutorial finished");
@@ -274,5 +282,11 @@ class Tutorial {
       ],
     ));
     return targets;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
