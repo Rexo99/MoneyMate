@@ -145,7 +145,9 @@ void createExpensePopup({required BuildContext context}) {
               decoration: const InputDecoration(
                 icon: Icon(Icons.category),
                 hintText: 'Category of your Expense',
+                hintStyle: TextStyle(overflow: TextOverflow.fade),
                 labelText: 'Category',
+
               ),
               validator: (value) {
                 if (value == null || value.id == null) {
