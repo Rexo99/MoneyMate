@@ -43,12 +43,12 @@ class MyApp extends StatefulWidget {
     Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
-    late final List<GlobalKey> _tutorialKeys;
+    late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
 
     @override
     void initState() {
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial'));
+      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - delete if no longer needed
       checkFirstSeen();
       checkTheme();
       super.initState();
@@ -131,6 +131,10 @@ class MyApp extends StatefulWidget {
       setState(() {
         _themeColor = color;
       });
+    }
+
+    Color getCurrentThemeColor() {
+      return _themeColor;
     }
 
     ///Returns the list of available theme colors. Only stored here so they can be changed easily
