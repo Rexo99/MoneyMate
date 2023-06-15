@@ -106,16 +106,6 @@ class MyApp extends StatefulWidget {
       }
     }
 
-    //todo - instead of using setState() maybe rerun the app with runApp(MyApp)? Or find a way to reload the HomePage when reloading the app, like with the initState() function
-    ///Used to change between light/dark/system theme
-    Future<void> changeTheme(ThemeMode themeMode) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt('themeMode', getThemeModes().indexOf(themeMode));
-      setState(() {
-        _themeMode = themeMode;
-      });
-    }
-
     ThemeMode getCurrentThemeMode() {
       return _themeMode;
     }
@@ -124,12 +114,13 @@ class MyApp extends StatefulWidget {
       return <ThemeMode> [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
     }
 
-    ///Used to change themeColor - todo - figure out how to create a whole color palette instead of using a color as a seed
-    Future<void> changeThemeColor(Color color) async {
+    Future<void> changeTheme(Color color, ThemeMode themeMode) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('themeColor', getThemeColors().indexOf(color));
+      prefs.setInt('themeMode', getThemeModes().indexOf(themeMode));
       setState(() {
         _themeColor = color;
+        _themeMode = themeMode;
       });
     }
 
