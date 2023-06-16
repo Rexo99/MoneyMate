@@ -382,7 +382,6 @@ void colorPicker(
                                   _textColor = getSystemColor(context)[1];
                                   _isDark = SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
                                   });
-
                                   break;
                               }
                             });
@@ -394,14 +393,20 @@ void colorPicker(
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context, 'Cancel');
+                    int count = 0;
+                    Navigator.popUntil(context, (route) {
+                      return count++ == 2;
+                    });
                   },
                   child: Text('Cancel', selectionColor: _newColor, style: TextStyle(color: _newColor)),
                 ),
                 TextButton(
                   onPressed: () {
+                    int count = 0;
                     MyApp.of(context).changeTheme(_newColor, _newTheme);
-                    Navigator.pop(context, 'Confirm');
+                    Navigator.popUntil(context, (route) {
+                      return count++ == 2;
+                    });
                   },
                   child: Text('Confirm', style: TextStyle(color: _newColor)),
                 ),
