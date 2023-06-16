@@ -49,6 +49,7 @@ dependencies:
   path_provider: ^2.0.14
   flutter_speed_dial: ^6.2.0
   flutter_swipe_action_cell: ^3.1.1
+  connectivity_plus: ^4.0.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
