@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
@@ -233,16 +234,34 @@ void infoPopup({required List featureList, required BuildContext context}) {
   );
 }
 
+Color getBackgroundColor(context) {
+  if(Theme.of(context).brightness == Brightness.dark) {
+    return Color(0xff201a18);
+    //dark: color: Color(0xffe8e2d9)
+  } else {
+    return Color(0xfffffbff);
+    //light: color: Color(0xff1d1b16)
+  }
+}
+
+List<Color> getSystemColor(context) {
+  if(SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
+    return [Color(0xff201a18), Color(0xffe8e2d9)]; //dark (first is backgroundColor, second is textColor)
+  } else {
+    return [Color(0xfffffbff), Color(0xff1d1b16)]; //light (first is backgroundColor, second is textColor)
+  }
+}
+
 void colorPicker(
-    {required Color currentColor,
-    required ThemeMode currentThemeMode,
-    required BuildContext context}) {
+    {required Color currentColor, required ThemeMode currentThemeMode, required BuildContext context}) {
   List<Color> _colors = MyApp.of(context).getThemeColors();
   List<bool> _selection = List.generate(3, (index) => false); //List for switching app design
   _selection[MyApp.of(context).getThemeModes().indexOf(MyApp.of(context).getCurrentThemeMode())] = true;
 
   Color _newColor = MyApp.of(context).getCurrentThemeColor();
-  ThemeMode _newTheme = ThemeMode.system;
+  ThemeMode _newTheme = MyApp.of(context).getCurrentThemeMode();
+  Color _backgroundColor = Theme.of(context).dialogBackgroundColor;
+  Color? _textColor = Theme.of(context).textTheme.displayLarge?.color;
 
   showDialog<String>(
     context: context,
@@ -250,17 +269,18 @@ void colorPicker(
       return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              //backgroundColor: Colors.black, //todo - change colorPicker to dark when selecting dark mode
+              backgroundColor: _backgroundColor,
               surfaceTintColor: _newColor,
               iconColor: _newColor,
-              shadowColor: _newColor,
+              titleTextStyle: TextStyle(color: _textColor),
+              contentTextStyle: TextStyle(color: _textColor),
               title: const Text('Theme Settings'),
               content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: 25),
                     Text(
-                        'Choose your Theme Color', textAlign: TextAlign.center),
+                        'Choose your Theme Color', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
                     SizedBox(height: 10),
                     //todo - find a way to highlight the selected button
                     Row(
@@ -268,20 +288,20 @@ void colorPicker(
                       children: [
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[0];}),
-                            child: Text('Red', textScaleFactor: .9),
+                            child: Text('Red', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[0],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[1];}),
-                            child: Text('Purple', textScaleFactor: .9),
+                            child: Text('Purple', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[1],
                                 shape: CircleBorder())
                         ),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[2];}),
-                            child: Text('Blue', textScaleFactor: .9),
+                            child: Text('Blue', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[2],
                                 shape: CircleBorder())
@@ -294,19 +314,19 @@ void colorPicker(
                       children: [
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[3];}),
-                            child: Text('Green', textScaleFactor: .9),
+                            child: Text('Green', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[3],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[4];}),
-                            child: Text('Yellow', textScaleFactor: .9),
+                            child: Text('Yellow', textScaleFactor: .9, style: TextStyle(color: Colors.white)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[4],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[5];}),
-                            child: Text('Brown', textScaleFactor: .9),
+                            child: Text('Brown', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[5],
                                 shape: CircleBorder())),
@@ -314,14 +334,17 @@ void colorPicker(
                       ],
                     ),
                     SizedBox(height: 25),
-                    Divider(),
+                    Divider(color: _newColor),
                     SizedBox(height: 25),
-                    Text('Choose your Theme Mode', textAlign: TextAlign.center),
+                    Text('Choose your Theme Mode', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
                     SizedBox(height: 10),
                     Center(
                         child: ToggleButtons(
                           color: _newColor,
                           selectedColor: _newColor,
+                          borderColor: _newColor.withAlpha(30),
+                          selectedBorderColor: _newColor.withAlpha(60),
+                          fillColor: _newColor.withAlpha(30),
                           children: [
                             Icon(Icons.light_mode),
                             Icon(Icons.dark_mode),
@@ -338,13 +361,19 @@ void colorPicker(
                               }
                               switch (index) {
                                 case 0:
-                                  _newTheme = ThemeMode.light;
+                                  setState(() {_newTheme = ThemeMode.light;
+                                  _backgroundColor = Color(0xfffffbff);
+                                  _textColor = Color(0xff1d1b16);});
                                   break;
                                 case 1:
-                                  _newTheme = ThemeMode.dark;
+                                  setState(() {_newTheme = ThemeMode.dark;
+                                  _backgroundColor = Color(0xff201a18);
+                                  _textColor = Color(0xffe8e2d9);});
                                   break;
                                 case 2:
-                                  _newTheme = ThemeMode.system;
+                                  setState(() {_newTheme = ThemeMode.system;
+                                  _backgroundColor = getSystemColor(context)[0];});
+                                  _textColor = getSystemColor(context)[1];
                                   break;
                               }
                             });
@@ -365,7 +394,7 @@ void colorPicker(
                     MyApp.of(context).changeTheme(_newColor, _newTheme);
                     Navigator.pop(context, 'Confirm');
                   },
-                  child: Text('Confirm', selectionColor: _newColor, style: TextStyle(color: _newColor)),
+                  child: Text('Confirm', style: TextStyle(color: _newColor)),
                 ),
               ],
             );
