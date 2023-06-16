@@ -263,6 +263,8 @@ void colorPicker(
   Color _backgroundColor = Theme.of(context).dialogBackgroundColor;
   Color? _textColor = Theme.of(context).textTheme.displayLarge?.color;
 
+  bool _isDark = Theme.of(context).brightness == Brightness.dark;
+
   showDialog<String>(
     context: context,
     builder: (context) {
@@ -274,7 +276,7 @@ void colorPicker(
               iconColor: _newColor,
               titleTextStyle: TextStyle(color: _textColor),
               contentTextStyle: TextStyle(color: _textColor),
-              title: const Text('Theme Settings'),
+              title: const Text('Theme Settings', style: TextStyle(fontSize: 20),),
               content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -288,20 +290,20 @@ void colorPicker(
                       children: [
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[0];}),
-                            child: Text('Red', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
+                            child: Text('Red', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[0],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[1];}),
-                            child: Text('Purple', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
+                            child: Text('Purple', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[1],
                                 shape: CircleBorder())
                         ),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[2];}),
-                            child: Text('Blue', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
+                            child: Text('Blue', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[2],
                                 shape: CircleBorder())
@@ -314,19 +316,19 @@ void colorPicker(
                       children: [
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[3];}),
-                            child: Text('Green', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
+                            child: Text('Green', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[3],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[4];}),
-                            child: Text('Yellow', textScaleFactor: .9, style: TextStyle(color: Colors.white)),
+                            child: Text('Yellow', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[4],
                                 shape: CircleBorder())),
                         FilledButton(
                             onPressed: () => setState(() {_newColor = _colors[5];}),
-                            child: Text('Brown', textScaleFactor: .9, style: TextStyle(color: Colors.white70)),
+                            child: Text('Brown', textScaleFactor: .9, style: TextStyle(color: _isDark ? Colors.black87 : Colors.white.withAlpha(200))),
                             style: FilledButton.styleFrom(
                                 backgroundColor: _colors[5],
                                 shape: CircleBorder())),
@@ -334,16 +336,16 @@ void colorPicker(
                       ],
                     ),
                     SizedBox(height: 25),
-                    Divider(color: _newColor),
+                    Divider(color: _newColor.withAlpha(100)),
                     SizedBox(height: 25),
                     Text('Choose your Theme Mode', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
                     SizedBox(height: 10),
                     Center(
                         child: ToggleButtons(
-                          color: _newColor,
+                          color: _isDark ? Colors.white70 : Colors.black87,
                           selectedColor: _newColor,
-                          borderColor: _newColor.withAlpha(30),
-                          selectedBorderColor: _newColor.withAlpha(60),
+                          borderColor: _isDark ? Colors.white10 : Colors.black12,
+                          selectedBorderColor: _isDark ? Colors.white12 : Colors.black12,
                           fillColor: _newColor.withAlpha(30),
                           children: [
                             Icon(Icons.light_mode),
@@ -363,17 +365,24 @@ void colorPicker(
                                 case 0:
                                   setState(() {_newTheme = ThemeMode.light;
                                   _backgroundColor = Color(0xfffffbff);
-                                  _textColor = Color(0xff1d1b16);});
+                                  _textColor = Color(0xff1d1b16);
+                                  _isDark = false;
+                                  });
                                   break;
                                 case 1:
                                   setState(() {_newTheme = ThemeMode.dark;
                                   _backgroundColor = Color(0xff201a18);
-                                  _textColor = Color(0xffe8e2d9);});
+                                  _textColor = Color(0xffe8e2d9);
+                                  _isDark = true;
+                                  });
                                   break;
                                 case 2:
                                   setState(() {_newTheme = ThemeMode.system;
-                                  _backgroundColor = getSystemColor(context)[0];});
+                                  _backgroundColor = getSystemColor(context)[0];
                                   _textColor = getSystemColor(context)[1];
+                                  _isDark = SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+                                  });
+
                                   break;
                               }
                             });
