@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +22,7 @@ Future<void> main() async {
 
   //await dotenv.load(fileName: '.env');
   Intl.defaultLocale = 'pt_BR';
-  runApp(const MyApp());
+  runApp(UserState(child: const MyApp()) );
 }
 
 class MyApp extends StatefulWidget {
@@ -60,7 +59,7 @@ class MyApp extends StatefulWidget {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
-      return UserState(child: MaterialApp(
+      return MaterialApp(
         title: 'Money Mate',
         theme: ThemeData(
           colorSchemeSeed: _themeColor, useMaterial3: true,
@@ -73,7 +72,7 @@ class MyApp extends StatefulWidget {
         themeMode: _themeMode,
         home: _startPage,
         debugShowCheckedModeBanner: false,
-      ));
+      );
     }
 
     ///Checks SharedPreferences whether the app is started for the first time after installing or not
