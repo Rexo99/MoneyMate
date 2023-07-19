@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 
 abstract class DTO {
@@ -14,7 +15,7 @@ class ExpenseDTO extends DTO {
   final num amount;
   final int categoryId;
   final DateTime dateTime;
-  final String image;
+  final Uint8List image;
 
   ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId, this.image);
 

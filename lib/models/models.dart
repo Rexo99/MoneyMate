@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 
@@ -23,7 +26,7 @@ class Expense implements Model {
   final num amount;
   final DateTime date;
   final int categoryId;
-  final String image;
+  final Uint8List image;
 
   Expense(this.name, this.amount, this.date, this.categoryId, this.image) {
     HTTPRequestBuilder()
@@ -44,7 +47,7 @@ class Expense implements Model {
   Expense copyWith({
     String? name,
     num? amount,
-    String? image,
+    Uint8List? image,
   }) =>
       Expense._(
           id, name ?? this.name, amount ?? this.amount, date, categoryId, image ?? this.image);
@@ -53,7 +56,7 @@ class Expense implements Model {
 
   Expense setAmount(num amount) => copyWith(amount: amount);
 
-  Expense setImage(String image) => copyWith(image: image);
+  Expense setImage(Uint8List image) => copyWith(image: image);
 }
 
 class Category implements Model {

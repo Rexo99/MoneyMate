@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,7 +16,8 @@ import 'StateManagement.dart';
 void updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) {
   FilePickerResult? result;
-  String image = expense.value.image;
+  Uint8List fileBytes = expense.value.image;
+  Uint8List image = expense.value.image;
   String name = expense.value.name;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
@@ -72,18 +75,21 @@ void updateExpensePopup(
                   String filePath = result!.files.single.path!;
 
                   // Read the file as bytes
-                  List<int> fileBytes = await File(filePath).readAsBytes();
-
-                  // Convert the bytes to a base64-encoded string
-                  image = base64Encode(fileBytes);
-
-                  // Now you can store the `base64String` in your database
-                  print("File selected. Base64 string: $image");
+                  image = await File(filePath).readAsBytes();
                 }
               },
               child: const Text('Select Image'),
             ),
-          ],
+            Container(
+              height: 100,
+              width: 100,
+              child: image.isNotEmpty
+                  ? Image.memory(
+                      fileBytes,
+                      fit: BoxFit.cover,
+                    )
+                  : const Text('No image selected.'),
+            )],
         ),
       ),
       actions: <Widget>[
@@ -114,7 +120,7 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
-  String image = " ";
+  Uint8List image = Uint8List(0);
   late int categoryId;
   final formKey = GlobalKey<FormState>();
   FilePickerResult? result;
@@ -198,13 +204,7 @@ void createExpensePopup({required BuildContext context}) {
                   String filePath = result!.files.single.path!;
 
                   // Read the file as bytes
-                  List<int> fileBytes = await File(filePath).readAsBytes();
-
-                  // Convert the bytes to a base64-encoded string
-                  image = base64Encode(fileBytes);
-
-                  // Now you can store the `base64String` in your database
-                  print("File selected. Base64 string: $image");
+                  image = await File(filePath).readAsBytes();
                 }
               },
               child: const Text('Select Image'),
