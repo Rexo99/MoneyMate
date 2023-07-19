@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
+import 'package:money_mate/pages/ChartsOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
@@ -14,6 +17,7 @@ import 'package:money_mate/util/CameraNew.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -45,6 +49,9 @@ class MyApp extends StatefulWidget {
     ///Tutorial related
     late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
+
+    //Connectivity related
+
 
     @override
     void initState() {
@@ -157,6 +164,9 @@ class HudState extends State<Hud> {
   final List<String> _titleList = ["Home", "Categories"];
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
+  //Checks for a Connectivity
+  late StreamSubscription connection;
+
   Tutorial _tutorial = Tutorial();
 
   /// _title dependant on _currentIndex and well update on change
@@ -166,6 +176,24 @@ class HudState extends State<Hud> {
   @override
   void initState() {
     super.initState();
+
+
+    //Code to check if there is a valid network connection
+    connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      // whenever connection status is changed.
+      if (result == ConnectivityResult.none) {
+        //there is no any connection
+        connectivityPopup(context: context);
+      } else if (result == ConnectivityResult.mobile) {
+        //connection is mobile data network
+      } else if (result == ConnectivityResult.wifi) {
+        //connection is from wifi
+      }
+    });
+
+
+
+    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
@@ -178,7 +206,19 @@ class HudState extends State<Hud> {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-            appBar: AppBar(title: $(_title, (String title) => Text(title)), automaticallyImplyLeading: false),
+            appBar: AppBar(title: $(_title, (String title) => Text(title)),
+                //IconButton that lead to Charts
+                /*actions: <Widget>[
+                  IconButton(
+                    iconSize: 50.0,
+                    color: Colors.black,
+                    icon: const Icon(Icons.bar_chart),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
+                    },
+                  ),
+                ],*/
+                automaticallyImplyLeading: false),
             body: PageView(
               controller: _pageController,
               onPageChanged: (newIndex) {

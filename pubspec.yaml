@@ -50,6 +50,7 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   flutter_swipe_action_cell: ^3.1.1
   connectivity_plus: ^4.0.1
+  fl_chart: ^0.63.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

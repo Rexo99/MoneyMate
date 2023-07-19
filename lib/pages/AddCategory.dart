@@ -6,22 +6,13 @@ import '../main.dart';
 
 class AddCategory extends StatelessWidget {
   AddCategory({super.key});
-   /*late final Category category;
-
-   AddCategory({required BuildContext context, super.key}) {
-     // category = UserState.of(context).addCategory;
-     category = UserState.of(context).categoryList;
-   }*/
-
-
-  /*late final UserState userstate;
-  AddCategory({required BuildContext context, super.key}) {
-    userstate = UserState.of(context).addCategory;
-  }*/
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +68,7 @@ class AddCategory extends StatelessWidget {
               children: <Widget>[
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.home),
                   onPressed: () {
                     // ...
@@ -85,7 +76,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.car_repair),
                   onPressed: () {
                     // ...
@@ -93,7 +84,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.local_grocery_store),
                   onPressed: () {
                     // ...
@@ -101,7 +92,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.local_bar),
                   onPressed: () {
                     // ...
@@ -117,7 +108,7 @@ class AddCategory extends StatelessWidget {
               children: <Widget>[
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.flight),
                   onPressed: () {
                     // ...
@@ -125,7 +116,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.business),
                   onPressed: () {
                     // ...
@@ -133,7 +124,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.album),
                   onPressed: () {
                     // ...
@@ -141,7 +132,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 IconButton(
                   iconSize: 50.0,
-                  color: Colors.black,
+                  color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.pets),
                   onPressed: () {
                     // ...
