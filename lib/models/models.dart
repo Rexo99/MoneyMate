@@ -23,33 +23,37 @@ class Expense implements Model {
   final num amount;
   final DateTime date;
   final int categoryId;
+  final String image;
 
-  Expense(this.name, this.amount, this.date, this.categoryId) {
+  Expense(this.name, this.amount, this.date, this.categoryId, this.image) {
     HTTPRequestBuilder()
         .createModel(
             path: "expenditures",
-            tmp: ExpenseDTO(name, amount, date, categoryId))
+            tmp: ExpenseDTO(name, amount, date, categoryId, image))
         .then((value) => _id = value);
   }
 
-  Expense._(this._id, this.name, this.amount, this.date, this.categoryId);
+  Expense._(this._id, this.name, this.amount, this.date, this.categoryId, this.image);
 
   static Expense fromJson(Map json) {
     return Expense._(json["id"], json["name"], json["amount"],
-        DateTime.parse(json["dateTime"]), json["categoryId"]);
+        DateTime.parse(json["dateTime"]), json["categoryId"], json["image"]);
   }
 
   @override
   Expense copyWith({
     String? name,
     num? amount,
+    String? image,
   }) =>
       Expense._(
-          id, name ?? this.name, amount ?? this.amount, date, categoryId);
+          id, name ?? this.name, amount ?? this.amount, date, categoryId, image ?? this.image);
 
   Expense setName(String name) => copyWith(name: name);
 
   Expense setAmount(num amount) => copyWith(amount: amount);
+
+  Expense setImage(String image) => copyWith(image: image);
 }
 
 class Category implements Model {

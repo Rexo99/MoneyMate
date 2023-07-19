@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:core';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +13,8 @@ import 'StateManagement.dart';
 /// A popup that allows the user to change the name and amount of an expense.
 void updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) {
+  FilePickerResult? result;
+  String image = expense.value.image;
   String name = expense.value.name;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
@@ -56,6 +61,28 @@ void updateExpensePopup(
                 return null;
               },
             ),
+            TextButton(
+              onPressed: () async {
+                result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['jpg', 'png'],
+                );
+                if (result != null) {
+                  // Get the selected file path
+                  String filePath = result!.files.single.path!;
+
+                  // Read the file as bytes
+                  List<int> fileBytes = await File(filePath).readAsBytes();
+
+                  // Convert the bytes to a base64-encoded string
+                  image = base64Encode(fileBytes);
+
+                  // Now you can store the `base64String` in your database
+                  print("File selected. Base64 string: $image");
+                }
+              },
+              child: const Text('Select Image'),
+            ),
           ],
         ),
       ),
@@ -72,7 +99,7 @@ void updateExpensePopup(
               );
               //Todo not the right context?
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: double.parse(amount));
+                  expense: expense, name: name, amount: double.parse(amount), image: image);
               Navigator.pop(subContext, 'OK');
             }
           },
@@ -87,8 +114,10 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
+  String image = " ";
   late int categoryId;
   final formKey = GlobalKey<FormState>();
+  FilePickerResult? result;
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) => AlertDialog(
@@ -158,6 +187,28 @@ void createExpensePopup({required BuildContext context}) {
                 return null;
               },
             ),
+            TextButton(
+              onPressed: () async {
+                result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['jpg', 'png'],
+                );
+                if (result != null) {
+                  // Get the selected file path
+                  String filePath = result!.files.single.path!;
+
+                  // Read the file as bytes
+                  List<int> fileBytes = await File(filePath).readAsBytes();
+
+                  // Convert the bytes to a base64-encoded string
+                  image = base64Encode(fileBytes);
+
+                  // Now you can store the `base64String` in your database
+                  print("File selected. Base64 string: $image");
+                }
+              },
+              child: const Text('Select Image'),
+            ),
           ],
         ),
       ),
@@ -175,7 +226,8 @@ void createExpensePopup({required BuildContext context}) {
               UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: num.parse(amount),
-                  categoryId: categoryId);
+                  categoryId: categoryId,
+                  image: image);
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -14,8 +14,9 @@ class ExpenseDTO extends DTO {
   final num amount;
   final int categoryId;
   final DateTime dateTime;
+  final String image;
 
-  ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId);
+  ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId, this.image);
 
   @override
   String toJson() {
@@ -23,7 +24,8 @@ class ExpenseDTO extends DTO {
       "name": name,
       "amount": amount,
       "categoryId": categoryId,
-      "dateTime": dateTime.toString()
+      "dateTime": dateTime.toString(),
+      "image": image
     };
     return jsonEncode(obj);
   }
