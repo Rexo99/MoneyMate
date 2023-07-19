@@ -163,6 +163,11 @@ class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openEndDrawer() {
+    _scaffoldKey.currentState!.openEndDrawer();
+  }
 
   //Checks for a Connectivity
   late StreamSubscription connection;
@@ -206,20 +211,28 @@ class HudState extends State<Hud> {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
+            key: _scaffoldKey,
             appBar: AppBar(title: $(_title, (String title) => Text(title)),
                 //IconButton that lead to Charts
-                /*actions: <Widget>[
+                actions: <Widget>[
                   IconButton(
-                    iconSize: 50.0,
+                    iconSize: 30.0,
                     color: Colors.black,
                     icon: const Icon(Icons.bar_chart),
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
                     },
                   ),
-                ],*/
+                  IconButton(
+                    iconSize: 30.0,
+                    color: Colors.black,
+                    icon: const Icon(Icons.menu),
+                    onPressed:
+                      _openEndDrawer,
+                  ),
+                ],
                 automaticallyImplyLeading: false),
-            body: PageView(
+          body: PageView(
               controller: _pageController,
               onPageChanged: (newIndex) {
                 _currentIndex.value = newIndex;
