@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:money_mate/util/Popups.dart';
 import '../UserState.dart';
@@ -121,7 +123,7 @@ class Register extends StatelessWidget {
         //Todo spaghetti code, move generating default data to backend
         await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
         await UserState.of(context).initListCategoryList();
-        UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!, image: " ");
+        UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!, image: Uint8List.fromList([]));
 
         if(context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
