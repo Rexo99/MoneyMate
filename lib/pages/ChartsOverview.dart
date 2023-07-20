@@ -9,10 +9,6 @@ import '../models/models.dart';
 class ChartsOverview extends StatelessWidget{
   const ChartsOverview({ super.key });
 
-  // To-Do add category and context over Userstate
-
-  // State<StatefulWidget> createState() => PieChartState(category: category, context: context);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +17,12 @@ class ChartsOverview extends StatelessWidget{
     ),
       body: ListView(
         children: [
+          /// To-Do add nested Listview for each Chart
+          /// scrollDirection: Axis.horizontal
           PieChartState(context: context),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+          ),
           BarChartWidget(context: context)
         ],
 
@@ -49,16 +50,61 @@ class PieChartState extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(aspectRatio: 1,
+    return AspectRatio(
+        aspectRatio: 1.3,
+        child: Row(
+        children: <Widget>[
+        const SizedBox(
+        height: 18,
+    ),
+      AspectRatio(aspectRatio: 1,
         child: PieChart(PieChartData(
             sectionsSpace: 0,
             centerSpaceRadius: 0,
           ///Pass the sections of the pie chart
             sections: section()
-        )
+        ),
 
-        )
-        );
+        ),
+      /// Show a legend under the PieChart
+      ),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+          children: <Widget>[
+            Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+            ),
+          ),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              'Text',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            )
+          ],
+                )
+              ]
+
+          )
+        ],
+
+      ),
+    );
+
+
+
   }
 
   //Method to generate each section for the chart from a catgeory
@@ -71,8 +117,12 @@ class PieChartState extends StatelessWidget{
         //für jede Kategorie herausfinden wie viele Expensenses in dieser vorhanden ist
         //Value = NumberofExpenses/AllExpenses * 100
         value: 1/categoryListOverview.length*100,
+        ///maybe add a list of colors
+        ///the color is different from index to index
+        /// x: categoryListOverview.indexOf(category)+1 == 1 is green,
         color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-        title: category.name,
+        // title: category.name,
+        title: (1/categoryListOverview.length*100).toString() + '%',
         /*badgeWidget: Icon(
           // Icon referenzieren,
 
@@ -147,7 +197,10 @@ class BarChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    /// rounded Borders
+    return Container (
+      // color: Theme.of(context).iconTheme.color,
+        child: AspectRatio(
       aspectRatio: 2,
       child: BarChart(
         //Holds the Data needed to draw the BarChart
@@ -163,9 +216,9 @@ class BarChartWidget extends StatelessWidget {
             // To-do Add Labels for the y and x axis
 
             bottomTitles: AxisTitles(
-              axisNameWidget:  Text('Category', style: TextStyle(color: Colors.black, fontSize: 22),),
+              axisNameWidget:  Text('Category', style: TextStyle(color: Colors.black, fontSize: 14),),
                 sideTitles: SideTitles(showTitles: true,   getTitlesWidget: bottomTitles)),
-            leftTitles: AxisTitles( axisNameWidget:  Text('Budget', style: TextStyle(color: Colors.black, fontSize: 22),),
+            leftTitles: AxisTitles( axisNameWidget:  Text('Budget', style: TextStyle(color: Colors.black, fontSize: 14),),
                 sideTitles: SideTitles(showTitles: true, getTitlesWidget: leftTitles)),
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -174,6 +227,7 @@ class BarChartWidget extends StatelessWidget {
         )
 
     ),
+        ),
     );
   }
 
@@ -181,9 +235,10 @@ class BarChartWidget extends StatelessWidget {
   List<BarChartGroupData> _chartGroups() {
     final List<BarChartGroupData> list = [];
     for (var category in categoryListBarChart) {
-      BarChartGroupData(
+      final data = BarChartGroupData(
         // To-Do schauen wie man x richtig setzt
-          x: categoryListBarChart.indexOf(category)+1,
+        x: categoryListBarChart.indexOf(category)+1,
+
           barRods: [
             //Specifies the Data of a bar
             BarChartRodData(
@@ -194,10 +249,11 @@ class BarChartWidget extends StatelessWidget {
               // better way ist to get the color from the category list
               //In order fro matching colors for pie and bar chart
               color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              width: 8,
             )
           ]
       );
-
+      list.add(data);
     }
     return list;
   }
@@ -233,10 +289,6 @@ class BarChartWidget extends StatelessWidget {
       fontSize: 14,
     );
       String text = '';
-      //do i need cases
-      //when yes
-      //switch (value.toInt()) {
-
       for (var category in categoryListBarChart) {
         text = category.name;
         return Text(text);
