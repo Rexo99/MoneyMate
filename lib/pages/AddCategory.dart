@@ -12,7 +12,18 @@ class AddCategory extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
 
 
-
+  ///Method to get the Icon
+  /// Switch Case
+  /*IconData getIcon(){
+    switch() {
+      case 1:
+        return Icons.home;
+        break; // without this, the switch statement would execute case 2 also!
+      case 2:
+        return Icons.car_repair;
+        break;
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {

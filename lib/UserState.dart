@@ -64,6 +64,7 @@ class UserState extends InheritedWidget {
   Future<void> addCategory({
     required String name,
     required int budget,
+    /// update with Icon
   }) async {
     Category cat = new Category.create(name, budget);
     await cat.create();

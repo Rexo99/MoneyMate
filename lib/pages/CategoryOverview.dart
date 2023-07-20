@@ -7,8 +7,25 @@ import '../util/Popups.dart';
 
 
 //To-Do make CategoryOverview Stateful
-class CategoryOverview extends StatelessWidget {
-  const CategoryOverview({super.key});
+class CategoryOverview extends StatefulWidget {
+  CategoryOverview({super.key});
+
+  @override
+  State<StatefulWidget> createState() => CategoryOverviewContent();
+}
+
+class CategoryOverviewContent extends State<CategoryOverview> {
+
+  @override
+  void initState() {
+    /// check if the state of the items has changed
+    /// when name or budget is different
+    super.initState();
+  }
+
+  void update() {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +58,7 @@ class CategoryCard extends StatelessWidget {
       }
 
     }
+
 
     // return Center(
     return SwipeActionCell(
@@ -92,12 +110,12 @@ class CategoryCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-             ListTile(
+            ListTile(
               leading: Icon(Icons.local_grocery_store),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
-               //Changes color of a list tile
-               tileColor: getColor(),
+              //Changes color of a list tile
+              tileColor: getColor(),
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.end,
@@ -145,45 +163,6 @@ Widget _getIconButton(color, icon) {
   );
 }
 
-/*
-class CategoryListView extends StatelessWidget {
-  // const CategoriesOverview({super.key});
-  late final BuildContext context;
-  late final List<Category> categoryListOverview;
-
-  CategoryListView({required this.context, super.key}) {
-    categoryListOverview = UserState.of(context).categoryList;
-    }
-
-  @override
-  Widget build(BuildContext context) {
-    */
-/*return ListView(
-      padding: const EdgeInsets.all(20.0),
-      children: const <Widget>[
-        CategoriesOverview(),
-        CategoriesOverview(),
-
-      ],
-    );*//*
-
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return SizedBox(
-          child: ListView.builder(
-            primary: true,
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return CategoryCard(category: category);
-            }),
-      );
-    });
-  }
-}
-
-
-*/
-
 
 class CategoryListView extends StatelessWidget {
   // const CategoriesOverview({super.key});
@@ -197,24 +176,24 @@ class CategoryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: categoryListOverview.length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              // return the header
-              return Row(
-                children: const [
-                  Text("Your categories:"),
-                ],
-              );
-            }
-            index -= 1;
-            var cats = categoryListOverview[index];
-            return CategoryCard(category: cats);
-          },
-          // separatorBuilder: (BuildContext context, int index) =>
-          // const Divider(),
-        );
+      padding: const EdgeInsets.all(8),
+      itemCount: categoryListOverview.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          // return the header
+          return Row(
+            children: const [
+              Text("Your categories:"),
+            ],
+          );
+        }
+        index -= 1;
+        var cats = categoryListOverview[index];
+        return CategoryCard(category: cats);
+      },
+      // separatorBuilder: (BuildContext context, int index) =>
+      // const Divider(),
+    );
   }
 }
 
