@@ -122,7 +122,7 @@ class PieChartState extends StatelessWidget{
         /// x: categoryListOverview.indexOf(category)+1 == 1 is green,
         color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
         // title: category.name,
-        title: (1/categoryListOverview.length*100).toString() + '%',
+        title: (1/categoryListOverview.length*100).toStringAsFixed(2) + '%',
         /*badgeWidget: Icon(
           // Icon referenzieren,
 
@@ -207,6 +207,7 @@ class BarChartWidget extends StatelessWidget {
         BarChartData(
           // Groups the Bars together, to create a Bar Chart
           barGroups: _chartGroups(),
+            barTouchData: barTouchData,
           borderData: FlBorderData(
             border: const Border( top: BorderSide.none, right: BorderSide.none,
               left: BorderSide(width: 1), bottom: BorderSide(width: 1))
@@ -231,6 +232,29 @@ class BarChartWidget extends StatelessWidget {
     );
   }
 
+  BarTouchData get barTouchData => BarTouchData(
+    enabled: false,
+    touchTooltipData: BarTouchTooltipData(
+      tooltipBgColor: Colors.transparent,
+      tooltipPadding: EdgeInsets.zero,
+      tooltipMargin: 8,
+      getTooltipItem: (
+          BarChartGroupData group,
+          int groupIndex,
+          BarChartRodData rod,
+          int rodIndex,
+          ) {
+        return BarTooltipItem(
+          rod.toY.round().toStringAsFixed(0) + '€',
+          TextStyle(
+            color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      },
+    ),
+  );
+
   //Get the Values from each Category as bars
   List<BarChartGroupData> _chartGroups() {
     final List<BarChartGroupData> list = [];
@@ -251,7 +275,8 @@ class BarChartWidget extends StatelessWidget {
               color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
               width: 8,
             )
-          ]
+          ],
+        showingTooltipIndicators: [0],
       );
       list.add(data);
     }
