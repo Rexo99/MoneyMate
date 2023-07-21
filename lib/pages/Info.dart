@@ -6,7 +6,6 @@ class Info extends StatelessWidget {
 
   final String title;
 
-
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +18,7 @@ class Info extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 20),
-              const Text("The MoneyMate team:",
+              const Text("The MoneyMate Team:",
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20)
@@ -38,7 +37,7 @@ class Info extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login Page View \n HomePage EndDrawer \n Info Page   \n  App Theme Composition \n Adjustable App Theme \n (Camera Initialization)' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login Page View \n HomePage (EndDrawer) \n Info Page \n  App Theme Composition \n Adjustable App Theme \n (Camera Initialization)' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
