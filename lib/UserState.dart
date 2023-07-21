@@ -66,9 +66,10 @@ class UserState extends InheritedWidget {
   Future<void> addCategory({
     required String name,
     required int budget,
+    String? icon,
     /// update with Icon
   }) async {
-    Category cat = new Category.create(name, budget);
+    Category cat = Category.create(name, budget,icon);
     await cat.create();
   }
 
@@ -82,18 +83,16 @@ class UserState extends InheritedWidget {
 
   // Updates a category on the [categoryList] and backend
   Future<void> updateCategory(
-      {required Category category, String? name, int? budget}) async {
+      {required Category category, String? name, int? budget, String? icon}) async {
     // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
     // attributes, but it works tho *Grinning Face With Sweat emoji*
-    if (name == null) {
-      name = category.name;
-    }
-    if (budget == null) {
-      budget = category.budget;
-    }
+    name ??= category.name;
+    budget ??= category.budget;
+    icon ??= category.icon;
+
     await HTTPRequestBuilder().put(
         path: "categories/${category.id}",
-        obj: CategoryDTO(name, budget, category.id),
+        obj: CategoryDTO(name, budget, category.id, category.icon),
         returnType: Category);
     initListCategoryList();
   }
