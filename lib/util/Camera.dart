@@ -90,14 +90,63 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Display the Picture')),
-      body: SizedBox.expand(child: Image.file(File(imagePath))),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          int count = 0;
-          Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
-          },
-        child: Text('Done'),
-      ),
+      body: Stack(
+        children: [
+          Image.file(File(imagePath)),
+          Positioned(
+            bottom: 15,
+            right: 15,
+            child: FloatingActionButton(
+              onPressed: () {
+                int count = 0;
+                Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
+              },
+              child: Text('Done'),
+            ),),
+          Positioned(
+            bottom: 15,
+              left: 15,
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Retry'),
+              ),)
+        ],
+      )
     );
   }
+}
+
+class DisplayPictureScreen2 extends StatelessWidget {
+final String imagePath;
+const DisplayPictureScreen2({super.key, required this.imagePath});
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+appBar: AppBar(title: const Text('Display the Picture')),
+body: Column(
+  children: [
+    SizedBox.expand(child: Image.file(File(imagePath))),
+    Row(
+      children: [
+        TextButton(
+          onPressed: () {
+            int count = 0;
+            Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
+          },
+          child: Text('Done'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Retry'),
+        ),
+      ],
+    )
+  ],
+)
+);
+}
 }
