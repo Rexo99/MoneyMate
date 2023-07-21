@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -25,7 +24,7 @@ class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindin
     super.initState();
     _controller = CameraController(
       widget.camera,
-      ResolutionPreset.high,
+      ResolutionPreset.veryHigh,
       enableAudio: false,
     );
     _initializeControllerFuture = _controller.initialize();
@@ -94,9 +93,8 @@ class DisplayPictureScreen extends StatelessWidget {
       body: SizedBox.expand(child: Image.file(File(imagePath))),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //todo - disposing of the camera doesn't work
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Hud()));
-          TakePictureScreenState().dispose();
+          int count = 0;
+          Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
           },
         child: Text('Done'),
       ),
