@@ -341,7 +341,9 @@ class MenuDrawer extends StatelessWidget{
     Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
     return Drawer(
         width: 250,
-        child: ListView(children: [
+        child: ListView(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
+          children: [
           const Icon(Icons.account_circle_outlined, size: 100),
           $(_loginState, (p0) => _loginState.value
             ? ListTile(
@@ -359,7 +361,7 @@ class MenuDrawer extends StatelessWidget{
               UserState.of(context).logoutUser();
             },
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -379,7 +381,7 @@ class MenuDrawer extends StatelessWidget{
 
               },
               style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 40),
@@ -393,7 +395,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -406,7 +408,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
