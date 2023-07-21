@@ -51,6 +51,7 @@ class HTTPRequestBuilder {
         _loggedIn = true;
       } else {
         print("Response body: ${response.body}");
+        throw ErrorDescription('Login: Response status: ${response.statusCode}');
       }
       print('Login: Response status: ${response.statusCode}');
     }

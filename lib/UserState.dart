@@ -7,10 +7,9 @@ import 'models/dtos.dart';
 import 'models/models.dart';
 
 class UserState extends InheritedWidget {
-  UserState({super.key, required super.child}){print("moin");}
+  UserState({super.key, required super.child});
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
-
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
@@ -28,9 +27,8 @@ class UserState extends InheritedWidget {
   //clears the categoryList and fills it with fresh data from the backend
   Future<void> initListCategoryList() async {
     categoryList.clear();
-    List<Category> exps = (await HTTPRequestBuilder().get(
-        path: "categories",
-        returnType: List<Category>)) as List<Category>;
+    List<Category> exps = (await HTTPRequestBuilder()
+        .get(path: "categories", returnType: List<Category>)) as List<Category>;
     for (Category element in exps) {
       categoryList.add(element);
     }
@@ -41,9 +39,13 @@ class UserState extends InheritedWidget {
     required String name,
     required String password,
   }) async {
-    await HTTPRequestBuilder().login(name: name, password: password);
-    await expendList.initListExpenseList();
-    await initListCategoryList();
+    try {
+      await HTTPRequestBuilder().login(name: name, password: password);
+      await expendList.initListExpenseList();
+      await initListCategoryList();
+    } catch (e) {
+      print(e);
+    }
   }
 
   // Registers a user with the backend
@@ -79,7 +81,8 @@ class UserState extends InheritedWidget {
   }
 
   // Updates a category on the [categoryList] and backend
-  Future<void> updateCategory({required Category category, String? name, int? budget}) async {
+  Future<void> updateCategory(
+      {required Category category, String? name, int? budget}) async {
     // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
     // attributes, but it works tho *Grinning Face With Sweat emoji*
     if (name == null) {
