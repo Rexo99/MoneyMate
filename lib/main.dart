@@ -217,7 +217,6 @@ class HudState extends State<Hud> {
                 actions: <Widget>[
                   IconButton(
                     iconSize: 30.0,
-                    color: Colors.black,
                     icon: const Icon(Icons.bar_chart),
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
@@ -225,7 +224,6 @@ class HudState extends State<Hud> {
                   ),
                   IconButton(
                     iconSize: 30.0,
-                    color: Colors.black,
                     icon: const Icon(Icons.menu),
                     onPressed:
                       _openEndDrawer,
