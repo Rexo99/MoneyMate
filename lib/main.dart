@@ -50,9 +50,6 @@ class MyApp extends StatefulWidget {
     late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
 
-    //Connectivity related
-
-
     @override
     void initState() {
       _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - delete if no longer needed
@@ -182,7 +179,6 @@ class HudState extends State<Hud> {
   void initState() {
     super.initState();
 
-
     //Code to check if there is a valid network connection
     connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       // whenever connection status is changed.
@@ -195,8 +191,6 @@ class HudState extends State<Hud> {
         //connection is from wifi
       }
     });
-
-
 
     //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
@@ -303,7 +297,6 @@ class HudState extends State<Hud> {
                     label: "TutorialButton"),
                 ],
               ),
-
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
@@ -335,6 +328,7 @@ class HudState extends State<Hud> {
     );
   }
 }
+
 class MenuDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -372,25 +366,25 @@ class MenuDrawer extends StatelessWidget{
             )
           )
               :ElevatedButton(
-              onPressed: () async {
+                onPressed: () async {
                 // Close drawer due to catch name and email from logged in user on successful login
                 Navigator.pop(context);
                 //Navigate to the Login-Screen
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
                 //UserState.of(context).loginUser(name: "erik", password: "test");
 
-              },
-              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 40),
-                  Icon(Icons.login_outlined, size: 24.0),
-                  SizedBox(width: 10),
-                  Text("Login"),
-                ],
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 40),
+                    Icon(Icons.login_outlined, size: 24.0),
+                    SizedBox(width: 10),
+                    Text("Login"),
+                  ],
+                )
               )
-          )
           ),
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
