@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/Popups.dart';
 
 
-//To-Do make CategoryOverview Stateful
+/// To-Do make CategoryOverview Stateful
+/// I still need to add set State
 class CategoryOverview extends StatefulWidget {
   CategoryOverview({super.key});
 
@@ -44,20 +46,41 @@ class CategoryCard extends StatelessWidget {
 
   CategoryCard({required this.category, super.key});
 
+
   @override
   Widget build(BuildContext context) {
 
     //Method to Change the Color depending on the budget spent
     // For Example if the expenses of the Category are bigger than 70% of it´s budget
-    Color getColor(){
+
+    IconData getCategoryIcon() {
+      if (category.icon.toString() == 'home') {
+        return Icons.home;
+      }
+      else {
+        return Icons.square;
+      }
+    }
+
+    Icon getColor(){
       if(category.budget.toInt() < 500) {
-        return Colors.green;
+        return Icon(Icons.emoji_emotions,
+          color: Colors.green);
       }
       else{
-        return Colors.red;
+        return Icon(Icons.warning,
+            color: Colors.red);
       }
-
     }
+
+    // Color getColor(){
+    //   if(category.budget.toInt() < 500) {
+    //     return Colors.green;
+    //   }
+    //   else{
+    //     return Colors.red;
+    //   }
+    // }
 
 
     // return Center(
@@ -111,11 +134,17 @@ class CategoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.local_grocery_store),
+              // leading: Icon(Icons.local_grocery_store),
+              /// To-Do get the Icondata over category.icon
+              leading: Icon(MdiIcons.fromString(category.icon.toString())),
+              // leading: Icon(getCategoryIcon()),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
-              //Changes color of a list tile
-              tileColor: getColor(),
+              /*trailing: Icon(Icons.circle,
+              color: getColor(),),*/
+              trailing: getColor(),
+              /// Add Something like a small circle in order to indicate the budget status
+              /// maybe through box decoration
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.end,

@@ -220,6 +220,7 @@ void connectivityPopup({required BuildContext context}) {
         AlertDialog(
           title: const Text('No connectivity found'),
           content: const Text('If this error persists, check your phones network connection'),
+          /// Disclaimer your data will not be safed
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),

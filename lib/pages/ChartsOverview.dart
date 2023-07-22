@@ -48,6 +48,13 @@ class PieChartState extends StatelessWidget{
     categoryListOverview = UserState.of(context).categoryList;
   }
 
+  final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
+    Colors.lime, Colors.purple, Colors.teal, Colors.indigoAccent, Colors.pink,
+    Colors.pinkAccent, Colors.purpleAccent, Colors.amber, Colors.deepOrange, Colors.cyan,
+    Colors.grey, Colors.green.shade900, Colors.red.shade900, Colors.lime.shade800, Colors.indigo.shade400,
+    Colors.teal.shade400, Colors.orangeAccent, Colors.blue.shade900, Colors.lightGreen.shade100, Colors.purpleAccent.shade700,
+    Colors.greenAccent, Colors.lightBlueAccent.shade200, Colors.deepPurple.shade200, Colors.pinkAccent.shade200, Colors.yellow.shade200];
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -120,7 +127,10 @@ class PieChartState extends StatelessWidget{
         ///maybe add a list of colors
         ///the color is different from index to index
         /// x: categoryListOverview.indexOf(category)+1 == 1 is green,
-        color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+
+        /// List of Pastel Colors
+        // color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+        color: colors[categoryListOverview.indexOf(category)],
         // title: category.name,
         title: (1/categoryListOverview.length*100).toStringAsFixed(2) + '%',
         /*badgeWidget: Icon(
@@ -191,6 +201,15 @@ class BarChartWidget extends StatelessWidget {
   BarChartWidget({required this.context}) {
     categoryListBarChart = UserState.of(context).categoryList;
   }
+
+  final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
+    Colors.lime, Colors.purple, Colors.teal, Colors.indigoAccent, Colors.pink,
+    Colors.pinkAccent, Colors.purpleAccent, Colors.amber, Colors.deepOrange, Colors.cyan,
+    Colors.grey, Colors.green.shade900, Colors.red.shade900, Colors.lime.shade800, Colors.indigo.shade400,
+    Colors.teal.shade400, Colors.orangeAccent, Colors.blue.shade900, Colors.lightGreen.shade100, Colors.purpleAccent.shade700,
+    Colors.greenAccent, Colors.lightBlueAccent.shade200, Colors.deepPurple.shade200, Colors.pinkAccent.shade200, Colors.yellow.shade200];
+
+
   //x-Achse categories
   //y-Achse budget
   //bekomme ich über category
@@ -247,7 +266,7 @@ class BarChartWidget extends StatelessWidget {
         return BarTooltipItem(
           rod.toY.round().toStringAsFixed(0) + '€',
           TextStyle(
-            color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+            color: colors[categoryListBarChart.indexOf(category)],
             fontWeight: FontWeight.bold,
           ),
         );
@@ -272,7 +291,7 @@ class BarChartWidget extends StatelessWidget {
                 toY: category.budget.toDouble(),
               // better way ist to get the color from the category list
               //In order fro matching colors for pie and bar chart
-              color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+              color: colors[categoryListBarChart.indexOf(category)],
               width: 8,
             )
           ],

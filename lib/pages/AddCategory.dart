@@ -10,20 +10,50 @@ class AddCategory extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+  String? testIcon = 'home';
 
 
   ///Method to get the Icon
   /// Switch Case
-  /*IconData getIcon(){
-    switch() {
-      case 1:
-        return Icons.home;
-        break; // without this, the switch statement would execute case 2 also!
-      case 2:
-        return Icons.car_repair;
+
+  ///Set the int through the Buttons
+  int iconCase = 0;
+
+  String getIcon( iconCase){
+    String result = '';
+    switch( iconCase) {
+      case 0:
+        result = 'square';
         break;
+      case 1:
+        result = 'home';
+        break;
+      case 2:
+        result = 'car_repair';
+        break;
+      case 3:
+        result = 'local_grocery_store';
+        break;
+      case 4:
+        result = 'local_bar';
+        break;
+      case 5:
+        result = 'flight';
+        break;
+      case 6:
+        result = 'business';
+        break;
+      case 7:
+        result = 'album';
+        break;
+      case 8:
+        result = 'pets';
+        break;
+      default:
+        return 'square';
     }
-  }*/
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +107,14 @@ class AddCategory extends StatelessWidget {
           child: Row (
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                /// Maybe change IconButton to IconButton.filled when pressed
+                /// To-Do this its must be a Stateful Widget
                 IconButton(
                   iconSize: 50.0,
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    // ...
+                    iconCase = 0;
                   },
                 ),
                 IconButton(
@@ -90,7 +122,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.car_repair),
                   onPressed: () {
-                    // ...
+                    iconCase = 1;
                   },
                 ),
                 IconButton(
@@ -146,7 +178,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.pets),
                   onPressed: () {
-                    // ...
+                    print(testIcon);
                   },
                 ),
               ]
@@ -178,7 +210,9 @@ class AddCategory extends StatelessWidget {
                   (
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text));
+                      String? testIcon = 'home';
+                      // await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: getIcon(iconCase));
+                      await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: testIcon);
                       await UserState.of(context).initListCategoryList();
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesOverview()),);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
