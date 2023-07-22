@@ -80,8 +80,7 @@ class Category implements Model {
       this._id, this.name, this.budget, this.userId, this.icon);
 
   static Category fromJson(Map json) {
-    print(json["icon"]);
-    print(json["name"]);
+    print(json["name"] + " IconName: " + json["icon"]);
     return Category._(json["id"], json["name"], json["budget"], json["user_id"], json["icon"]);
   }
 
