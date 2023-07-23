@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/Popups.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Login.dart';
@@ -72,7 +73,7 @@ class Register extends StatelessWidget {
 
                                 if(context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Registered!')),);
+                                    uniformSnackBar('Registered!'));
 
                                   Navigator.push(
                                       context,
@@ -81,7 +82,7 @@ class Register extends StatelessWidget {
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please fill input')),
+                                  uniformSnackBar('Please fill input')
                                 );
                               }
                             },

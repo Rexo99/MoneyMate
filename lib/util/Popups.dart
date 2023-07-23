@@ -68,7 +68,7 @@ void updateExpensePopup(
           onPressed: () {
             if (formKey.currentState!.validate()) {
               ScaffoldMessenger.of(subContext).showSnackBar(
-                const SnackBar(content: Text('Updated Expense')),
+                uniformSnackBar('Updated Expense'),
               );
               //Todo not the right context?
               UserState.of(context).expendList.updateItem(
@@ -170,7 +170,7 @@ void createExpensePopup({required BuildContext context}) {
           onPressed: () {
             if (formKey.currentState!.validate()) {
               ScaffoldMessenger.of(subContext).showSnackBar(
-                const SnackBar(content: Text('Created Expense')),
+                uniformSnackBar('Created Expense'),
               );
               UserState.of(context).expendList.addExpense(
                   name: name,
@@ -429,4 +429,16 @@ void colorPicker(
             );
           });
     });
+}
+
+SnackBar uniformSnackBar(String text) {
+  SnackBar snackBar = SnackBar(
+      content: Text(text, textAlign: TextAlign.center),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(20))),
+      width: (text.length * 8)
+  );
+
+  return snackBar;
 }

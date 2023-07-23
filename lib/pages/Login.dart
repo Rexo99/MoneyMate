@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
+import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../UserState.dart';
 import '../main.dart';
@@ -102,7 +103,7 @@ class _Login extends State<Login> {
 
                             if (builder.loggedIn) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Logged in!')),
+                                uniformSnackBar('Logged in!')
                               );
 
                               if (staySignedIn) {
