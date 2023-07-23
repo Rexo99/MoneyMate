@@ -435,9 +435,10 @@ SnackBar uniformSnackBar(String text) {
   SnackBar snackBar = SnackBar(
       content: Text(text, textAlign: TextAlign.center),
       behavior: SnackBarBehavior.floating,
+      elevation: 10,
       shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(20))),
-      width: (text.length * 8)
+      width: (text.length * 10)
   );
 
   return snackBar;
