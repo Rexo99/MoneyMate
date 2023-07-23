@@ -31,7 +31,10 @@ class HTTPRequestBuilder {
         await http.post(url, body: {"name": name, "password": password});
     if (response.statusCode == 200) {
       print("Register successful");
-    } else {
+    } else if(response.statusCode == 500) {
+      print("User already exists"); //todo - tell UserState -> Register
+    }
+    else {
       print("Response body: ${response.body}");
     }
     print('Register: Response status: ${response.statusCode}');
