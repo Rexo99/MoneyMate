@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/Popups.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -74,7 +75,8 @@ class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindin
               ),
             );
           } catch (e) {
-            //print(e);
+            ScaffoldMessenger.of(context).showSnackBar(uniformSnackBar("An error occurred. Please try again."));
+            pop();
           }
         },
         child: const Icon(Icons.camera_alt),
@@ -116,37 +118,4 @@ class DisplayPictureScreen extends StatelessWidget {
       )
     );
   }
-}
-
-class DisplayPictureScreen2 extends StatelessWidget {
-final String imagePath;
-const DisplayPictureScreen2({super.key, required this.imagePath});
-@override
-Widget build(BuildContext context) {
-return Scaffold(
-appBar: AppBar(title: const Text('Display the Picture')),
-body: Column(
-  children: [
-    SizedBox.expand(child: Image.file(File(imagePath))),
-    Row(
-      children: [
-        TextButton(
-          onPressed: () {
-            int count = 0;
-            Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
-          },
-          child: Text('Done'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Retry'),
-        ),
-      ],
-    )
-  ],
-)
-);
-}
 }
