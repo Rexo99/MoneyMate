@@ -183,16 +183,18 @@ class HudState extends State<Hud> {
     super.initState();
 
 
-    //Code to check if there is a valid network connection
+    ///Code to check if there is a valid network connection
     connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      // whenever connection status is changed.
+      /// whenever connection status is changed.
+      /// there isn´t any connection
       if (result == ConnectivityResult.none) {
-        //there is no any connection
-        connectivityPopup(context: context);
+        Future.delayed(Duration(seconds: 10), () {
+          connectivityPopup(context: context);
+        });
       } else if (result == ConnectivityResult.mobile) {
-        //connection is mobile data network
+        /// connection is mobile data network
       } else if (result == ConnectivityResult.wifi) {
-        //connection is from wifi
+        ///connection is from wifi
       }
     });
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../UserState.dart';
 import '../main.dart';
-import 'package:money_mate/pages/CategoryOverview.dart';
 import '../models/models.dart';
 import 'package:flutter/services.dart';
 
