@@ -13,7 +13,7 @@ import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/pages/Tutorial.dart';
 import 'package:money_mate/util/StateManagement.dart';
-import 'package:money_mate/util/CameraNew.dart';
+import 'package:money_mate/util/Camera.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,9 +49,6 @@ class MyApp extends StatefulWidget {
     ///Tutorial related
     late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
-
-    //Connectivity related
-
 
     @override
     void initState() {
@@ -183,7 +180,7 @@ class HudState extends State<Hud> {
     super.initState();
 
 
-    ///Code to check if there is a valid network connection
+    //Code to check if there is a valid network connection
     connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       /// whenever connection status is changed.
       /// there isn´t any connection
@@ -197,8 +194,6 @@ class HudState extends State<Hud> {
         ///connection is from wifi
       }
     });
-
-
 
     //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
@@ -219,7 +214,6 @@ class HudState extends State<Hud> {
                 actions: <Widget>[
                   IconButton(
                     iconSize: 30.0,
-                    color: Colors.black,
                     icon: const Icon(Icons.bar_chart),
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
@@ -227,7 +221,6 @@ class HudState extends State<Hud> {
                   ),
                   IconButton(
                     iconSize: 30.0,
-                    color: Colors.black,
                     icon: const Icon(Icons.menu),
                     onPressed:
                       _openEndDrawer,
@@ -307,7 +300,6 @@ class HudState extends State<Hud> {
                     label: "TutorialButton"),
                 ],
               ),
-
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
@@ -339,13 +331,16 @@ class HudState extends State<Hud> {
     );
   }
 }
+
 class MenuDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
     return Drawer(
         width: 250,
-        child: ListView(children: [
+        child: ListView(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
+          children: [
           const Icon(Icons.account_circle_outlined, size: 100),
           $(_loginState, (p0) => _loginState.value
             ? ListTile(
@@ -363,7 +358,7 @@ class MenuDrawer extends StatelessWidget{
               UserState.of(context).logoutUser();
             },
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -374,30 +369,30 @@ class MenuDrawer extends StatelessWidget{
             )
           )
               :ElevatedButton(
-              onPressed: () async {
+                onPressed: () async {
                 // Close drawer due to catch name and email from logged in user on successful login
                 Navigator.pop(context);
                 //Navigate to the Login-Screen
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
                 //UserState.of(context).loginUser(name: "erik", password: "test");
 
-              },
-              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 40),
-                  Icon(Icons.login_outlined, size: 24.0),
-                  SizedBox(width: 10),
-                  Text("Login"),
-                ],
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 40),
+                    Icon(Icons.login_outlined, size: 24.0),
+                    SizedBox(width: 10),
+                    Text("Login"),
+                  ],
+                )
               )
-          )
           ),
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -410,7 +405,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),

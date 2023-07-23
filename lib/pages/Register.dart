@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/Popups.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Login.dart';
@@ -34,6 +35,8 @@ class Register extends StatelessWidget {
                         const SizedBox(height: 25),
                         TextFormField(
                           controller: usernameController,
+                          autocorrect: false,
+                          enableSuggestions: false,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(), labelText: "Username"),
                           validator: (value) {
@@ -47,6 +50,8 @@ class Register extends StatelessWidget {
                         TextFormField(
                           controller: passwordController,
                           obscureText: true,
+                          autocorrect: false,
+                          enableSuggestions: false,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(), labelText: "Password"),
                           validator: (value) {
@@ -61,27 +66,33 @@ class Register extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text);
-                                //Todo exception handling for registration errors
-                                await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
+                                if(await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text) == false) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      uniformSnackBar('This username is already taken.')
+                                  );
+                                } else {
+                                  await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
+
 
                                 //Todo spaghetti code, move generating default data to backend
                                 await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
                                 await UserState.of(context).initListCategoryList();
                                 UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
 
-                                if(context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Registered!')),);
 
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Hud()));// Navigate the user to the Home page
+                                  if(context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        uniformSnackBar('Registered!'));
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Hud()));// Navigate the user to the Home page
+                                  }
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Please fill input')),
+                                  uniformSnackBar('Please fill input fields')
                                 );
                               }
                             },
@@ -110,11 +121,8 @@ class Register extends StatelessWidget {
                             )
                           ],
                         ),
-                        Visibility(child: ElevatedButton(onPressed:() => Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => UserState(child: Hud())),),
-                            child: Text('Debug exit')), visible: false), //todo - remove debug button
-                        SizedBox(height: 30),
-                      ]),
+
+                    ]),
                 )
             )
         )

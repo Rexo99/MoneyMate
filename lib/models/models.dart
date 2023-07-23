@@ -69,8 +69,8 @@ class Category implements Model {
       this._id, this.name, this.budget, this.userId, this.icon) {
     HTTPRequestBuilder()
         .createModel(
-        path: "categories",
-        tmp: CategoryDTO(name, budget, userId, icon))
+            path: "categories",
+            tmp: CategoryDTO(name, budget, userId, icon))
         .then((value) => _id = value);
   }
 
