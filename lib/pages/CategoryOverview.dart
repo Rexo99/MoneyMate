@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/Popups.dart';
 
 
-//To-Do make CategoryOverview Stateful
+/// To-Do make CategoryOverview Stateful
+/// I still need to add set State
 class CategoryOverview extends StatefulWidget {
   CategoryOverview({super.key});
 
@@ -44,19 +46,67 @@ class CategoryCard extends StatelessWidget {
 
   CategoryCard({required this.category, super.key});
 
+
   @override
   Widget build(BuildContext context) {
 
     //Method to Change the Color depending on the budget spent
     // For Example if the expenses of the Category are bigger than 70% of it´s budget
-    Color getColor(){
+
+    // IconData getCategoryIcon() {
+    //   if (category.icon.toString() == 'home') {
+    //     return Icons.home;
+    //   }
+    //   else {
+    //     return Icons.square;
+    //   }
+    // }
+
+    String? catIcon = category.icon;
+
+    IconData getCategoryIcon(catIcon) {
+      switch(catIcon) {
+        case '':
+          return Icons.square;
+          break;
+        case 'home':
+          return Icons.home;
+          break;
+        case 'car_repair':
+          return Icons.car_repair;
+          break;
+        case 'local_grocery_store':
+          return Icons.local_grocery_store;
+          break;
+        case 'local_bar':
+          return Icons.local_bar;
+          break;
+        case 'flight':
+          return Icons.flight;
+          break;
+        case 'business':
+          return Icons.business;
+          break;
+        case 'album':
+          return Icons.album;
+          break;
+        case 'pets':
+          return Icons.pets;
+          break;
+        default:
+          return Icons.square;
+      }
+    }
+
+    Icon getColor(){
       if(category.budget.toInt() < 500) {
-        return Colors.green;
+        return Icon(Icons.emoji_emotions,
+          color: Colors.green);
       }
       else{
-        return Colors.red;
+        return Icon(Icons.warning,
+            color: Colors.red);
       }
-
     }
 
 
@@ -111,11 +161,20 @@ class CategoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.local_grocery_store),
+              // leading: Icon(Icons.local_grocery_store),
+              /// To-Do get the Icondata over category.icon
+              /// it´s not as simple as to convert String? to String
+              /// As MdiIcons are different than normal Flutter Icon it´s not
+              /// the best solution
+              // leading: Icon(MdiIcons.fromString(category.icon.toString())),
+              leading: Icon(getCategoryIcon(catIcon)),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
-              //Changes color of a list tile
-              tileColor: getColor(),
+              /*trailing: Icon(Icons.circle,
+              color: getColor(),),*/
+              trailing: getColor(),
+              /// Add Something like a small circle in order to indicate the budget status
+              /// maybe through box decoration
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.end,

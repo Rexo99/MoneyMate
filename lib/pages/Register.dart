@@ -13,12 +13,12 @@ class Register extends StatelessWidget {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-@override
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async => false,
-          child: Scaffold(
-              body: Form(
+        child: Scaffold(
+            body: Form(
                 key: _formKey,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
@@ -26,11 +26,11 @@ class Register extends StatelessWidget {
                       children: [
                         const SizedBox(height: 100),
                         Center(
-                          child: Text("Register for MoneyMate",
-                              textDirection: TextDirection.ltr,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 20)
-                          )
+                            child: Text("Register for MoneyMate",
+                                textDirection: TextDirection.ltr,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontSize: 20)
+                            )
                         ),
                         const SizedBox(height: 25),
                         TextFormField(
@@ -73,10 +73,12 @@ class Register extends StatelessWidget {
                                 } else {
                                   await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
 
-                                  // Todo spaghetti code, move generating default data to backend
-                                  await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400);
-                                  await UserState.of(context).initListCategoryList();
-                                  UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
+
+                                //Todo spaghetti code, move generating default data to backend
+                                await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
+                                await UserState.of(context).initListCategoryList();
+                                UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
+
 
                                   if(context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -100,9 +102,9 @@ class Register extends StatelessWidget {
                         SizedBox(height: 20),
                         Text('Already have an Account?', textAlign: TextAlign.center),
                         GestureDetector(
-                              onTap: () => Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),),
-                              child: Text('Log in instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
+                          onTap: () => Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),),
+                          child: Text('Log in instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
                         ),
                         SizedBox(height: 90),
                         Column(
@@ -119,10 +121,11 @@ class Register extends StatelessWidget {
                             )
                           ],
                         ),
+
                     ]),
                 )
-              )
-          )
+            )
+        )
     );
   }
 }

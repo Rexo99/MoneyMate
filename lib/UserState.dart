@@ -74,9 +74,9 @@ class UserState extends InheritedWidget {
     required String name,
     required int budget,
     String? icon,
-    /// update with Icon
   }) async {
-    Category cat = Category.create(name, budget,icon);
+    Category cat = Category.create(name, budget, icon);
+
     await cat.create();
   }
 
@@ -99,7 +99,7 @@ class UserState extends InheritedWidget {
 
     await HTTPRequestBuilder().put(
         path: "categories/${category.id}",
-        obj: CategoryDTO(name, budget, category.id, category.icon),
+        obj: CategoryDTO(name, budget, category.id, icon),
         returnType: Category);
     initListCategoryList();
   }

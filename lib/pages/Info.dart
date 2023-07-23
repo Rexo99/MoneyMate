@@ -28,7 +28,7 @@ class Info extends StatelessWidget {
                   Flexible(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('Category Overview \n Add Category Screen \n Edit Category Screen \n Popups(DeleteCategory)', textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('Category Overview \n Add Category Screen \n Edit Category Screen \n Popups(DeleteCategory) \n Charts Overview Screen' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
