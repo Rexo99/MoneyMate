@@ -10,16 +10,17 @@ class AddCategory extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
-  String? testIcon = 'home';
+  String testIcon = 'home';
 
 
   ///Method to get the Icon
   /// Switch Case
 
   ///Set the int through the Buttons
+  /// This method seems to work
   int iconCase = 0;
 
-  String getIcon( iconCase){
+  String getIcon(iconCase){
     String result = '';
     switch( iconCase) {
       case 0:
@@ -114,7 +115,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    iconCase = 0;
+                    iconCase = 1;
                   },
                 ),
                 IconButton(
@@ -122,7 +123,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.car_repair),
                   onPressed: () {
-                    iconCase = 1;
+                    iconCase = 2;
                   },
                 ),
                 IconButton(
@@ -130,7 +131,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.local_grocery_store),
                   onPressed: () {
-                    // ...
+                    iconCase = 3;
                   },
                 ),
                 IconButton(
@@ -138,7 +139,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.local_bar),
                   onPressed: () {
-                    // ...
+                    iconCase = 4;
                   },
                 ),
               ]
@@ -154,7 +155,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.flight),
                   onPressed: () {
-                    // ...
+                    iconCase = 5;
                   },
                 ),
                 IconButton(
@@ -162,7 +163,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.business),
                   onPressed: () {
-                    // ...
+                    iconCase = 6;
                   },
                 ),
                 IconButton(
@@ -170,7 +171,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.album),
                   onPressed: () {
-                    // ...
+                    iconCase = 7;
                   },
                 ),
                 IconButton(
@@ -178,7 +179,7 @@ class AddCategory extends StatelessWidget {
                   color: Theme.of(context).iconTheme.color,
                   icon: const Icon(Icons.pets),
                   onPressed: () {
-                    print(testIcon);
+                    iconCase = 8;
                   },
                 ),
               ]
@@ -210,9 +211,11 @@ class AddCategory extends StatelessWidget {
                   (
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      String? testIcon = 'home';
-                      // await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: getIcon(iconCase));
-                      await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: testIcon);
+                      await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: getIcon(iconCase));
+                      // await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text), icon: testIcon);
+                      /// Adding a Category without an Icon causes trouble
+                      /// check code if somewhere icon is not assigned as String?
+                      // await UserState.of(context).addCategory(name: nameController.value.text, budget: int.parse(budgetController.text));
                       await UserState.of(context).initListCategoryList();
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => CategoriesOverview()),);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);

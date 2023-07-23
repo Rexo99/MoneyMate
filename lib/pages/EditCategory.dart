@@ -8,13 +8,55 @@ import 'package:flutter/services.dart';
 
 
 class EditCategory extends StatelessWidget {
-  // EditCategory({super.key});
   Category category;
   EditCategory({required this.category, super.key});
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+  String test = 'home';
+
+
+  ///Method to change the icon
+  /// at the moment icon is not updated maybe i need to pass category.icon
+  /// Maybe need to change the return Type of getIcon to ?
+  int iconCase = 0;
+
+  String? getIcon(iconCase){
+    String? result = '';
+    switch( iconCase) {
+      case 0:
+        result = category.icon;
+        break;
+      case 1:
+        result = 'home';
+        break;
+      case 2:
+        result = 'car_repair';
+        break;
+      case 3:
+        result = 'local_grocery_store';
+        break;
+      case 4:
+        result = 'local_bar';
+        break;
+      case 5:
+        result = 'flight';
+        break;
+      case 6:
+        result = 'business';
+        break;
+      case 7:
+        result = 'album';
+        break;
+      case 8:
+        result = 'pets';
+        break;
+      default:
+        return category.icon;
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +121,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.home),
                     onPressed: () {
-                      // ...
+                      iconCase = 1;
                     },
                   ),
                   IconButton(
@@ -87,7 +129,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.car_repair),
                     onPressed: () {
-                      // ...
+                      iconCase = 2;
                     },
                   ),
                   IconButton(
@@ -95,7 +137,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.local_grocery_store),
                     onPressed: () {
-                      // ...
+                      iconCase = 3;
                     },
                   ),
                   IconButton(
@@ -103,7 +145,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.local_bar),
                     onPressed: () {
-                      // ...
+                      iconCase = 4;
                     },
                   ),
                 ]
@@ -119,7 +161,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.flight),
                     onPressed: () {
-                      // ...
+                      iconCase = 5;
                     },
                   ),
                   IconButton(
@@ -127,7 +169,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.business),
                     onPressed: () {
-                      // ...
+                      iconCase = 6;
                     },
                   ),
                   IconButton(
@@ -135,7 +177,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.album),
                     onPressed: () {
-                      // ...
+                      iconCase = 7;
                     },
                   ),
                   IconButton(
@@ -143,7 +185,7 @@ class EditCategory extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.pets),
                     onPressed: () {
-                      // ...
+                      iconCase = 8;
                     },
                   ),
                 ]
@@ -175,7 +217,9 @@ class EditCategory extends StatelessWidget {
                       (
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text));
+                          UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text), icon: getIcon(iconCase));
+                          /// It functions when i assign category.icon = 'home', but why
+                          // UserState.of(context).updateCategory(category: category, name: nameController.value.text, budget: int.parse(budgetController.text), icon: category.icon = 'home');
                           // UserState.of(context).updateCategory(category: UserState.of(context).categoryList.last, name: nameController.value.text, budget: int.parse(budgetController.text));
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
                         }

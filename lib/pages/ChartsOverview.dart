@@ -266,7 +266,8 @@ class BarChartWidget extends StatelessWidget {
         return BarTooltipItem(
           rod.toY.round().toStringAsFixed(0) + '€',
           TextStyle(
-            color: colors[categoryListBarChart.indexOf(category)],
+            /// To-do add matching Styles
+            color: Colors.red,
             fontWeight: FontWeight.bold,
           ),
         );

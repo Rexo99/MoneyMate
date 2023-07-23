@@ -91,7 +91,7 @@ class UserState extends InheritedWidget {
 
     await HTTPRequestBuilder().put(
         path: "categories/${category.id}",
-        obj: CategoryDTO(name, budget, category.id, category.icon),
+        obj: CategoryDTO(name, budget, category.id, icon),
         returnType: Category);
     initListCategoryList();
   }

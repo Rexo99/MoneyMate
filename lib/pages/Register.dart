@@ -66,7 +66,7 @@ class Register extends StatelessWidget {
                                 await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
 
                                 //Todo spaghetti code, move generating default data to backend
-                                await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400);
+                                await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
                                 await UserState.of(context).initListCategoryList();
                                 UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
 

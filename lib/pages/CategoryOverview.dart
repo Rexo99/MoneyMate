@@ -53,12 +53,48 @@ class CategoryCard extends StatelessWidget {
     //Method to Change the Color depending on the budget spent
     // For Example if the expenses of the Category are bigger than 70% of it´s budget
 
-    IconData getCategoryIcon() {
-      if (category.icon.toString() == 'home') {
-        return Icons.home;
-      }
-      else {
-        return Icons.square;
+    // IconData getCategoryIcon() {
+    //   if (category.icon.toString() == 'home') {
+    //     return Icons.home;
+    //   }
+    //   else {
+    //     return Icons.square;
+    //   }
+    // }
+
+    String? catIcon = category.icon;
+
+    IconData getCategoryIcon(catIcon) {
+      switch(catIcon) {
+        case '':
+          return Icons.square;
+          break;
+        case 'home':
+          return Icons.home;
+          break;
+        case 'car_repair':
+          return Icons.car_repair;
+          break;
+        case 'local_grocery_store':
+          return Icons.local_grocery_store;
+          break;
+        case 'local_bar':
+          return Icons.local_bar;
+          break;
+        case 'flight':
+          return Icons.flight;
+          break;
+        case 'business':
+          return Icons.business;
+          break;
+        case 'album':
+          return Icons.album;
+          break;
+        case 'pets':
+          return Icons.pets;
+          break;
+        default:
+          return Icons.square;
       }
     }
 
@@ -72,15 +108,6 @@ class CategoryCard extends StatelessWidget {
             color: Colors.red);
       }
     }
-
-    // Color getColor(){
-    //   if(category.budget.toInt() < 500) {
-    //     return Colors.green;
-    //   }
-    //   else{
-    //     return Colors.red;
-    //   }
-    // }
 
 
     // return Center(
@@ -136,8 +163,11 @@ class CategoryCard extends StatelessWidget {
             ListTile(
               // leading: Icon(Icons.local_grocery_store),
               /// To-Do get the Icondata over category.icon
-              leading: Icon(MdiIcons.fromString(category.icon.toString())),
-              // leading: Icon(getCategoryIcon()),
+              /// it´s not as simple as to convert String? to String
+              /// As MdiIcons are different than normal Flutter Icon it´s not
+              /// the best solution
+              // leading: Icon(MdiIcons.fromString(category.icon.toString())),
+              leading: Icon(getCategoryIcon(catIcon)),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
               /*trailing: Icon(Icons.circle,
