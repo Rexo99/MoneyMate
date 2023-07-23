@@ -55,6 +55,8 @@ class _Login extends State<Login> {
                     const SizedBox(height: 25),
                     TextFormField(
                       controller: usernameController,
+                      autocorrect: false,
+                      enableSuggestions: false,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: "Username"),
                       validator: (value) {
@@ -68,6 +70,8 @@ class _Login extends State<Login> {
                     TextFormField(
                       controller: passwordController,
                       obscureText: true,
+                      autocorrect: false,
+                      enableSuggestions: false,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: "Password"),
                       validator: (value) {
@@ -115,12 +119,17 @@ class _Login extends State<Login> {
                                 await prefs.setString("username", "");
                                 await prefs.setString("password", "");
                               }
+
                               if(context.mounted) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Hud()));
                               }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  uniformSnackBar('Incorrect credentials')
+                              );
                             }
                           }
                         },
@@ -150,12 +159,6 @@ class _Login extends State<Login> {
                         )
                       ],
                     ),
-                    Visibility(child: ElevatedButton(
-                        onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                            ),
-                        child: Text('Debug exit')), visible: false,), //todo - remove debug button
                   ]),
                 ))));
   }

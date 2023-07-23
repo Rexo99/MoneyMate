@@ -35,6 +35,8 @@ class Register extends StatelessWidget {
                         const SizedBox(height: 25),
                         TextFormField(
                           controller: usernameController,
+                          autocorrect: false,
+                          enableSuggestions: false,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(), labelText: "Username"),
                           validator: (value) {
@@ -48,6 +50,8 @@ class Register extends StatelessWidget {
                         TextFormField(
                           controller: passwordController,
                           obscureText: true,
+                          autocorrect: false,
+                          enableSuggestions: false,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(), labelText: "Password"),
                           validator: (value) {
@@ -111,10 +115,6 @@ class Register extends StatelessWidget {
                             )
                           ],
                         ),
-                        Visibility(child: ElevatedButton(onPressed:() => Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => UserState(child: Hud())),),
-                            child: Text('Debug exit')), visible: false), //todo - remove debug button
-                        SizedBox(height: 30),
                     ]),
                 )
               )
