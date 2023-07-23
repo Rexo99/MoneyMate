@@ -38,15 +38,17 @@ class CategoryDTO extends DTO {
   final String name;
   final int budget;
   int? userId;
+  String? icon;
 
-  CategoryDTO(this.name, this.budget, this.userId);
+  CategoryDTO(this.name, this.budget, this.userId, this.icon);
 
   @override
   String toJson() {
     Map<String, dynamic> obj = {
       "name": name,
       "budget": budget,
-      "user_id": userId
+      "user_id": userId,
+      "icon": icon
     };
     return jsonEncode(obj);
   }

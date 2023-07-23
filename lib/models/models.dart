@@ -16,6 +16,8 @@ abstract class Model{
   }
 }
 
+///
+///
 class Expense implements Model {
   @override
   int? _id;
@@ -68,30 +70,31 @@ class Category implements Model {
   final String name;
   final int budget;
   int? userId;
+  String? icon;
 
   Category(
-      this._id, this.name, this.budget, this.userId) {
+      this._id, this.name, this.budget, this.userId, this.icon) {
     HTTPRequestBuilder()
         .createModel(
             path: "categories",
-            tmp: CategoryDTO(name, budget, userId))
+            tmp: CategoryDTO(name, budget, userId, icon))
         .then((value) => _id = value);
   }
 
-  Category.create(this.name, this.budget);
+  Category.create(this.name, this.budget, this.icon);
 
   Category._(
-      this._id, this.name, this.budget, this.userId);
+      this._id, this.name, this.budget, this.userId, this.icon);
 
   static Category fromJson(Map json) {
-    return Category._(json["id"], json["name"], json["budget"], json["user_id"]);
+    return Category._(json["id"], json["name"], json["budget"], json["user_id"], json["icon"]);
   }
 
   create() async {
     await HTTPRequestBuilder()
         .createModel(
         path: "categories",
-        tmp: CategoryDTO(name, budget, userId))
+        tmp: CategoryDTO(name, budget, userId, icon))
         .then((value) => _id = value);
   }
 
@@ -99,12 +102,15 @@ class Category implements Model {
   Category copyWith({
     String? name,
     int? budget,
+    String? icon,
   }) =>
-      Category._(_id, name ?? this.name, budget ?? this.budget, userId);
+      Category._(_id, name ?? this.name, budget ?? this.budget, userId, icon ?? this.icon);
 
   Category setName(String name) => copyWith(name: name);
 
   Category setBudget(int budget) => copyWith(budget: budget);
+
+  Category setIcon(String icon) => copyWith(icon: icon);
 
 /*  Category addExpenditure(Expense expenditure) {
     List<Expense> expenditures = expenditureList;

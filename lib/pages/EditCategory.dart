@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../UserState.dart';
 import '../main.dart';
+import 'package:money_mate/pages/CategoryOverview.dart';
 import '../models/models.dart';
 import 'package:flutter/services.dart';
 
@@ -75,7 +76,7 @@ class EditCategory extends StatelessWidget {
                 children: <Widget>[
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.home),
                     onPressed: () {
                       // ...
@@ -83,7 +84,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.car_repair),
                     onPressed: () {
                       // ...
@@ -91,7 +92,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.local_grocery_store),
                     onPressed: () {
                       // ...
@@ -99,7 +100,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.local_bar),
                     onPressed: () {
                       // ...
@@ -115,7 +116,7 @@ class EditCategory extends StatelessWidget {
                 children: <Widget>[
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.flight),
                     onPressed: () {
                       // ...
@@ -123,7 +124,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.business),
                     onPressed: () {
                       // ...
@@ -131,7 +132,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.album),
                     onPressed: () {
                       // ...
@@ -139,7 +140,7 @@ class EditCategory extends StatelessWidget {
                   ),
                   IconButton(
                     iconSize: 50.0,
-                    color: Colors.black,
+                    color: Theme.of(context).iconTheme.color,
                     icon: const Icon(Icons.pets),
                     onPressed: () {
                       // ...

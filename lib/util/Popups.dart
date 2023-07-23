@@ -255,8 +255,6 @@ void deleteCategoryPopup({ required Category category, required BuildContext con
             ),
             TextButton(
               onPressed: () {
-                // UserState.of(context).removeCategory(category);
-                // UserState.of(context).removeCategory(UserState.of(context).categoryList.last);
                 UserState.of(context).removeCategory(category);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
               },
@@ -267,7 +265,22 @@ void deleteCategoryPopup({ required Category category, required BuildContext con
   );
 }
 
-
+void connectivityPopup({required BuildContext context}) {
+  showDialog<String>(
+    context: context,
+    builder: (BuildContext subContext) =>
+        AlertDialog(
+          title: const Text('No connectivity found'),
+          content: const Text('If this error persists, check your phones network connection'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+  );
+}
 
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(

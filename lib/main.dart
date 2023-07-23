@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,15 +7,17 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
+import 'package:money_mate/pages/ChartsOverview.dart';
 import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/pages/Tutorial.dart';
 import 'package:money_mate/util/StateManagement.dart';
-import 'package:money_mate/util/CameraNew.dart';
+import 'package:money_mate/util/Camera.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -156,6 +160,14 @@ class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openEndDrawer() {
+    _scaffoldKey.currentState!.openEndDrawer();
+  }
+
+  //Checks for a Connectivity
+  late StreamSubscription connection;
 
   Tutorial _tutorial = Tutorial();
 
@@ -166,6 +178,21 @@ class HudState extends State<Hud> {
   @override
   void initState() {
     super.initState();
+
+    //Code to check if there is a valid network connection
+    connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      // whenever connection status is changed.
+      if (result == ConnectivityResult.none) {
+        //there is no any connection
+        connectivityPopup(context: context);
+      } else if (result == ConnectivityResult.mobile) {
+        //connection is mobile data network
+      } else if (result == ConnectivityResult.wifi) {
+        //connection is from wifi
+      }
+    });
+
+    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
@@ -178,8 +205,26 @@ class HudState extends State<Hud> {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-            appBar: AppBar(title: $(_title, (String title) => Text(title)), automaticallyImplyLeading: false),
-            body: PageView(
+            key: _scaffoldKey,
+            appBar: AppBar(title: $(_title, (String title) => Text(title)),
+                //IconButton that lead to Charts
+                actions: <Widget>[
+                  IconButton(
+                    iconSize: 30.0,
+                    icon: const Icon(Icons.bar_chart),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
+                    },
+                  ),
+                  IconButton(
+                    iconSize: 30.0,
+                    icon: const Icon(Icons.menu),
+                    onPressed:
+                      _openEndDrawer,
+                  ),
+                ],
+                automaticallyImplyLeading: false),
+          body: PageView(
               controller: _pageController,
               onPageChanged: (newIndex) {
                 _currentIndex.value = newIndex;
@@ -252,7 +297,6 @@ class HudState extends State<Hud> {
                     label: "TutorialButton"),
                 ],
               ),
-
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
@@ -284,13 +328,16 @@ class HudState extends State<Hud> {
     );
   }
 }
+
 class MenuDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
     return Drawer(
         width: 250,
-        child: ListView(children: [
+        child: ListView(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
+          children: [
           const Icon(Icons.account_circle_outlined, size: 100),
           $(_loginState, (p0) => _loginState.value
             ? ListTile(
@@ -308,7 +355,7 @@ class MenuDrawer extends StatelessWidget{
               UserState.of(context).logoutUser();
             },
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -319,30 +366,30 @@ class MenuDrawer extends StatelessWidget{
             )
           )
               :ElevatedButton(
-              onPressed: () async {
+                onPressed: () async {
                 // Close drawer due to catch name and email from logged in user on successful login
                 Navigator.pop(context);
                 //Navigate to the Login-Screen
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
                 //UserState.of(context).loginUser(name: "erik", password: "test");
 
-              },
-              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 40),
-                  Icon(Icons.login_outlined, size: 24.0),
-                  SizedBox(width: 10),
-                  Text("Login"),
-                ],
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 40),
+                    Icon(Icons.login_outlined, size: 24.0),
+                    SizedBox(width: 10),
+                    Text("Login"),
+                  ],
+                )
               )
-          )
           ),
           ElevatedButton(
             onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
@@ -355,7 +402,7 @@ class MenuDrawer extends StatelessWidget{
           ElevatedButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Info(title: 'Info'))),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 40),
