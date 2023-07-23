@@ -86,7 +86,7 @@ class Register extends StatelessWidget {
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  uniformSnackBar('Please fill input')
+                                  uniformSnackBar('Please fill input fields')
                                 );
                               }
                             },
