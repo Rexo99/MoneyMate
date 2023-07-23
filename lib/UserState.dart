@@ -49,7 +49,14 @@ class UserState extends InheritedWidget {
   }
 
   // Registers a user with the backend
-  Future<void> registerUser({
+  Future<bool> registerUser({
+    required String name, required String password })
+  async {
+     return await HTTPRequestBuilder().register(name: name, password: password);
+  }
+
+  // Registers a user with the backend
+  Future<void> oldRegisterUser({
     required String name,
     required String password,
   }) async {

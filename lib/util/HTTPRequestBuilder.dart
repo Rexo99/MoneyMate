@@ -24,11 +24,27 @@ class HTTPRequestBuilder {
     return _instance;
   }
 
-  Future<void> register(
+  Future<bool> register(
       {required String name, required String password}) async {
     Uri url = Uri.https(_rootURL, "api/register");
     var response =
         await http.post(url, body: {"name": name, "password": password});
+    print('Register: Response status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print("Register successful");
+      return true;
+    }
+    else {
+      print("Response body: ${response.body}");
+      return false;
+    }
+  }
+
+  Future<void> oldRegister(
+      {required String name, required String password}) async {
+    Uri url = Uri.https(_rootURL, "api/register");
+    var response =
+    await http.post(url, body: {"name": name, "password": password});
     if (response.statusCode == 200) {
       print("Register successful");
     } else if(response.statusCode == 500) {

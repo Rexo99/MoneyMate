@@ -66,23 +66,27 @@ class Register extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text);
-                                //Todo exception handling for registration errors
-                                await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
-
-                                // Todo spaghetti code, move generating default data to backend
-                                await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400);
-                                await UserState.of(context).initListCategoryList();
-                                UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
-
-                                if(context.mounted) {
+                                if(await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text) == false) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    uniformSnackBar('Registered!'));
+                                      uniformSnackBar('This username is already taken.')
+                                  );
+                                } else {
+                                  await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
 
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Hud()));// Navigate the user to the Home page
+                                  // Todo spaghetti code, move generating default data to backend
+                                  await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400);
+                                  await UserState.of(context).initListCategoryList();
+                                  UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
+
+                                  if(context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        uniformSnackBar('Registered!'));
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Hud()));// Navigate the user to the Home page
+                                  }
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
