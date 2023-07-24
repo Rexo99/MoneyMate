@@ -22,9 +22,11 @@ class _Login extends State<Login> {
   TextEditingController _passwordController = TextEditingController();
   final FocusNode _usernameFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
-  //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
+
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getBool("staySignedIn") ?? false) {
@@ -32,8 +34,7 @@ class _Login extends State<Login> {
         _passwordController.text = prefs.getString("password") ?? "";
         await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
 
-        Navigator.push(
-            context,
+        Navigator.push(context,
             MaterialPageRoute(
                 builder: (context) => Hud()
             )
@@ -50,14 +51,13 @@ class _Login extends State<Login> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: ListView(children: [
-                    new Image.asset('images/icon.png', height: 100, width: 100),
-                    const SizedBox(height: 30),
+                    SizedBox(height: screenHeight / 13),
                     Center(
                         child: Text("Log in to your MoneyMate",
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.left,
                             style: TextStyle(fontSize: 20))),
-                    const SizedBox(height: 25),
+                    SizedBox(height: screenHeight / 15.5),
                     TextFormField(
                       controller: _usernameController,
                       focusNode: _usernameFocus,
@@ -73,7 +73,7 @@ class _Login extends State<Login> {
                       },
                       onFieldSubmitted: (text) => _fieldFocusChange(context, _usernameFocus, _passwordFocus),
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: screenHeight / 52),
                     TextFormField(
                       controller: _passwordController,
                       focusNode: _passwordFocus,
@@ -104,6 +104,7 @@ class _Login extends State<Login> {
                           ),
                           Text('Stay signed in?')
                         ]),
+                    SizedBox(height: screenHeight / 52),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
@@ -112,8 +113,9 @@ class _Login extends State<Login> {
                         child: const Text('Submit'),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: screenHeight / 12),
                     Text('Have no Account?', textAlign: TextAlign.center),
+                    SizedBox(height: screenHeight / 70),
                     GestureDetector(
                       onTap: () => Navigator.pushReplacement(
                         context,
@@ -123,13 +125,16 @@ class _Login extends State<Login> {
                       child: Text('Register instead',
                           textAlign: TextAlign.center,
                           style:
-                              TextStyle(decoration: TextDecoration.underline)),
+                              TextStyle(decoration: TextDecoration.underline, fontSize: 15)),
                     ),
-                    SizedBox(height: 160),
-                    ListTile(
-                      title: Text('Version Info', textAlign: TextAlign.center),
-                      subtitle: Text('Beta 0.1', textAlign: TextAlign.center),
-                    ),
+                    SizedBox(height: screenHeight / 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        new Image.asset('images/icon.png', height: 100, width: 100),
+                        Text("MoneyMate \n Your helper in finance", textAlign: TextAlign.center,)
+                      ],
+                    )
                   ]),
                 )
             )

@@ -17,6 +17,8 @@ class Register extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -26,7 +28,7 @@ class Register extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: ListView(
                       children: [
-                        const SizedBox(height: 100),
+                        SizedBox(height: screenHeight / 13),
                         Center(
                             child: Text("Register for MoneyMate",
                                 textDirection: TextDirection.ltr,
@@ -34,7 +36,7 @@ class Register extends StatelessWidget {
                                 style: TextStyle(fontSize: 20)
                             )
                         ),
-                        const SizedBox(height: 25),
+                        SizedBox(height: screenHeight / 15.5),
                         TextFormField(
                           controller: _usernameController,
                           focusNode: _usernameFocus,
@@ -50,7 +52,7 @@ class Register extends StatelessWidget {
                           },
                           onFieldSubmitted: (text) => _fieldFocusChange(context, _usernameFocus, _passwordFocus),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: screenHeight / 52),
                         TextFormField(
                           controller: _passwordController,
                           focusNode: _passwordFocus,
@@ -67,7 +69,7 @@ class Register extends StatelessWidget {
                           },
                           onFieldSubmitted: (text) => submitButtonClick(context),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: screenHeight / 30),
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
@@ -76,29 +78,22 @@ class Register extends StatelessWidget {
                             child: const Text('Submit'),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: screenHeight / 15),
                         Text('Already have an Account?', textAlign: TextAlign.center),
+                        SizedBox(height: screenHeight / 70),
                         GestureDetector(
                           onTap: () => Navigator.push(
                             context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),),
                           child: Text('Log in instead', textAlign: TextAlign.center, style: TextStyle(decoration: TextDecoration.underline)),
                         ),
-                        SizedBox(height: 90),
-                        Column(
-                          children: <Widget>[
-                            Text("Additional Information", textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold)),
-                            Divider(),
-                            ListTile(
-                              title: Text('What is MoneyMate?'),
-                              subtitle: Text('MoneyMate helps you keep track of your finances'),
-                            ),
-                            ListTile(
-                              title: Text('Version Info'),
-                              subtitle: Text('Beta 0.1'),
-                            )
+                        SizedBox(height: screenHeight / 6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            new Image.asset('images/icon.png', height: 100, width: 100),
+                            Text("MoneyMate \n Your helper in finance", textAlign: TextAlign.center,)
                           ],
-                        ),
-
+                        )
                     ]),
                 )
             )
