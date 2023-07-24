@@ -44,7 +44,8 @@ class HTTPRequestBuilder {
     if (!_loggedIn) {
       Uri url = Uri.https(_rootURL, "api/login");
       var response =
-          await http.post(url, body: {"name": name, "password": password});
+        await http.post(url, body: {"name": name, "password": password});
+      print('Login: Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         _bearerToken = response.body;
         Map<String, dynamic> decodedToken = JwtDecoder.decode(_bearerToken);
@@ -56,7 +57,6 @@ class HTTPRequestBuilder {
         print("Response body: ${response.body}");
         throw ErrorDescription('Login: Response status: ${response.statusCode}');
       }
-      print('Login: Response status: ${response.statusCode}');
     }
   }
 
