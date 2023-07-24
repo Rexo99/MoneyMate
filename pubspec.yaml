@@ -52,6 +52,7 @@ dependencies:
   flutter_swipe_action_cell: ^3.1.1
   connectivity_plus: ^4.0.1
   fl_chart: ^0.63.0
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

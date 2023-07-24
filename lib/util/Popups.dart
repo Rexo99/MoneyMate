@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../main.dart';
 import '../models/models.dart';
 import 'StateManagement.dart';
@@ -16,7 +17,6 @@ import 'StateManagement.dart';
 void updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) {
   FilePickerResult? result;
-  Uint8List fileBytes = expense.value.image;
   Uint8List image = expense.value.image;
   String name = expense.value.name;
   String amount = expense.value.amount.toString();
@@ -85,7 +85,7 @@ void updateExpensePopup(
               width: 100,
               child: image.isNotEmpty
                   ? Image.memory(
-                      fileBytes,
+                      image,
                       fit: BoxFit.cover,
                     )
                   : const Text('No image selected.'),
@@ -103,7 +103,6 @@ void updateExpensePopup(
               ScaffoldMessenger.of(subContext).showSnackBar(
                 const SnackBar(content: Text('Updated Expense')),
               );
-              //Todo not the right context?
               UserState.of(context).expendList.updateItem(
                   expense: expense, name: name, amount: double.parse(amount), image: image);
               Navigator.pop(subContext, 'OK');
@@ -120,7 +119,7 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
-  Uint8List image = Uint8List(0);
+  Uint8List imageBytes = Uint8List(0);
   late int categoryId;
   final formKey = GlobalKey<FormState>();
   FilePickerResult? result;
@@ -204,7 +203,9 @@ void createExpensePopup({required BuildContext context}) {
                   String filePath = result!.files.single.path!;
 
                   // Read the file as bytes
-                  image = await File(filePath).readAsBytes();
+                  File image = File(filePath);
+                  imageBytes = await image.readAsBytes();
+                  UserState.of(context).builder.createImage(file: image);
                 }
               },
               child: const Text('Select Image'),
@@ -227,7 +228,7 @@ void createExpensePopup({required BuildContext context}) {
                   name: name,
                   amount: num.parse(amount),
                   categoryId: categoryId,
-                  image: image);
+                  image: imageBytes);
               Navigator.push(
                   context,
                   MaterialPageRoute(
