@@ -119,7 +119,8 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
-  Uint8List imageBytes = Uint8List(0);
+  int imageId;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   late int categoryId;
   final formKey = GlobalKey<FormState>();
   FilePickerResult? result;
@@ -238,7 +239,7 @@ void createExpensePopup({required BuildContext context}) {
                   name: name,
                   amount: num.parse(amount),
                   categoryId: categoryId,
-                  image: imageBytes);
+                  image: imageBytes.value);
               Navigator.push(
                   context,
                   MaterialPageRoute(
