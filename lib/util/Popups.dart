@@ -189,38 +189,13 @@ void createExpensePopup({required BuildContext context}) {
   );
 }
 
-void deleteCategoryPopup({ required Category category, required BuildContext context}){
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext subContext) =>
-        AlertDialog(
-          title: const Text('Delete category'),
-          content: const Text('All data in this category will be lost!'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                UserState.of(context).removeCategory(category);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Hud()),);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-  );
-}
-
 void connectivityPopup({required BuildContext context}) {
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) =>
         AlertDialog(
           title: const Text('No connectivity found'),
-          content: const Text('If this error persists, check your phones network connection'),
-          /// Disclaimer your data will not be safed
+          content: const Text('If this error persists, check your phones network connection  \n Your Data will not be saved'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
