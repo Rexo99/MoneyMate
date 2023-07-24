@@ -55,14 +55,6 @@ class UserState extends InheritedWidget {
      return await HTTPRequestBuilder().register(name: name, password: password);
   }
 
-  // Registers a user with the backend
-  Future<void> oldRegisterUser({
-    required String name,
-    required String password,
-  }) async {
-    await HTTPRequestBuilder().register(name: name, password: password);
-  }
-
   //Logs out the user and clears the data
   Future<void> logoutUser() async {
     categoryList.clear();

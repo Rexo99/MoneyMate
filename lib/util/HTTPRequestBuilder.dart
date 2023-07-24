@@ -40,22 +40,6 @@ class HTTPRequestBuilder {
     }
   }
 
-  Future<void> oldRegister(
-      {required String name, required String password}) async {
-    Uri url = Uri.https(_rootURL, "api/register");
-    var response =
-    await http.post(url, body: {"name": name, "password": password});
-    if (response.statusCode == 200) {
-      print("Register successful");
-    } else if(response.statusCode == 500) {
-      print("User already exists"); //todo - tell UserState -> Register
-    }
-    else {
-      print("Response body: ${response.body}");
-    }
-    print('Register: Response status: ${response.statusCode}');
-  }
-
   Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
       Uri url = Uri.https(_rootURL, "api/login");
