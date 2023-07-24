@@ -204,12 +204,22 @@ void createExpensePopup({required BuildContext context}) {
 
                   // Read the file as bytes
                   File image = File(filePath);
-                  imageBytes = await image.readAsBytes();
-                  UserState.of(context).builder.createImage(file: image);
+                  //imageBytes = await image.readAsBytes();
+                  imageBytes.value = await UserState.of(context).builder.createImage(file: image);
                 }
               },
               child: const Text('Select Image'),
             ),
+            Container(
+              height: 100,
+              width: 100,
+              child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                  ? Image.memory(
+                imageBytes.value,
+                fit: BoxFit.cover,
+              )
+                  : const Text('No image selected.'),)
+            )
           ],
         ),
       ),
