@@ -195,7 +195,7 @@ void connectivityPopup({required BuildContext context}) {
     builder: (BuildContext subContext) =>
         AlertDialog(
           title: const Text('No connectivity found'),
-          content: const Text('If this error persists, check your phones network connection  \n Your Data will not be saved'),
+          content: const Text('If this error persists, check your phones network connection  \n  \nYour Data will not be saved'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),

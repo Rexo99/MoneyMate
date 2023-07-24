@@ -89,6 +89,14 @@ class Info extends StatelessWidget {
                     subtitle: Text('Draws a horizontal line across the screen'),
                   ),
                   ListTile(
+                    title: Text('PieChart', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Displays data as sections of a circular graph'),
+                  ),
+                  ListTile(
+                    title: Text('BarChart', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Displays a bar for each data point'),
+                  ),
+                  ListTile(
                     title: Text('Widget', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for'),
                   )
