@@ -186,7 +186,7 @@ class HudState extends State<Hud> {
       /// there isn´t any connection
       if (result == ConnectivityResult.none) {
         Future.delayed(Duration(seconds: 10), () {
-          connectivityPopup(context: context);
+          connectivityPopup(context: context); //todo - increase duration (it just delays the popup, it will show even after .1 seconds of no internet, just 10 seconds later)
         });
       } else if (result == ConnectivityResult.mobile) {
         /// connection is mobile data network
