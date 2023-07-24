@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -17,8 +18,8 @@ class HTTPRequestBuilder {
   late String username;
   late String _bearerToken;
 
-  //final String _rootURL = "192.168.0.99:6060"; Todo comment in
-  final String _rootURL = "192.168.178.55:6060";
+  final String _rootURL = "192.168.0.99:6060";
+  //final String _rootURL = "192.168.178.55:6060"; Todo comment in
 
   bool _loggedIn = false;
 
@@ -91,7 +92,7 @@ class HTTPRequestBuilder {
   }
 
 
-  void createImage({required File file}) async {
+  Future<Uint8List> createImage({required File file}) async {
 
     var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/testUpload"));
 
@@ -115,17 +116,26 @@ class HTTPRequestBuilder {
 
     //for getting and decoding the response into json format
     var responsed = await http.Response.fromStream(response);
-    final responseData = json.decode(responsed.body);
+    Map<String, dynamic> responseData = json.decode(responsed.body);
 
 
     if (response.statusCode == 200) {
       print("SUCCESS");
       print(responseData);
+
+      List<dynamic> dataArray = responseData['message']['imageBytes']['data'];
+
+      List<int> intArray = dataArray.cast<int>();
+
+      Uint8List imageBytes = Uint8List.fromList(intArray);
+
+      return imageBytes;
       //Todo compare file types  js.Buffer(server) to octet-stream(client)
     }
     else {
       print(response.statusCode);
       print("ERROR");
+      return Uint8List(0);
     }
   }
 
