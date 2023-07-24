@@ -61,7 +61,6 @@ class PieChartState extends StatelessWidget{
         child: PieChart(PieChartData(
             sectionsSpace: 0,
             centerSpaceRadius: 0,
-          ///Pass the sections of the pie chart
             sections: section()
         ),
 

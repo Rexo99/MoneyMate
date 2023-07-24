@@ -86,7 +86,7 @@ class AddCategory extends StatelessWidget {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a Description';
+                    return 'Please enter a Budget';
                   }
                   return null;
                   },

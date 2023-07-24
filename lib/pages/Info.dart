@@ -28,7 +28,7 @@ class Info extends StatelessWidget {
                   Flexible(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('Category Overview \n Add Category Screen \n Edit Category Screen \n Popups(DeleteCategory) \n Charts Overview Screen' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('Category Overview \n Add Category Screen \n Edit Category Screen \n ConnectivityChecker \n Popups(ConnectivityPopup) \n Charts Overview Screen' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
@@ -87,6 +87,14 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('Divider', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Draws a horizontal line across the screen'),
+                  ),
+                  ListTile(
+                    title: Text('PieChart', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Displays data as sections of a circular graph'),
+                  ),
+                  ListTile(
+                    title: Text('BarChart', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Displays a bar for each data point'),
                   ),
                   ListTile(
                     title: Text('Widget', style: TextStyle(fontWeight: FontWeight.bold)),
