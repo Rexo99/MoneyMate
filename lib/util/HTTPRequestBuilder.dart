@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/dtos.dart';
@@ -8,14 +10,16 @@ import '../models/models.dart';
 
 class HTTPRequestBuilder {
   static final HTTPRequestBuilder _instance =
-      HTTPRequestBuilder._privateConstructor();
+  HTTPRequestBuilder._privateConstructor();
 
   // Variables were final, but I had to remove the final keyword to make the logout function work
   late int userId;
   late String username;
   late String _bearerToken;
 
-  final String _rootURL = "192.168.0.99:6060";
+  //final String _rootURL = "192.168.0.99:6060"; Todo comment in
+  final String _rootURL = "192.168.178.55:6060";
+
   bool _loggedIn = false;
 
   HTTPRequestBuilder._privateConstructor();
@@ -28,7 +32,7 @@ class HTTPRequestBuilder {
       {required String name, required String password}) async {
     Uri url = Uri.http(_rootURL, "api/register");
     var response =
-        await http.post(url, body: {"name": name, "password": password});
+    await http.post(url, body: {"name": name, "password": password});
     print('Register: Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       print("Register successful");
@@ -44,8 +48,7 @@ class HTTPRequestBuilder {
     if (!_loggedIn) {
       Uri url = Uri.http(_rootURL, "api/login");
       var response =
-        await http.post(url, body: {"name": name, "password": password});
-      print('Login: Response status: ${response.statusCode}');
+      await http.post(url, body: {"name": name, "password": password});print('Login: Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         _bearerToken = response.body;
         Map<String, dynamic> decodedToken = JwtDecoder.decode(_bearerToken);
@@ -55,7 +58,8 @@ class HTTPRequestBuilder {
         _loggedIn = true;
       } else {
         print("Response body: ${response.body}");
-        throw ErrorDescription('Login: Response status: ${response.statusCode}');
+        throw ErrorDescription(
+            'Login: Response status: ${response.statusCode}');
       }
     }
   }
@@ -84,6 +88,45 @@ class HTTPRequestBuilder {
     print("Response body: ${response.body}");
     Map object = json.decode(response.body);
     return object['message']["id"];
+  }
+
+
+  void createImage({required File file}) async {
+
+    var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/testUpload"));
+
+
+    request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
+
+    request.files.add(
+    http.MultipartFile.fromBytes(
+        'image',
+        file.readAsBytesSync(),
+        filename: file.path,
+        )
+    );
+
+
+    request.fields['hash'] = file.hashCode.toString();
+
+    print("Request: $request");
+    //for completeing the request
+    var response = await request.send();
+
+    //for getting and decoding the response into json format
+    var responsed = await http.Response.fromStream(response);
+    final responseData = json.decode(responsed.body);
+
+
+    if (response.statusCode == 200) {
+      print("SUCCESS");
+      print(responseData);
+      //Todo compare file types  js.Buffer(server) to octet-stream(client)
+    }
+    else {
+      print(response.statusCode);
+      print("ERROR");
+    }
   }
 
   Future<Object?> get({required String path, required Type returnType}) async {
@@ -182,14 +225,14 @@ class HTTPRequestBuilder {
       throw ErrorDescription("$deleteType with id $objId not found");
     }
   }
+
   bool get loggedIn => _loggedIn;
 
   set loggedIn(bool state) => _loggedIn = state;
 
 
-
-  String? getUsername(){
-    if(_loggedIn){
+  String? getUsername() {
+    if (_loggedIn) {
       return username;
     } else {
       return null;
