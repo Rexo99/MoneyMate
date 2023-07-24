@@ -10,8 +10,10 @@ class Register extends StatelessWidget {
   final String title;
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,8 @@ class Register extends StatelessWidget {
                         ),
                         const SizedBox(height: 25),
                         TextFormField(
-                          controller: usernameController,
+                          controller: _usernameController,
+                          focusNode: _usernameFocus,
                           autocorrect: false,
                           enableSuggestions: false,
                           decoration: const InputDecoration(
@@ -45,10 +48,12 @@ class Register extends StatelessWidget {
                             }
                             return null;
                           },
+                          onFieldSubmitted: (text) => _fieldFocusChange(context, _usernameFocus, _passwordFocus),
                         ),
                         const SizedBox(height: 15),
                         TextFormField(
-                          controller: passwordController,
+                          controller: _passwordController,
+                          focusNode: _passwordFocus,
                           obscureText: true,
                           autocorrect: false,
                           enableSuggestions: false,
@@ -60,41 +65,13 @@ class Register extends StatelessWidget {
                             }
                             return null;
                           },
+                          onFieldSubmitted: (text) => submitButtonClick(context),
                         ),
                         const SizedBox(height: 20),
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                if(await UserState.of(context).registerUser(name: usernameController.value.text, password: passwordController.value.text) == false) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      uniformSnackBar('This username is already taken.')
-                                  );
-                                } else {
-                                  await UserState.of(context).loginUser(name: usernameController.value.text, password: passwordController.value.text);
-
-
-                                //Todo spaghetti code, move generating default data to backend
-                                await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
-                                await UserState.of(context).initListCategoryList();
-                                UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
-
-
-                                  if(context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        uniformSnackBar('Registered!'));
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Hud()));// Navigate the user to the Home page
-                                  }
-                                }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  uniformSnackBar('Please fill input fields')
-                                );
-                              }
+                              submitButtonClick(context);
                             },
                             child: const Text('Submit'),
                           ),
@@ -127,5 +104,41 @@ class Register extends StatelessWidget {
             )
         )
     );
+  }
+
+  Future<void> submitButtonClick(context) async {
+    if (_formKey.currentState!.validate()) {
+      if(await UserState.of(context).registerUser(name: _usernameController.value.text, password: _passwordController.value.text) == false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        uniformSnackBar('This username is already taken.')
+        );
+      } else {
+        await UserState.of(context).loginUser(name: _usernameController.value.text, password: _passwordController.value.text);
+
+        //Todo spaghetti code, move generating default data to backend
+        await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
+        await UserState.of(context).initListCategoryList();
+        UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
+
+        if(context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        uniformSnackBar('Registered!'));
+
+        Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => Hud()));// Navigate the user to the Home page
+        }
+      }
+    } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      uniformSnackBar('Please fill input fields')
+    );
+    }
+  }
+
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 }

@@ -18,22 +18,26 @@ class Login extends StatefulWidget {
 class _Login extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   bool staySignedIn = false;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
   //todo - upon login the dashboard is not refreshed, so that required information is missing, until another page is opened and closed
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getBool("staySignedIn") ?? false) {
-        usernameController.text = prefs.getString("username") ?? "";
-        passwordController.text = prefs.getString("password") ?? "";
-        await UserState.of(context).loginUser(name: usernameController.text, password: passwordController.text);
+        _usernameController.text = prefs.getString("username") ?? "";
+        _passwordController.text = prefs.getString("password") ?? "";
+        await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
 
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Hud()));
+                builder: (context) => Hud()
+            )
+        );
       }
     });
 
@@ -46,7 +50,8 @@ class _Login extends State<Login> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: ListView(children: [
-                    const SizedBox(height: 100),
+                    new Image.asset('images/icon.png', height: 100, width: 100),
+                    const SizedBox(height: 30),
                     Center(
                         child: Text("Log in to your MoneyMate",
                             textDirection: TextDirection.ltr,
@@ -54,7 +59,8 @@ class _Login extends State<Login> {
                             style: TextStyle(fontSize: 20))),
                     const SizedBox(height: 25),
                     TextFormField(
-                      controller: usernameController,
+                      controller: _usernameController,
+                      focusNode: _usernameFocus,
                       autocorrect: false,
                       enableSuggestions: false,
                       decoration: const InputDecoration(
@@ -65,10 +71,12 @@ class _Login extends State<Login> {
                         }
                         return null;
                       },
+                      onFieldSubmitted: (text) => _fieldFocusChange(context, _usernameFocus, _passwordFocus),
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
-                      controller: passwordController,
+                      controller: _passwordController,
+                      focusNode: _passwordFocus,
                       obscureText: true,
                       autocorrect: false,
                       enableSuggestions: false,
@@ -80,6 +88,7 @@ class _Login extends State<Login> {
                         }
                         return null;
                       },
+                      onFieldSubmitted: (text) => submitButtonClick(),
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -98,40 +107,7 @@ class _Login extends State<Login> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final SharedPreferences prefs = await SharedPreferences.getInstance();
-                          if (_formKey.currentState!.validate()) {
-                            await UserState.of(context).loginUser(
-                                name: usernameController.value.text,
-                                password: passwordController.value.text);
-                            HTTPRequestBuilder builder = HTTPRequestBuilder();
-
-                            if (builder.loggedIn) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                uniformSnackBar('Logged in!')
-                              );
-
-                              if (staySignedIn) {
-                                await prefs.setBool("staySignedIn", true);
-                                await prefs.setString("username", usernameController.value.text);
-                                await prefs.setString("password", passwordController.value.text);
-                              } else {
-                                await prefs.setBool("staySignedIn", false);
-                                await prefs.setString("username", "");
-                                await prefs.setString("password", "");
-                              }
-
-                              if(context.mounted) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Hud()));
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  uniformSnackBar('Incorrect credentials')
-                              );
-                            }
-                          }
+                          submitButtonClick();
                         },
                         child: const Text('Submit'),
                       ),
@@ -149,17 +125,57 @@ class _Login extends State<Login> {
                           style:
                               TextStyle(decoration: TextDecoration.underline)),
                     ),
-                    SizedBox(height: 200),
-                    Column(
-                      children: <Widget>[
-                        Divider(),
-                        ListTile(
-                          title: Text('Version Info'),
-                          subtitle: Text('Beta 0.1'),
-                        )
-                      ],
+                    SizedBox(height: 160),
+                    ListTile(
+                      title: Text('Version Info', textAlign: TextAlign.center),
+                      subtitle: Text('Beta 0.1', textAlign: TextAlign.center),
                     ),
                   ]),
-                ))));
+                )
+            )
+        )
+    );
+  }
+
+  Future<void> submitButtonClick() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_formKey.currentState!.validate()) {
+      await UserState.of(context).loginUser(
+          name: _usernameController.value.text,
+          password: _passwordController.value.text);
+      HTTPRequestBuilder builder = HTTPRequestBuilder();
+
+      if (builder.loggedIn) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            uniformSnackBar('Logged in!')
+        );
+
+        if (staySignedIn) {
+          await prefs.setBool("staySignedIn", true);
+          await prefs.setString("username", _usernameController.value.text);
+          await prefs.setString("password", _passwordController.value.text);
+        } else {
+          await prefs.setBool("staySignedIn", false);
+          await prefs.setString("username", "");
+          await prefs.setString("password", "");
+        }
+
+        if(context.mounted) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Hud()));
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            uniformSnackBar('Incorrect credentials')
+        );
+      }
+    }
+  }
+
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 }
