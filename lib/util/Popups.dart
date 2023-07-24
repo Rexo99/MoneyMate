@@ -439,7 +439,8 @@ SnackBar uniformSnackBar(String text) {
       elevation: 10,
       shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(20))),
-      width: (text.length * 10)
+      width: (text.length * 10),
+      clipBehavior: Clip.none,
   );
 
   return snackBar;
