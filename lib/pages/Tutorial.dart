@@ -52,6 +52,7 @@ class Tutorial extends State {
         print('onClickOverlay: $target');
       },
       onSkip: () {
+        finished = true;
         print("skip");
       },
     );
