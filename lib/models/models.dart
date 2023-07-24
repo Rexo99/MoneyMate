@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 
@@ -105,6 +108,40 @@ class Category implements Model {
   Category setBudget(int budget) => copyWith(budget: budget);
 
   Category setIcon(String icon) => copyWith(icon: icon);
+
+  IconData getIconData(){
+      switch(icon) {
+        case '':
+          return Icons.square;
+          break;
+        case 'home':
+          return Icons.home;
+          break;
+        case 'car_repair':
+          return Icons.car_repair;
+          break;
+        case 'local_grocery_store':
+          return Icons.local_grocery_store;
+          break;
+        case 'local_bar':
+          return Icons.local_bar;
+          break;
+        case 'flight':
+          return Icons.flight;
+          break;
+        case 'business':
+          return Icons.business;
+          break;
+        case 'album':
+          return Icons.album;
+          break;
+        case 'pets':
+          return Icons.pets;
+          break;
+        default:
+          return Icons.square;
+      }
+  }
 
 /*  Category addExpenditure(Expense expenditure) {
     List<Expense> expenditures = expenditureList;

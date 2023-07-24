@@ -76,7 +76,6 @@ class ExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Todo Wrapper for slide options
     return SwipeActionCell(
       index: index,
 
@@ -93,16 +92,14 @@ class ExpenseCard extends StatelessWidget {
             backgroundRadius: 10,
             performsFirstActionWithFullSwipe: true,
             nestedAction: SwipeNestedAction(
-              content: Container(
-                child: OverflowBox(
-                  maxWidth: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('confirm',
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
-                    ],
-                  ),
+              content: const OverflowBox(
+                maxWidth: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('confirm',
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                  ],
                 ),
               ),
             ),
@@ -117,6 +114,7 @@ class ExpenseCard extends StatelessWidget {
             onTap: (handler) {
               updateExpensePopup(expense: expense, context: context);
               handler(false);
+
             }),
       ],
       /* child: Padding(
@@ -128,9 +126,8 @@ class ExpenseCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            //Todo rearrange Textiles
             ListTile(
-              leading: const Icon(Icons.local_grocery_store),
+              leading: Icon(UserState.of(context).getIconFromCategoryId(categoryId: expense.value.categoryId)),
               title: Text(expense.value.name),
               subtitle: Row(
                 children: [

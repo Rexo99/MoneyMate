@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:money_mate/util/StateManagement.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'models/ExpenseList.dart';
@@ -94,6 +95,23 @@ class UserState extends InheritedWidget {
         obj: CategoryDTO(name, budget, category.id, icon),
         returnType: Category);
     initListCategoryList();
+  }
+
+  Category? getCategoryById({required categoryId}){
+    for(Category c in categoryList) {
+      if(c.id == categoryId) {
+        return c;
+      }
+    }
+    return null;
+  }
+
+  IconData getIconFromCategoryId({required categoryId}){
+    Category? category = getCategoryById(categoryId: categoryId);
+    if (category == null){
+      return Icons.square;
+    }
+    return category.getIconData();
   }
 
   @override
