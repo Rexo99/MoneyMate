@@ -167,7 +167,7 @@ class HudState extends State<Hud> {
   }
 
   //Checks for a Connectivity
-  late StreamSubscription connection;
+  late StreamSubscription connection; //todo - add cancellation of subscription
 
   Tutorial _tutorial = Tutorial();
 
@@ -347,35 +347,37 @@ class MenuDrawer extends StatelessWidget{
                 title: Text(HTTPRequestBuilder().username[0].toUpperCase() + HTTPRequestBuilder().username.substring(1), textAlign: TextAlign.center),
                 subtitle: const Text('', textAlign: TextAlign.center))
             : const ListTile(
-                title: Text('Hey!', textAlign: TextAlign.center),
+                title: Text('User', textAlign: TextAlign.center),
               subtitle: Text('', textAlign: TextAlign.center)),
            ),
           $(_loginState, (p0) => _loginState.value
               ? ElevatedButton(
-            onPressed: () async {
-              //Navigate to the Login-Screen
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
-              UserState.of(context).logoutUser();
-            },
-            style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 40),
-                Icon(Icons.login_outlined, size: 24.0),
-                SizedBox(width: 10),
-                Text("Logout"),
-              ],
-            )
-          )
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        uniformSnackBar('Logged out!')
+                    );
+
+                    //Navigate to the Login-Screen
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
+                    UserState.of(context).logoutUser();
+                  },
+                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 40),
+                      Icon(Icons.login_outlined, size: 24.0),
+                      SizedBox(width: 10),
+                      Text("Logout"),
+                    ],
+                  )
+              )
               :ElevatedButton(
                 onPressed: () async {
                 // Close drawer due to catch name and email from logged in user on successful login
                 Navigator.pop(context);
                 //Navigate to the Login-Screen
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
-                //UserState.of(context).loginUser(name: "erik", password: "test");
-
                 },
                 style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
                 child: const Row(
