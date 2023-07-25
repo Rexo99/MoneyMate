@@ -17,25 +17,25 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     required String name,
     required num amount,
     required int categoryId,
-    required Uint8List image,
+    required int? imageId,
   }) {
-    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId, image)));
+    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId, imageId)));
   }
 
-  void updateItem({required Prop<Expense> expense, String? name, num? amount, Uint8List? image}) {
+  void updateItem({required Prop<Expense> expense, String? name, num? amount, int? imageId}) {
     if (name != null) {
       expense.value = expense.value.setName(name);
     }
     if (amount != null) {
       expense.value = expense.value.setAmount(amount);
     }
-    if (image != null) {
-      expense.value = expense.value.setImage(image);
+    if (imageId != null) {
+      expense.value = expense.value.setImage(imageId);
     }
     HTTPRequestBuilder().put(
         path: "expenditures/${expense.value.id}",
         obj: ExpenseDTO(expense.value.name, expense.value.amount,
-            expense.value.date, expense.value.categoryId, expense.value.image),
+            expense.value.date, expense.value.categoryId, expense.value.imageId),
         returnType: Expense);
   }
 

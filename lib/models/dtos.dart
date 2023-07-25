@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 
 abstract class DTO {
@@ -15,9 +14,9 @@ class ExpenseDTO extends DTO {
   final num amount;
   final int categoryId;
   final DateTime dateTime;
-  final Uint8List image;
+  final int? imageId;
 
-  ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId, this.image);
+  ExpenseDTO(this.name, this.amount, this.dateTime, this.categoryId, this.imageId);
 
   @override
   String toJson() {
@@ -26,7 +25,7 @@ class ExpenseDTO extends DTO {
       "amount": amount,
       "categoryId": categoryId,
       "dateTime": dateTime.toString(),
-      "image": image
+      "imageId": imageId
     };
     return jsonEncode(obj);
   }
