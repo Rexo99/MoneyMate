@@ -1,23 +1,20 @@
-import 'dart:convert';
 import 'dart:core';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
-import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../main.dart';
 import '../models/models.dart';
 import 'StateManagement.dart';
 
 /// A popup that allows the user to change the name and amount of an expense.
-void updateExpensePopup(
-    {required Prop<Expense> expense, required BuildContext context}) {
+Future<void> updateExpensePopup(
+    {required Prop<Expense> expense, required BuildContext context}) async {
   FilePickerResult? result;
-  Uint8List image = expense.value.image;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
+  imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
   String name = expense.value.name;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
@@ -75,7 +72,7 @@ void updateExpensePopup(
                   String filePath = result!.files.single.path!;
 
                   // Read the file as bytes
-                  image = await File(filePath).readAsBytes();
+                  imageBytes.value = await File(filePath).readAsBytes();
                 }
               },
               child: const Text('Select Image'),
@@ -83,9 +80,9 @@ void updateExpensePopup(
             Container(
               height: 100,
               width: 100,
-              child: image.isNotEmpty
+              child: imageBytes.value.isNotEmpty
                   ? Image.memory(
-                      image,
+                      imageBytes.value,
                       fit: BoxFit.cover,
                     )
                   : const Text('No image selected.'),
@@ -104,7 +101,7 @@ void updateExpensePopup(
                 const SnackBar(content: Text('Updated Expense')),
               );
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: double.parse(amount), image: image);
+                  expense: expense, name: name, amount: double.parse(amount), imageId: 0);
               Navigator.pop(subContext, 'OK');
             }
           },
@@ -119,7 +116,7 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
-  int imageId;
+  int? imageId;
   Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   late int categoryId;
   final formKey = GlobalKey<FormState>();
@@ -205,8 +202,10 @@ void createExpensePopup({required BuildContext context}) {
 
                   // Read the file as bytes
                   File image = File(filePath);
-                  //imageBytes = await image.readAsBytes();
-                  imageBytes.value = await UserState.of(context).builder.createImage(file: image);
+
+                  imageId = await UserState.of(context).builder.createImage(file: image);
+
+                  imageBytes.value = await File(filePath).readAsBytes();
                 }
               },
               child: const Text('Select Image'),
@@ -239,7 +238,7 @@ void createExpensePopup({required BuildContext context}) {
                   name: name,
                   amount: num.parse(amount),
                   categoryId: categoryId,
-                  image: imageBytes.value);
+                  imageId: imageId);
               Navigator.push(
                   context,
                   MaterialPageRoute(

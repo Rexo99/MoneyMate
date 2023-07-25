@@ -90,11 +90,8 @@ class HTTPRequestBuilder {
   }
 
 
-  Future<Uint8List> createImage({required File file}) async {
-
-    var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/testUpload"));
-
-
+  Future<int> createImage({required File file}) async {
+    var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/image"));
     request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
 
     request.files.add(
@@ -104,7 +101,6 @@ class HTTPRequestBuilder {
         filename: file.path,
         )
     );
-
 
     request.fields['hash'] = file.hashCode.toString();
 
@@ -116,25 +112,43 @@ class HTTPRequestBuilder {
     var responsed = await http.Response.fromStream(response);
     Map<String, dynamic> responseData = json.decode(responsed.body);
 
-
     if (response.statusCode == 200) {
       print("SUCCESS");
       print(responseData);
 
-      List<dynamic> dataArray = responseData['message']['imageBytes']['data'];
-
-      List<int> intArray = dataArray.cast<int>();
-
-      Uint8List imageBytes = Uint8List.fromList(intArray);
-
-      return imageBytes;
-      //Todo compare file types  js.Buffer(server) to octet-stream(client)
+      int imageId = responseData['message'];
+      return imageId;
     }
     else {
       print(response.statusCode);
       print("ERROR");
-      return Uint8List(0);
+      return 0;
     }
+  }
+
+  Future<Uint8List> getImage({required int? imageId}) async {
+    Uri uri = Uri.http(_rootURL, "api/image/$imageId");
+    Map<String, String>? headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $_bearerToken',
+    };
+
+    final response = await http.get(uri, headers: headers);
+    Map object = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      List<dynamic> dataArray = object['message']['imageBytes']['data'];
+      List<int> intArray = dataArray.cast<int>();
+      Uint8List imageBytes = Uint8List.fromList(intArray);
+
+      return imageBytes;
+    }
+    else {
+      print(response.statusCode);
+      print("ERROR");
+    } return Uint8List(0);
   }
 
   Future<Object?> get({required String path, required Type returnType}) async {
