@@ -55,7 +55,6 @@ class Expense implements Model {
 
   Expense setAmount(num amount) => copyWith(amount: amount);
 
-  //todo implement
   Expense setImage(int imageId) => copyWith(imageId: imageId);
 }
 
