@@ -19,6 +19,7 @@ Future<void> updateExpensePopup(
   Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
   String name = expense.value.name;
+  int? imageId = expense.value.imageId;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
@@ -71,24 +72,24 @@ Future<void> updateExpensePopup(
                   allowedExtensions: ['jpg', 'png'],
                 );
                 if (result != null) {
-                  // Get the selected file path
                   String filePath = result!.files.single.path!;
+                  File image = File(filePath);
 
-                  // Read the file as bytes
+                  imageId = await UserState.of(context).builder.createImage(file: image);
                   imageBytes.value = await File(filePath).readAsBytes();
                 }
               },
               child: const Text('Select Image'),
             ),
             Container(
-              height: 100,
-              width: 100,
-              child: imageBytes.value.isNotEmpty
-                  ? Image.memory(
-                      imageBytes.value,
-                      fit: BoxFit.cover,
-                    )
-                  : const Text('No image selected.'),
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text('No image selected.'),)
             )],
         ),
       ),
@@ -104,7 +105,7 @@ Future<void> updateExpensePopup(
                 uniformSnackBar('Updated Expense'),
               );
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: double.parse(amount), imageId: 0);
+                  expense: expense, name: name, amount: double.parse(amount), imageId: imageId);
               Navigator.pop(subContext, 'OK');
             }
           },
