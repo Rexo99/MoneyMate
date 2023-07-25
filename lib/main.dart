@@ -392,7 +392,7 @@ class MenuDrawer extends StatelessWidget{
               )
           ),
           ElevatedButton(
-            onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
+            onPressed: () => themePicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
