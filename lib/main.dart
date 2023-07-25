@@ -281,7 +281,7 @@ class HudState extends State<Hud> {
                         icon: const Icon(Icons.camera),
                         onPressed: ()  async {
                           final cameras = await availableCameras();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: cameras.first)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => InitializeCamera(camera: cameras.first)));
                           isDialOpen.value = false;
                         },
                       ),
