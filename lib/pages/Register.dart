@@ -4,6 +4,12 @@ import '../UserState.dart';
 import '../main.dart';
 import 'Login.dart';
 
+/// Register Page, opened from [Login.dart] if the user has no account yet.
+/// The user enters their credentials in the two [TextFormField]s
+/// User is forwarded to the [Homepage] / [Hud] upon successful registering.
+///
+/// Code in [Login.dart] by Erik Hinkelmanns, Dannie Krösche (Processing user data and login)
+/// and Dorian Zimmermann (Page Composition, Widgets and User-Feedback)
 class Register extends StatelessWidget {
   Register({super.key, required this.title});
 
@@ -101,6 +107,8 @@ class Register extends StatelessWidget {
     );
   }
 
+  /// Checks the entered user data after clicking the [SubmitButton],
+  /// and logs the user in
   Future<void> submitButtonClick(context) async {
     if (_formKey.currentState!.validate()) {
       if(await UserState.of(context).registerUser(name: _usernameController.value.text, password: _passwordController.value.text) == false) {
@@ -132,6 +140,7 @@ class Register extends StatelessWidget {
     }
   }
 
+  /// Changes focus to the next [TextFormField]
   _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
