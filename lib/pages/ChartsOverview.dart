@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../UserState.dart';
 import '../models/models.dart';
+import '../util/HTTPRequestBuilder.dart';
 
 
 class ChartsOverview extends StatelessWidget{
@@ -32,10 +32,14 @@ class ChartsOverview extends StatelessWidget{
 
 class PieChartState extends StatelessWidget{
 
-  // Category category;
-
   late final BuildContext context;
   late final List<Category> categoryListOverview;
+  // late final List<Expense> categoryExpenseList;
+  late final List<Expense> categoryExpenseList = [Expense('test', 100, DateTime.now(), 56)
+  , Expense('new', 100, DateTime.now(), 56), Expense('test2', 200, DateTime.now(), 56),
+    Expense('new', 50, DateTime.now(), 57)];
+
+
 
   PieChartState({required this.context}) {
     categoryListOverview = UserState.of(context).categoryList;
@@ -82,7 +86,33 @@ class PieChartState extends StatelessWidget{
 
   }
 
-  /// Method to generate each section for the chart from a catgeory
+  ///Method to get the SectionData
+  List<int> expenseSectionData() {
+    final List<int> pielist = [];
+    int expensevalue = 0;
+    for (var category in categoryListOverview) {
+        /// This code loops in the other for loop
+        int expensecounter = 0;
+        for (var expense in categoryExpenseList) {
+        if ( expense.categoryId == category.id) {
+        expensecounter += 1;
+        }
+        }
+        expensevalue = expensecounter;
+        pielist.add(expensevalue);
+    }
+    return pielist;
+  }
+
+  /// Method to get the expense List
+  Future<List<Expense>> getexpenseList() async {
+    List<Expense> exps = (await HTTPRequestBuilder().get(
+        path: "expenditures",
+        returnType: List<Expense>)) as List<Expense>;
+    return exps;
+  }
+
+  /// Method to generate a legend for the chart from a catgeory
   /*List<Widget> chartLegend() {
     final  List<Widget> chartlist = [];
     for (var category in categoryListOverview) {
@@ -123,23 +153,16 @@ class PieChartState extends StatelessWidget{
 
   /// Method to generate each section for the chart from a catgeory
   List<PieChartSectionData> section() {
-    //do i need to return the list
-    // like this  return List
     final List<PieChartSectionData> list = [];
+    final List<int> pielist = expenseSectionData();
     for (var category in categoryListOverview) {
       final data = PieChartSectionData(
-        //für jede Kategorie herausfinden wie viele Expensenses in dieser vorhanden ist
-        //Value = NumberofExpenses/AllExpenses * 100
-        value: 1/categoryListOverview.length*100,
-        ///maybe add a list of colors
-        ///the color is different from index to index
-        /// x: categoryListOverview.indexOf(category)+1 == 1 is green,
-
-        /// List of Pastel Colors
-        // color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+        value: pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.length*100,
+        // value: 1/categoryListOverview.length*100,
         color: colors[categoryListOverview.indexOf(category)],
-        // title: category.name,
-        title: (1/categoryListOverview.length*100).toStringAsFixed(2) + '%',
+
+        title: (pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.length*100).toStringAsFixed(2) + '%',
+        // title: (1/categoryListOverview.length*100).toStringAsFixed(2) + '%',
         radius: 100,
     );
       list.add(data);
@@ -231,6 +254,10 @@ class BarChartWidget extends StatelessWidget {
 
   late final BuildContext context;
   late final List<Category> categoryListBarChart;
+  // late final List<Expense> categoryExpenseBarList
+  late final List<Expense> categoryExpenseBarList = [Expense('test', 100, DateTime.now(), 56)
+  , Expense('new', 100, DateTime.now(), 56), Expense('test2', 200, DateTime.now(), 56),
+  Expense('new', 50, DateTime.now(), 57)];
 
   BarChartWidget({required this.context}) {
     categoryListBarChart = UserState.of(context).categoryList;
@@ -243,6 +270,32 @@ class BarChartWidget extends StatelessWidget {
     Colors.teal.shade400, Colors.orangeAccent, Colors.blue.shade900, Colors.lightGreen.shade100, Colors.purpleAccent.shade700,
     Colors.greenAccent, Colors.lightBlueAccent.shade200, Colors.deepPurple.shade200, Colors.pinkAccent.shade200, Colors.yellow.shade200];
 
+  ///Method to get the Roddata
+  List<int> expenseBarData() {
+
+    final List<int> barlist = [];
+    int expensevalue = 0;
+    for (var category in categoryListBarChart) {
+      /// This code loops in the other for loop
+      int expensebudget = 0;
+      for (var expense in categoryExpenseBarList) {
+        if ( expense.categoryId == category.id) {
+          expensebudget += expense.amount.toInt();
+        }
+      }
+      expensevalue = expensebudget;
+      barlist.add(expensevalue);
+    }
+    return barlist;
+  }
+
+  /// Method to get the expense List
+  Future<List<Expense>> getexpenseList() async {
+    List<Expense> exps = (await HTTPRequestBuilder().get(
+        path: "expenditures",
+        returnType: List<Expense>)) as List<Expense>;
+    return exps;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -308,20 +361,18 @@ class BarChartWidget extends StatelessWidget {
   //Get the Values from each Category as bars
   List<BarChartGroupData> _chartGroups() {
     final List<BarChartGroupData> list = [];
+    final List<int> barlist = expenseBarData();
     for (var category in categoryListBarChart) {
       final data = BarChartGroupData(
-        // To-Do schauen wie man x richtig setzt
         x: categoryListBarChart.indexOf(category)+1,
-
           barRods: [
-            //Specifies the Data of a bar
+            /// Specifies the Data of a bar
             BarChartRodData(
-              //Position where the Bar Starts from
+              /// Position where the Bar Starts from
                 fromY: 0,
-                // Position to the max value of the bar
-                toY: category.budget.toDouble(),
-              // better way ist to get the color from the category list
-              //In order fro matching colors for pie and bar chart
+                /// Position to the max value of the bar
+                toY: barlist[categoryListBarChart.indexOf(category)].toDouble(),
+                // toY: category.budget.toDouble(),
               color: colors[categoryListBarChart.indexOf(category)],
               width: 8,
             )
@@ -333,6 +384,16 @@ class BarChartWidget extends StatelessWidget {
     return list;
   }
 
+  List<String> barName() {
+    final List<String> list = [];
+    list.add('hello');
+    for (var category in categoryListBarChart) {
+      String cat = category.name;
+      list.add(cat);
+    }
+    return list;
+    }
+
   Widget leftTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff7589a2),
@@ -341,7 +402,7 @@ class BarChartWidget extends StatelessWidget {
     );
     String text;
     if (value == 0) {
-      text = '1K';
+      text = '0€';
     } else if (value == 10) {
       text = '5K';
     } else if (value == 19) {
@@ -356,24 +417,25 @@ class BarChartWidget extends StatelessWidget {
     );
   }
 
-  //get the names for each category
+  /// get the names for each category
   Widget bottomTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Color(0xff7589a2),
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
-      String text = '';
-      for (var category in categoryListBarChart) {
-        text = category.name;
-        return Text(text);
-      }
+    final titles = barName();
 
-      return SideTitleWidget(
-        axisSide: meta.axisSide,
-        space: 0,
-        child: Text(text, style: style),
-      );
+    final Widget text = Text(
+      titles[value.toInt()],
+      style: const TextStyle(
+        color: Color(0xff7589a2),
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
+    );
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 0, //margin top
+      // child: RotatedBox(quarterTurns: -1, child: text),
+        child: text
+    );
 
     }
 }
