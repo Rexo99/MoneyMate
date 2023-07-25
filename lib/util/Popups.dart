@@ -7,7 +7,11 @@ import '../main.dart';
 import '../models/models.dart';
 import 'StateManagement.dart';
 
+/// [Popups.dart] consists of all frequently used popups and overlays,
+/// so that they don't have to be created from scratch over and over again.
+
 /// A popup that allows the user to change the name and amount of an expense.
+/// Code by ...
 void updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) {
   String name = expense.value.name;
@@ -83,7 +87,8 @@ void updateExpensePopup(
   );
 }
 
-
+/// A popup that allows the user to create an expense.
+/// Code by ...
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
@@ -189,6 +194,8 @@ void createExpensePopup({required BuildContext context}) {
   );
 }
 
+///
+/// Code by Daniel Ottolien
 void connectivityPopup({required BuildContext context}) {
   showDialog<String>(
     context: context,
@@ -206,6 +213,10 @@ void connectivityPopup({required BuildContext context}) {
   );
 }
 
+/// Popup used in [Info.dart] to show
+/// the implemented features of a team member
+///
+/// Code by Dorian Zimmermann
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
     context: context,
@@ -225,16 +236,10 @@ void infoPopup({required List featureList, required BuildContext context}) {
   );
 }
 
-Color getBackgroundColor(context) {
-  if(Theme.of(context).brightness == Brightness.dark) {
-    return Color(0xff201a18);
-    //dark: color: Color(0xffe8e2d9)
-  } else {
-    return Color(0xfffffbff);
-    //light: color: Color(0xff1d1b16)
-  }
-}
-
+/// Determines which theme is currently in use
+/// and returns the according color palette
+///
+/// Code by Dorian Zimmermann
 List<Color> getSystemColor(context) {
   if(SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
     return [Color(0xff201a18), Color(0xffe8e2d9)]; //dark (first is backgroundColor, second is textColor)
@@ -243,7 +248,11 @@ List<Color> getSystemColor(context) {
   }
 }
 
-void colorPicker(
+/// [themePicker] popup, that lets the user change the accent color of the app,
+/// as well as switching between light, dark and system mode.
+///
+/// Code by Dorian Zimmermann
+void themePicker(
     {required Color currentColor, required ThemeMode currentThemeMode, required BuildContext context}) {
   List<Color> _colors = MyApp.of(context).getThemeColors();
   List<bool> _selection = List.generate(3, (index) => false); //List for switching app design
@@ -271,11 +280,10 @@ void colorPicker(
               content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Text(
                         'Choose your Theme Color', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
                     SizedBox(height: 10),
-                    //todo - find a way to highlight the selected button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -301,7 +309,7 @@ void colorPicker(
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -326,11 +334,11 @@ void colorPicker(
 
                       ],
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Divider(color: _newColor.withAlpha(100)),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Text('Choose your Theme Mode', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Center(
                         child: ToggleButtons(
                           color: _isDark ? Colors.white70 : Colors.black87,
@@ -379,7 +387,7 @@ void colorPicker(
                           },
                         )
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                   ]),
               actions: <Widget>[
                 TextButton(
@@ -407,8 +415,13 @@ void colorPicker(
     });
 }
 
+/// Erstellt einen floating [SnackBar] mit abgerundeten Ecken
+/// [text] ist ein String, der im SnackBar zu sehen ist, von
+/// diesem wird auch die [width] des SnackBars bestimmt.
+///
+/// Code von Dorian Zimmermann
 SnackBar uniformSnackBar(String text) {
-  SnackBar snackBar = SnackBar(
+  return SnackBar(
       content: Text(text, textAlign: TextAlign.center),
       behavior: SnackBarBehavior.floating,
       elevation: 10,
@@ -417,6 +430,4 @@ SnackBar uniformSnackBar(String text) {
       width: (text.length * 10),
       clipBehavior: Clip.none,
   );
-
-  return snackBar;
 }
