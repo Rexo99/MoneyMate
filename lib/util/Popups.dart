@@ -14,7 +14,8 @@ Future<void> updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) async {
   FilePickerResult? result;
   Prop<Uint8List> imageBytes = Prop(Uint8List(0));
-  imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
+  if (expense.value.imageId != null)
+    imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
   String name = expense.value.name;
   int? imageId = expense.value.imageId;
   String amount = expense.value.amount.toString();
