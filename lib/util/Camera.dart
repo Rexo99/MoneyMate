@@ -4,8 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:money_mate/util/Popups.dart';
 
-class TakePictureScreen extends StatefulWidget {
-  const TakePictureScreen({
+class InitializeCamera extends StatefulWidget {
+  const InitializeCamera({
     super.key,
     required this.camera,
   });
@@ -13,10 +13,10 @@ class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState();
+  InitializeCameraState createState() => InitializeCameraState();
 }
 
-class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindingObserver {
+class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingObserver {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -37,10 +37,6 @@ class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindin
     _controller.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  void pop() {
-    Navigator.pop(context);
   }
 
   @override
@@ -76,7 +72,7 @@ class TakePictureScreenState extends State<TakePictureScreen> with WidgetsBindin
             );
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(uniformSnackBar("An error occurred. Please try again."));
-            pop();
+            Navigator.pop(context);
           }
         },
         child: const Icon(Icons.camera_alt),
