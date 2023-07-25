@@ -157,13 +157,19 @@ class Hud extends StatefulWidget {
 }
 
 class HudState extends State<Hud> {
-  final Prop<int> _currentIndex = Prop(0);
+  int _currentIndex = 0;
   final List<String> _titleList = ["Home", "Categories"];
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openEndDrawer() {
     _scaffoldKey.currentState!.openEndDrawer();
+  }
+  void changePage(int newPageIndex){
+    setState(() {
+      _currentIndex = newPageIndex;
+      _title = _titleList[newPageIndex];
+    });
   }
 
   //Checks for a Connectivity
@@ -172,7 +178,7 @@ class HudState extends State<Hud> {
   Tutorial _tutorial = Tutorial();
 
   /// _title dependant on _currentIndex and well update on change
-  late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
+  late String _title = _titleList[_currentIndex];
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
@@ -209,7 +215,7 @@ class HudState extends State<Hud> {
         onWillPop: () async => false,
         child: Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(title: $(_title, (String title) => Text(title)),
+            appBar: AppBar(title: Text(_title),
                 //IconButton that lead to Charts
                 actions: <Widget>[
                   IconButton(
@@ -230,64 +236,63 @@ class HudState extends State<Hud> {
           body: PageView(
               controller: _pageController,
               onPageChanged: (newIndex) {
-                _currentIndex.value = newIndex;
+                changePage(newIndex);
               },
               children:[
                 new Homepage(context: context),
                 new CategoryOverview(),
               ],
             ),
-            floatingActionButton: $(
-              _currentIndex, (p0) => SpeedDial(
+            floatingActionButton: SpeedDial(
               //key: MyApp.of(context).getTutorialKeys()[2],
-                // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
-                animatedIcon: AnimatedIcons.menu_close,
-                spaceBetweenChildren: 10,
-                openCloseDial: isDialOpen,
-                children: [
-                  _currentIndex.value == 0 ? SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        createExpensePopup(context: context);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "Add Expense",
-                  ) : SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.category),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "Add Category",
+              // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
+              animatedIcon: AnimatedIcons.menu_close,
+              spaceBetweenChildren: 10,
+              openCloseDial: isDialOpen,
+              children: [
+                _currentIndex == 0 ? SpeedDialChild(
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      createExpensePopup(context: context);
+                      isDialOpen.value = false;
+                    },
                   ),
-                  // TODO: remove this button when the app is finished
-                  SpeedDialChild(
+                  label: "Add Expense",
+                ) : SpeedDialChild(
+                  child: IconButton(
+                    icon: const Icon(Icons.category),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
+                      isDialOpen.value = false;
+                    },
+                  ),
+                  label: "Add Category",
+                ),
+                // TODO: remove this button when the app is finished
+                SpeedDialChild(
                     visible: false,
-                      child: IconButton(
-                        icon: const Icon(Icons.bug_report),
-                        onPressed: () async {
-                          UserState.of(context).categoryList.forEach((element) {print(element.name);});
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "DevelopmentButton"),
-                  SpeedDialChild(
-                      visible: _currentIndex.value == 0,
-                      child: IconButton(
-                        icon: const Icon(Icons.camera),
-                        onPressed: ()  async {
-                          final cameras = await availableCameras();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: cameras.first)));
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "Open Camera"),
-                  //todo - remove button
-                  SpeedDialChild(
+                    child: IconButton(
+                      icon: const Icon(Icons.bug_report),
+                      onPressed: () async {
+                        UserState.of(context).categoryList.forEach((element) {print(element.name);});
+                        isDialOpen.value = false;
+                      },
+                    ),
+                    label: "DevelopmentButton"),
+                SpeedDialChild(
+                    visible: _currentIndex == 0,
+                    child: IconButton(
+                      icon: const Icon(Icons.camera),
+                      onPressed: ()  async {
+                        final cameras = await availableCameras();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: cameras.first)));
+                        isDialOpen.value = false;
+                      },
+                    ),
+                    label: "Open Camera"),
+                //todo - remove button
+                SpeedDialChild(
                     visible: true,
                     child: IconButton(
                       icon: const Icon(Icons.info_sharp),
@@ -298,101 +303,107 @@ class HudState extends State<Hud> {
                       },
                     ),
                     label: "TutorialButton"),
-                ],
-              ),
+              ],
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
-            bottomNavigationBar: $(
-                _currentIndex,
-                (int index) => BottomNavigationBar(
-                      currentIndex: _currentIndex.value,
-                      selectedItemColor: MyApp.of(context)._themeColor,
-                      unselectedItemColor: Colors.grey,
-                      items: [
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.euro_outlined, /*key: MyApp.of(context).getTutorialKeys()[0]*/),
-                          label: "Expenses",
-                        ),
-                        BottomNavigationBarItem(
-                            icon: Icon(Icons.inventory_2_outlined, /*key: MyApp.of(context).getTutorialKeys()[1]*/),
-                            label: "Categories"),
-                      ],
-                      onTap: (newIndex) {
-                        _pageController.animateToPage(newIndex,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease);
-                        _currentIndex.value = newIndex;
-                      },
-                    )
+            bottomNavigationBar:
+            BottomNavigationBar(
+              currentIndex: _currentIndex,
+              selectedItemColor: MyApp.of(context)._themeColor,
+              unselectedItemColor: Colors.grey,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.euro_outlined, /*key: MyApp.of(context).getTutorialKeys()[0]*/),
+                  label: "Expenses",
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.inventory_2_outlined, /*key: MyApp.of(context).getTutorialKeys()[1]*/),
+                    label: "Categories"),
+              ],
+              onTap: (newIndex) {
+                _pageController.animateToPage(newIndex,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+                changePage(newIndex);
+              },
             )
         )
     );
   }
 }
 
-class MenuDrawer extends StatelessWidget{
+class MenuDrawer extends ReactiveWidget{
+  const MenuDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
-    Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
+    Prop<bool> loginState = Prop(HTTPRequestBuilder().loggedIn);
     return Drawer(
         width: 250,
         child: ListView(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
           children: [
-          const Icon(Icons.account_circle_outlined, size: 100),
-          $(_loginState, (p0) => _loginState.value
-            ? ListTile(
-                title: Text(HTTPRequestBuilder().username[0].toUpperCase() + HTTPRequestBuilder().username.substring(1), textAlign: TextAlign.center),
-                subtitle: const Text('', textAlign: TextAlign.center))
-            : const ListTile(
-                title: Text('User', textAlign: TextAlign.center),
-              subtitle: Text('', textAlign: TextAlign.center)),
-           ),
-          $(_loginState, (p0) => _loginState.value
-              ? ElevatedButton(
-                  onPressed: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        uniformSnackBar('Logged out!')
-                    );
+            const Icon(Icons.account_circle_outlined, size: 100),
+            loginState.value
+                ? ListTile(
+                    title: Text(
+                        HTTPRequestBuilder().username[0].toUpperCase() +
+                            HTTPRequestBuilder().username.substring(1),
+                        textAlign: TextAlign.center),
+                    subtitle: const Text('', textAlign: TextAlign.center))
+                : const ListTile(
+                    title: Text('User', textAlign: TextAlign.center),
+                    subtitle: Text('', textAlign: TextAlign.center)),
+            loginState.value
+                ? ElevatedButton(
+                    onPressed: () async {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(uniformSnackBar('Logged out!'));
 
-                    //Navigate to the Login-Screen
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
-                    UserState.of(context).logoutUser();
-                  },
-                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 40),
-                      Icon(Icons.login_outlined, size: 24.0),
-                      SizedBox(width: 10),
-                      Text("Logout"),
-                    ],
-                  )
-              )
-              :ElevatedButton(
-                onPressed: () async {
-                // Close drawer due to catch name and email from logged in user on successful login
-                Navigator.pop(context);
-                //Navigate to the Login-Screen
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
-                },
-                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 40),
-                    Icon(Icons.login_outlined, size: 24.0),
-                    SizedBox(width: 10),
-                    Text("Login"),
-                  ],
-                )
-              )
-          ),
-          ElevatedButton(
-            onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
+                      //Navigate to the Login-Screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Login(title: 'Login')),
+                      );
+                      UserState.of(context).logoutUser();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        side: const BorderSide(width: .01, color: Colors.grey)),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 40),
+                        Icon(Icons.login_outlined, size: 24.0),
+                        SizedBox(width: 10),
+                        Text("Logout"),
+                      ],
+                    ))
+                : ElevatedButton(
+                    onPressed: () async {
+                      // Close drawer due to catch name and email from logged in user on successful login
+                      Navigator.pop(context);
+                      //Navigate to the Login-Screen
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Login(title: 'Login')));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        side: const BorderSide(width: .01, color: Colors.grey)),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 40),
+                        Icon(Icons.login_outlined, size: 24.0),
+                        SizedBox(width: 10),
+                        Text("Login"),
+                      ],
+                    )),
+            ElevatedButton(
+              onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,

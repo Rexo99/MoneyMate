@@ -53,17 +53,6 @@ class _ExpenseOverview extends State<ExpenseOverview> {
     }
   }
 
-  /*@override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ExpenseListView(
-          context: context,
-        ),
-      ),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     allItems = UserState.of(context).expendList;
@@ -89,11 +78,12 @@ class _ExpenseOverview extends State<ExpenseOverview> {
                 itemBuilder: (context, index) {
                   Prop<Expense> item =
                       items.isEmpty ? allItems.value[index] : items[index];
-                  return $(item, (p1) => ExpenseCard(
+                  return ExpenseCard(
                     expense: item,
                     index: index,
                     context: context,
-                  ));
+                  );
+                  //Todo StateManagement
                 },
               )),
 
@@ -111,7 +101,7 @@ class _ExpenseOverview extends State<ExpenseOverview> {
   }
 }
 
-class ListEntry extends StatelessWidget {
+class ListEntry extends ReactiveWidget {
   Prop<Expense> expense;
 
   ListEntry({required this.expense, super.key});
@@ -129,24 +119,21 @@ class ListEntry extends StatelessWidget {
             child: Text("Icon"),
           ),
           title: Row(children: <Widget>[
-            $(
-                expense,
-                (e) => Text(
-                    "${e.name}  ${e.amount.toString()} ${e.date.dateFormatter()}")),
+            Text("${expense.value.name}  ${expense.value.amount.toString()} ${expense.value.date.dateFormatter()}"),
             MaterialButton(
                 child: const Text('Delete'),
                 color: Colors.red,
                 onPressed: () {
-                  UserState.of(context).expendList.removeItem(expense);
+                  UserState.of(context).expendList.removeItem(expense.value);
                 }),
           ]),
         ));
   }
 }
 
-class ExpenseListView extends StatelessWidget {
+class ExpenseListView extends ReactiveWidget {
   late final BuildContext context;
-  late final Prop<IList<Prop<Expense>>> expenseList;
+  late final ExpenseList expenseList;
 
   ExpenseListView({required this.context, super.key}) {
     expenseList = UserState.of(context).expendList;
@@ -154,28 +141,26 @@ class ExpenseListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return $(
-        expenseList,
-        (expenses) => ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: expenseList.value.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  // return the header
-                  return Row(
-                    children: const [
-                      Text("Name       "),
-                      Text("Amount       "),
-                      Text("Date"),
-                    ],
-                  );
-                }
-                index -= 1;
-                var exp = expenseList.value.get(index);
-                return ListEntry(expense: exp);
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-            ));
+    return ListView.separated(
+      padding: const EdgeInsets.all(8),
+      itemCount: expenseList.value.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          // return the header
+          return Row(
+            children: const [
+              Text("Name       "),
+              Text("Amount       "),
+              Text("Date"),
+            ],
+          );
+        }
+        index -= 1;
+        var exp = expenseList.value.get(index);
+        return ListEntry(expense: exp);
+      },
+      separatorBuilder: (BuildContext context, int index) =>
+      const Divider(),
+    );
   }
 }

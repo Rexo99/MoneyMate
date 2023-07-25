@@ -5,7 +5,7 @@ import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 import 'models.dart';
 
-class ExpenseList extends Prop<IList<Prop<Expense>>> {
+class ExpenseList extends Props<Expense> {
   ExpenseList(super.value);
 
 
@@ -15,7 +15,7 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     required num amount,
     required int categoryId
   }) {
-    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId)));
+    add(Expense(name, amount, DateTime.now(), categoryId));
   }
 
   void updateItem({required Prop<Expense> expense, String? name, num? amount}) {
@@ -32,9 +32,10 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
         returnType: Expense);
   }
 
-  void removeItem(Prop<Expense> expense) {
-    value = value.remove(expense);
-    HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);
+  void removeItem(Expense expense) {
+    removeItem(expense);
+    notifyListeners();
+    HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.id);
   }
 
   num getTotalToday(){
@@ -58,19 +59,19 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
 
   //clears the expendList and fills it with fresh data from the backend
   Future<void> initListExpenseList() async {
-    value = value.clear();
+    value.clear();
     List<Expense> exps = (await HTTPRequestBuilder().get(
         path: "expenditures", //todo - change to "expenses"
         returnType: List<Expense>)) as List<Expense>;
 
     exps.sort((a, b) => b.date.compareTo(a.date));
     for (Expense element in exps) {
-      value = value.add(Prop(element));
+      add(element);
     }
   }
 
   /// Sorts the list of DateTimes in descending order and returns the [count] newest DateTimes
-  IList<Prop<Expense>> findNewest(int count) {
+  List<Prop<Expense>> findNewest(int count) {
     if (value.isEmpty) {
       return value;
       //throw Exception('The list of DateTimes is empty.');

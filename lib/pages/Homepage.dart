@@ -24,44 +24,44 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Column(
-            children: [
-              HTTPRequestBuilder().loggedIn
-              ? $(
-                  expenseList,
-                  (p0) => CardListBuilder(
-                      objectList: expenseList.findNewest(3),
-                      cardType: Expense,
-                      count: 3))
+        children: [
+          HTTPRequestBuilder().loggedIn
+              ? CardListBuilder(
+                  expenseList: expenseList,
+                  count: 3,
+                )
               : const Text("Please login"),
-              ElevatedButton(
-                  //key: MyApp.of(context).getTutorialKeys()[3],
+          ElevatedButton(
+              //key: MyApp.of(context).getTutorialKeys()[3],
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
               child: const Text("See All")),
-              $(
-                expenseList,
-                (p) => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      HTTPRequestBuilder().loggedIn
-                          ? TotalExpense(
-                              title: "Today",
-                              amount: num.tryParse(expenseList.getTotalToday().toStringAsFixed(1)))
-                          : TotalExpense(title: "Today", amount: 0),
-                      HTTPRequestBuilder().loggedIn
-                          ? TotalExpense(
-                              title: "Month",
-                              amount: num.tryParse(expenseList.getTotalMonth().toStringAsFixed(1)))
-                          : TotalExpense(title: "Month", amount: 0)
-                    ],
-                  ))
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              HTTPRequestBuilder().loggedIn
+                  ? TotalExpense(
+                  title: "Today",
+                  amount: num.tryParse(expenseList
+                      .getTotalToday()
+                      .toStringAsFixed(1)))
+                  : TotalExpense(title: "Today", amount: 0),
+              HTTPRequestBuilder().loggedIn
+                  ? TotalExpense(
+                  title: "Month",
+                  amount: num.tryParse(expenseList
+                      .getTotalMonth()
+                      .toStringAsFixed(1)))
+                  : TotalExpense(title: "Month", amount: 0)
+            ],
+          )
         ],
       )),
     );
   }
 }
 
-class ExpenseCard extends StatelessWidget {
+class ExpenseCard extends ReactiveWidget {
   late final ExpenseList expenseList;
   final Prop<Expense> expense;
   final int index;
@@ -105,7 +105,7 @@ class ExpenseCard extends StatelessWidget {
             ),
             onTap: (handler) async {
               await handler(true);
-              expenseList.removeItem(expense);
+              expenseList.removeItem(expense.value);
             }),
         SwipeAction(
             content: _getIconButton(Colors.green, Icons.mode_edit),
@@ -163,18 +163,14 @@ Widget _getIconButton(color, icon) {
   );
 }
 
-/// Build a List of Card Widgets from a List
-/// [objectList] needs an [IList] of [Model]
-/// [cardType] needs a [Model]
+
 /// [count] of cards that should be build (default = 3)
-class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
-  final T objectList;
-  final Type cardType;
+class CardListBuilder extends ReactiveWidget {
+  final ExpenseList expenseList;
   final int count;
 
   CardListBuilder(
-      {required this.objectList,
-      required this.cardType,
+      {required this.expenseList,
       this.count = 3,
       super.key});
 
@@ -188,23 +184,12 @@ class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
             primary: true,
             itemCount: 3,
             itemBuilder: (BuildContext context, int index) {
-              switch (cardType) {
-                case Expense:
-                  Prop<Expense>? expense = objectList.getOrNull(index);
-                  if (expense != null) {
-                    return $(
-                        expense,
-                        (p1) => ExpenseCard(
-                              expense: expense,
-                              index: index,
-                              context: context,
-                            ));
-                  }
-                  return null;
-                case Category:
-                  throw UnimplementedError();
-              }
-              return null;
+              Prop<Expense> expense = expenseList.value[index];
+              return ExpenseCard(
+                expense: expense,
+                index: index,
+                context: context,
+              );
             }),
       );
     });
