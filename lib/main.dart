@@ -18,6 +18,7 @@ import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -47,12 +48,10 @@ class MyApp extends StatefulWidget {
     Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
-    late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
 
     @override
     void initState() {
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - delete if no longer needed
       checkFirstSeen();
       checkTheme();
       super.initState();
@@ -143,11 +142,6 @@ class MyApp extends StatefulWidget {
         Colors.brown
       ];
     }
-
-    ///Returns the GlobalKeys generated where they are needed to reference widgets to the tutorial
-    List<GlobalKey> getTutorialKeys() {
-      return _tutorialKeys;
-    }
   }
 
 class Hud extends StatefulWidget {
@@ -162,8 +156,12 @@ class HudState extends State<Hud> {
   final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _openEndDrawer() {
+  void _toggleEndDrawer() {
     _scaffoldKey.currentState!.openEndDrawer();
+  }
+
+  void openSpeedDial(bool value) {
+    isDialOpen.value = value;
   }
 
   //Checks for a Connectivity
@@ -178,7 +176,6 @@ class HudState extends State<Hud> {
   @override
   void initState() {
     super.initState();
-
 
     //Code to check if there is a valid network connection
     connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -198,7 +195,7 @@ class HudState extends State<Hud> {
     //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
-      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+      _tutorial.createTutorial();
       _tutorial.showTutorial(context);
     }
   }
@@ -223,7 +220,7 @@ class HudState extends State<Hud> {
                     iconSize: 30.0,
                     icon: const Icon(Icons.menu),
                     onPressed:
-                      _openEndDrawer,
+                      _toggleEndDrawer,
                   ),
                 ],
                 automaticallyImplyLeading: false),
@@ -237,9 +234,9 @@ class HudState extends State<Hud> {
                 new CategoryOverview(),
               ],
             ),
+            //todo - change to simple button, as SpeedDial would only have one action when deployed anyway
             floatingActionButton: $(
               _currentIndex, (p0) => SpeedDial(
-              //key: MyApp.of(context).getTutorialKeys()[2],
                 // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                 animatedIcon: AnimatedIcons.menu_close,
                 spaceBetweenChildren: 10,
@@ -287,17 +284,6 @@ class HudState extends State<Hud> {
                       ),
                       label: "Open Camera"),
                   //todo - remove button
-                  SpeedDialChild(
-                    visible: true,
-                    child: IconButton(
-                      icon: const Icon(Icons.info_sharp),
-                      onPressed: () async {
-                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
-                        _tutorial.showTutorial(context);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "TutorialButton"),
                 ],
               ),
             ),
@@ -312,11 +298,11 @@ class HudState extends State<Hud> {
                       unselectedItemColor: Colors.grey,
                       items: [
                         BottomNavigationBarItem(
-                          icon: Icon(Icons.euro_outlined, /*key: MyApp.of(context).getTutorialKeys()[0]*/),
+                          icon: Icon(Icons.euro_outlined),
                           label: "Expenses",
                         ),
                         BottomNavigationBarItem(
-                            icon: Icon(Icons.inventory_2_outlined, /*key: MyApp.of(context).getTutorialKeys()[1]*/),
+                            icon: Icon(Icons.inventory_2_outlined),
                             label: "Categories"),
                       ],
                       onTap: (newIndex) {
@@ -356,7 +342,6 @@ class MenuDrawer extends StatelessWidget{
                     ScaffoldMessenger.of(context).showSnackBar(
                         uniformSnackBar('Logged out!')
                     );
-
                     //Navigate to the Login-Screen
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
                     UserState.of(context).logoutUser();
@@ -365,7 +350,7 @@ class MenuDrawer extends StatelessWidget{
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(width: 40),
+                      SizedBox(width: 25),
                       Icon(Icons.login_outlined, size: 24.0),
                       SizedBox(width: 10),
                       Text("Logout"),
@@ -383,7 +368,7 @@ class MenuDrawer extends StatelessWidget{
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 40),
+                    SizedBox(width: 25),
                     Icon(Icons.login_outlined, size: 24.0),
                     SizedBox(width: 10),
                     Text("Login"),
@@ -397,7 +382,7 @@ class MenuDrawer extends StatelessWidget{
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 40),
+                SizedBox(width: 25),
                 Icon(Icons.design_services_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Theme Settings'),
@@ -410,13 +395,31 @@ class MenuDrawer extends StatelessWidget{
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 40),
+                SizedBox(width: 25),
                 Icon(Icons.info_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Info Screen'),
               ],
             ),
           ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                TutorialState _tutorial = TutorialState();
+                _tutorial.createTutorial();
+                _tutorial.showTutorial(context);
+              },
+              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 25),
+                  Icon(Icons.accessibility, size: 24.0),
+                  SizedBox(width: 10),
+                  Text('Rewatch Tutorial'),
+                ],
+              ),
+            ),
         ],
         )
     );
