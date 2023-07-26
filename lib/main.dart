@@ -169,7 +169,7 @@ class HudState extends State<Hud> {
   //Checks for a Connectivity
   late StreamSubscription connection; //todo - add cancellation of subscription
 
-  Tutorial _tutorial = Tutorial();
+  TutorialState _tutorial = TutorialState();
 
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);

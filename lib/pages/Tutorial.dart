@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-class TutorialTest extends StatefulWidget {
+/// Code by Dorian Zimmermann
+class Tutorial extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => Tutorial();
+  State<StatefulWidget> createState() => TutorialState();
 }
 
-class Tutorial extends State {
+class TutorialState extends State {
   late TutorialCoachMark tutorialCoachMark;
   late double _screenWidth;
   late double _screenHeight;
