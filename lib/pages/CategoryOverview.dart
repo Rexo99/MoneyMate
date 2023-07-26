@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../UserState.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
-import '../util/Popups.dart';
+
 
 
 /// To-Do make CategoryOverview Stateful
 /// I still need to add set State
+/// seems to be correct
 class CategoryOverview extends StatefulWidget {
   CategoryOverview({super.key});
 
@@ -16,6 +19,8 @@ class CategoryOverview extends StatefulWidget {
   State<StatefulWidget> createState() => CategoryOverviewContent();
 }
 
+///Seems to be correct to
+/// need to add a way to see if the data has been changed
 class CategoryOverviewContent extends State<CategoryOverview> {
 
   @override
@@ -26,7 +31,9 @@ class CategoryOverviewContent extends State<CategoryOverview> {
   }
 
   void update() {
+    setState(() {
 
+    });
   }
 
   @override
@@ -41,73 +48,94 @@ class CategoryOverviewContent extends State<CategoryOverview> {
   }
 }
 
+///no changes required?
 class CategoryCard extends StatelessWidget {
   Category category;
+
+  List<Expense> categoryExpenseList = [];
+  // late List<Expense> categoryExpenseList = [Expense('test', 400, DateTime.now(), 56)];
+  // late final List<Expense> categoryExpenseList = await getexpenseList();
+  // late final List<Expense> exps;
 
   CategoryCard({required this.category, super.key});
 
 
+
   @override
   Widget build(BuildContext context) {
+    /*Future<List<Expense>> initexpenseList() async {
+      List<Expense> categoryExpenseList = await getexpenseList();
+      return categoryExpenseList;
+    }
+    initexpenseList();*/
 
-    //Method to Change the Color depending on the budget spent
-    // For Example if the expenses of the Category are bigger than 70% of it´s budget
+    Future<void> initexpenseList() async {
+      categoryExpenseList = await getexpenseList();
+    }
+    initexpenseList();
 
-    // IconData getCategoryIcon() {
-    //   if (category.icon.toString() == 'home') {
-    //     return Icons.home;
-    //   }
-    //   else {
-    //     return Icons.square;
-    //   }
-    // }
-
+    /// Method to get the icon of a category
     String? catIcon = category.icon;
-
     IconData getCategoryIcon(catIcon) {
       switch(catIcon) {
         case '':
           return Icons.square;
-          break;
         case 'home':
           return Icons.home;
-          break;
         case 'car_repair':
           return Icons.car_repair;
-          break;
         case 'local_grocery_store':
           return Icons.local_grocery_store;
-          break;
         case 'local_bar':
           return Icons.local_bar;
-          break;
         case 'flight':
           return Icons.flight;
-          break;
         case 'business':
           return Icons.business;
-          break;
         case 'album':
           return Icons.album;
-          break;
         case 'pets':
           return Icons.pets;
-          break;
         default:
           return Icons.square;
       }
     }
 
-    Icon getColor(){
-      if(category.budget.toInt() < 500) {
-        return Icon(Icons.emoji_emotions,
-          color: Colors.green);
+    /// Method to get the expense List
+    /*Future<List<Expense>> getexpenseList() async {
+      List<Expense> exps = (await HTTPRequestBuilder().get(
+          path: "expenditures",
+          returnType: List<Expense>)) as List<Expense>;
+      return exps;
+    }*/
+
+    /// Method to get the spent budget of all expenses in a category
+    int getBudgetofCategory() {
+
+      int expensebudget = 0;
+      for (var expense in categoryExpenseList) {
+        if ( expense.categoryId == category.id) {
+          expensebudget += expense.amount.toInt();
+        }
       }
-      else{
+      return expensebudget;
+    }
+
+
+
+    ///Method the show a warning if your budget has been spent
+    Icon getColor(){
+      if(getBudgetofCategory() > category.budget.toInt()) {
         return Icon(Icons.warning,
             color: Colors.red);
       }
+      else{
+        return Icon(Icons.emoji_emotions,
+            color: Colors.green);
+      }
     }
+
+
 
 
     // return Center(
@@ -162,19 +190,21 @@ class CategoryCard extends StatelessWidget {
           children: <Widget>[
             ListTile(
               // leading: Icon(Icons.local_grocery_store),
-              /// To-Do get the Icondata over category.icon
-              /// it´s not as simple as to convert String? to String
-              /// As MdiIcons are different than normal Flutter Icon it´s not
-              /// the best solution
               // leading: Icon(MdiIcons.fromString(category.icon.toString())),
               leading: Icon(getCategoryIcon(catIcon)),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
+              /*subtitle: Column(
+                children: <Widget>[
+                  Text('inside column'),
+                  TextButton(child: Text('button'), onPressed: () {
+                    print(categoryExpenseList);
+                  })
+                ],
+              ),*/
               /*trailing: Icon(Icons.circle,
               color: getColor(),),*/
               trailing: getColor(),
-              /// Add Something like a small circle in order to indicate the budget status
-              /// maybe through box decoration
             ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.end,
@@ -205,6 +235,16 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
+/// get the ExpenseList
+Future<List<Expense>> getexpenseList() async {
+  List<Expense> exps = (await HTTPRequestBuilder().get(
+      path: "expenditures",
+      returnType: List<Expense>)) as List<Expense>;
+  print(exps);
+  return exps;
+}
+
+
 Widget _getIconButton(color, icon) {
   return Container(
     width: 50,
@@ -222,9 +262,8 @@ Widget _getIconButton(color, icon) {
   );
 }
 
-
+/// doesn´t need any changes
 class CategoryListView extends StatelessWidget {
-  // const CategoriesOverview({super.key});
   late final BuildContext context;
   late final List<Category> categoryListOverview;
 
@@ -255,5 +294,8 @@ class CategoryListView extends StatelessWidget {
     );
   }
 }
+
+
+
 
 
