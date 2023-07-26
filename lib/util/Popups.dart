@@ -63,23 +63,44 @@ Future<void> updateExpensePopup(
                 return null;
               },
             ),
-            TextButton(
-              onPressed: () async {
-                result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['jpg', 'png'],
-                );
-                if (result != null) {
-                  String filePath = result!.files.single.path!;
-                  File image = File(filePath);
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
 
-                  imageId = await UserState.of(context).builder.createImage(file: image);
-                  imageBytes.value = await File(filePath).readAsBytes();
+                    // Read the file as bytes
+                    File image = File(filePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
                 }
               },
-              child: const Text('Select Image'),
-            ),
-            Container(
+              child: Container(
                 height: 100,
                 width: 100,
                 child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
@@ -87,8 +108,11 @@ Future<void> updateExpensePopup(
                   imageBytes.value,
                   fit: BoxFit.cover,
                 )
-                    : const Text('No image selected.'),)
-            )],
+                    : const Text(''),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       actions: <Widget>[
@@ -192,35 +216,54 @@ void createExpensePopup({required BuildContext context}) {
                 return null;
               },
             ),
-            TextButton(
-              onPressed: () async {
-                result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['jpg', 'png'],
-                );
-                if (result != null) {
-                  // Get the selected file path
-                  String filePath = result!.files.single.path!;
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
 
-                  // Read the file as bytes
-                  File image = File(filePath);
+                    // Read the file as bytes
+                    File image = File(filePath);
 
-                  imageId = await UserState.of(context).builder.createImage(file: image);
+                    imageId = await UserState.of(context).builder.createImage(file: image);
 
-                  imageBytes.value = await File(filePath).readAsBytes();
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
                 }
               },
-              child: const Text('Select Image'),
-            ),
-            Container(
-              height: 100,
-              width: 100,
-              child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
-                  ? Image.memory(
-                imageBytes.value,
-                fit: BoxFit.cover,
-              )
-                  : const Text('No image selected.'),)
+              child: Container(
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text(''),
+                ),
+              ),
             )
           ],
         ),
