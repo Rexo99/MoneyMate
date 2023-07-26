@@ -44,13 +44,20 @@ class _Login extends State<Login> {
       if (prefs.getBool("staySignedIn") ?? false) {
         _usernameController.text = prefs.getString("username") ?? "";
         _passwordController.text = prefs.getString("password") ?? "";
-        await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
-
-        Navigator.push(context,
-            MaterialPageRoute(
-                builder: (context) => Hud()
-            )
-        );
+        bool loggedIn = await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
+        if (loggedIn)
+        {
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context) => Hud()
+              )
+          );
+        }
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              uniformSnackBar('Please check your internet connection')
+          );
+        }
       }
     });
 

@@ -40,7 +40,7 @@ class HTTPRequestBuilder {
     }
   }
 
-  Future<void> login({required String name, required String password}) async {
+  Future<bool> login({required String name, required String password}) async {
     if (!_loggedIn) {
       Uri url = Uri.https(_rootURL, "api/login");
       var response =
@@ -53,11 +53,13 @@ class HTTPRequestBuilder {
         username = decodedToken["name"];
         print("User: $username");
         _loggedIn = true;
+        return true;
       } else {
         print("Response body: ${response.body}");
         throw ErrorDescription('Login: Response status: ${response.statusCode}');
       }
     }
+    return false;
   }
 
   logout() async {
