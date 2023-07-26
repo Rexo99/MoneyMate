@@ -147,7 +147,7 @@ class Hud extends StatefulWidget {
 }
 
 class HudState extends State<Hud> {
-  final Prop<int> _currentIndex = Prop(0);
+  int _currentIndex = 0;
   final List<String> _titleList = ["Home", "Categories"];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -157,8 +157,15 @@ class HudState extends State<Hud> {
   TutorialState _tutorial = TutorialState();
 
   /// _title dependant on _currentIndex and well update on change
-  late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
+  late String _title = _titleList[_currentIndex];
   final PageController _pageController = PageController(initialPage: 0);
+
+  void changePage(int newPageIndex){
+    setState(() {
+      _currentIndex = newPageIndex;
+      _title = _titleList[newPageIndex];
+    });
+  }
 
   @override
   void initState() {
@@ -192,7 +199,7 @@ class HudState extends State<Hud> {
         onWillPop: () async => false,
         child: Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(title: $(_title, (String title) => Text(title)),
+            appBar: AppBar(title: Text(_title),
                 //IconButton that lead to Charts
                 actions: <Widget>[
                   IconButton(
@@ -213,50 +220,45 @@ class HudState extends State<Hud> {
           body: PageView(
               controller: _pageController,
               onPageChanged: (newIndex) {
-                _currentIndex.value = newIndex;
+                changePage(newIndex);
               },
               children:[
                 new Homepage(context: context),
                 new CategoryOverview(),
               ],
             ),
-            floatingActionButton: $(
-              _currentIndex, (p0) => FloatingActionButton(
-                onPressed: () {
-                  if(_currentIndex.value == 0) {
-                    createExpensePopup(context: context);
-                  } else {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
-                  }
-                },
-                child: Icon(Icons.add),
-              ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                if(_currentIndex == 0) {
+                  createExpensePopup(context: context);
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
+                }
+              },
+              child: Icon(Icons.add),
             ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
-            bottomNavigationBar: $(
-                _currentIndex,
-                (int index) => BottomNavigationBar(
-                      currentIndex: _currentIndex.value,
-                      selectedItemColor: MyApp.of(context)._themeColor,
-                      unselectedItemColor: Colors.grey,
-                      items: [
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.euro_outlined),
-                          label: "Expenses",
-                        ),
-                        BottomNavigationBarItem(
-                            icon: Icon(Icons.inventory_2_outlined),
-                            label: "Categories"),
-                      ],
-                      onTap: (newIndex) {
-                        _pageController.animateToPage(newIndex,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease);
-                        _currentIndex.value = newIndex;
-                      },
-                    )
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              selectedItemColor: MyApp.of(context)._themeColor,
+              unselectedItemColor: Colors.grey,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.euro_outlined),
+                  label: "Expenses",
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.inventory_2_outlined),
+                    label: "Categories"),
+              ],
+              onTap: (newIndex) {
+                _pageController.animateToPage(newIndex,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+                changePage(newIndex);
+              },
             )
         )
     );
