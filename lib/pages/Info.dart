@@ -41,7 +41,7 @@ class Info extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight / 19),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login/ Register Page \n Login/ Register Exception Handling \n HomePage (EndDrawer) \n Info Page \n  App Theme Composition \n Adjustable App Theme \n Camera Initialization' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login/ Register Page \n Login/ Register Exception Handling \n HomePage (EndDrawer) \n Info Page \n  App Design \n Adjustable App Theme \n Camera Initialization' , textAlign: TextAlign.center)], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
