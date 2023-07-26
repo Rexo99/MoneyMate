@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:money_mate/util/Popups.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+/// Used to create and show the tutorial when first starting the app.
+///
 /// Code by Dorian Zimmermann
 class Tutorial extends StatefulWidget {
   @override
@@ -22,46 +25,30 @@ class TutorialState extends State {
       tutorialCoachMark.show(context: context);
     } catch (exception) {
       finished = true;
-      print('Exception occurred while showing the tutorial');
+      ScaffoldMessenger.of(context).showSnackBar(uniformSnackBar("Tutorial failed. Please try again."));
     }
   }
 
-  void createTutorial(/*List<GlobalKey> keys*/) {
+  void createTutorial() {
     //todo - remove following lines
     _screenWidth = WidgetsBinding.instance.renderView.size.width;
     _screenHeight = WidgetsBinding.instance.renderView.size.height;
-    print(WidgetsBinding.instance.renderView.configuration);
-    print(_screenWidth);
-    print(_screenHeight);
 
     tutorialCoachMark = TutorialCoachMark(
-      targets: _createTargets(/*keys*/),
+      targets: _createTargets(),
       textSkip: "SKIP",
       paddingFocus: 10,
-      opacityShadow: 0.8,
       showSkipInLastTarget: false,
       onFinish: () {
         finished = true;
-        print("Tutorial finished");
-      },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
       },
       onSkip: () {
         finished = true;
-        print("skip");
       },
     );
   }
 
-  //todo - add relative spacing for widgets
-  List<TargetFocus> _createTargets(/*List<GlobalKey> keys*/) {
+  List<TargetFocus> _createTargets() {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
@@ -81,31 +68,31 @@ class TutorialState extends State {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 100),
-                  Text("Welcome to MoneyMate!",
+                  SizedBox(height: _screenHeight / 7.76),
+                  const Text("Welcome to MoneyMate!",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 40
                     ),
                       textAlign: TextAlign.center
                   ),
-                  SizedBox(height: 35),
+                  SizedBox(height: _screenHeight / 22),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      new Image.asset('images/icon.png', height: 80, width: 80),
-                      Text("Your helper in finance", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20))
+                      new Image.asset('images/icon.png', height: _screenHeight / 9.7, width: _screenHeight / 9.7),
+                      const Text("Your helper in finance", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),
-                  SizedBox(height: 80),
-                  Text("Here's a quick rundown of what you can do with this App",
+                  SizedBox(height: _screenHeight / 9.7),
+                  const Text("Here's a quick rundown of what you can do with this App",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 80),
+                  SizedBox(height: _screenHeight / 9.7),
                   ElevatedButton(onPressed: () => tutorialCoachMark.next(), child: Text('Continue')),
                 ],
               );
@@ -127,24 +114,24 @@ class TutorialState extends State {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text("This is the \n Expense tab",
+                children: <Widget>[
+                  const Text("This is the \n Expense tab",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 35
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 25),
-                  Text('Here you can view ...',
+                  SizedBox(height: _screenHeight / 31),
+                  const Text('Here you can view ...',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 30),
-                  Row(
+                  SizedBox(height: _screenHeight / 25.86),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
@@ -154,8 +141,8 @@ class TutorialState extends State {
                       ),
                       Icon(Icons.refresh, size: 32, color: Colors.white)
                     ],),
-                  SizedBox(height: 15),
-                  Row(
+                  SizedBox(height: _screenHeight / 51.72),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
@@ -165,15 +152,15 @@ class TutorialState extends State {
                       ),
                       Icon(Icons.calendar_today, size: 30, color: Colors.white)
                     ],),
-                  SizedBox(height: 50),
-                  Text("Click 'See All' to view all expenses",
+                  SizedBox(height: _screenHeight / 15.51),
+                  const Text("Click 'See All' to view all expenses",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 200)
+                  SizedBox(height: _screenHeight / 3.88)
                 ],
               );
             },
@@ -193,16 +180,16 @@ class TutorialState extends State {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
+                children: <Widget>[
+                  const Text(
                     "SpeedDial",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontSize: 35.0),
                   ),
-                  SizedBox(height: 30),
-                  Padding(
+                  SizedBox(height: _screenHeight / 25.86),
+                  const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
                       "Conveniently add: ",
@@ -210,8 +197,8 @@ class TutorialState extends State {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(height: 25),
-                  Row(
+                  SizedBox(height: _screenHeight / 31.03),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
@@ -221,8 +208,8 @@ class TutorialState extends State {
                       ),
                       Icon(Icons.euro, size: 32, color: Colors.white)
                     ],),
-                  SizedBox(height: 20),
-                  Row(
+                  SizedBox(height: _screenHeight / 38.79),
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
@@ -232,13 +219,13 @@ class TutorialState extends State {
                       ),
                       Icon(Icons.inventory_2_outlined, size: 32, color: Colors.white)
                     ],),
-                  SizedBox(height: 100),
-                  Text(
+                  SizedBox(height: _screenHeight / 7.76),
+                  const Text(
                     "What the SpeedDial does depends \n on the tab you're on",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 140),
+                  SizedBox(height: _screenHeight / 5.54),
                 ],
               );
             },
@@ -249,7 +236,6 @@ class TutorialState extends State {
     targets.add(
       TargetFocus(
         identify: "Category Tab",
-        //keyTarget: keys[1],
         targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.738, _screenHeight * 0.948)), //values perfect for pixel 2
         alignSkip: Alignment.topRight,
         paddingFocus: 26,
@@ -261,21 +247,21 @@ class TutorialState extends State {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text("Categories tab",
+                  const Text("Categories tab",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 35
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Text('Here you can view your',
+                  SizedBox(height: _screenHeight / 25.86),
+                  const Text('Here you can view your',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -285,15 +271,15 @@ class TutorialState extends State {
                       ),
                       Icon(Icons.inventory_2_outlined, size: 32, color: Colors.white)
                     ],),
-                  SizedBox(height: 30),
-                  Text('Click on a category to view \n all expenses of that category',
+                  SizedBox(height: _screenHeight / 31.03),
+                  const Text('Click on a category to view \n all expenses of that category',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 250)
+                  SizedBox(height: _screenHeight / 3.1)
                 ],
               );
             },
@@ -311,9 +297,9 @@ class TutorialState extends State {
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const <Widget>[
-                SizedBox(height: 125),
-                Text(
+              children: <Widget>[
+                SizedBox(height: _screenHeight / 6.2),
+                const Text(
                   "Statistics",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -321,7 +307,7 @@ class TutorialState extends State {
                       fontSize: 35.0
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
                     "Tap here to see detailed \n usage statistics. \n \n Statistics include:",
@@ -329,8 +315,8 @@ class TutorialState extends State {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20),
-                Row(
+                SizedBox(height: _screenHeight / 38.79),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -340,8 +326,8 @@ class TutorialState extends State {
                     ),
                     Icon(Icons.euro, size: 32, color: Colors.white)
                   ],),
-                SizedBox(height: 20),
-                Row(
+                SizedBox(height: _screenHeight / 38.79),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -367,9 +353,9 @@ class TutorialState extends State {
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const <Widget>[
-                SizedBox(height: 100),
-                Text(
+              children: <Widget>[
+                SizedBox(height: _screenHeight / 7.76),
+                const Text(
                   "Menu",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -377,8 +363,8 @@ class TutorialState extends State {
                       fontSize: 35.0
                   ),
                 ),
-                SizedBox(height: 25),
-                Padding(
+                SizedBox(height: _screenHeight / 31.03),
+                const Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
                     "Tap here to access the menu \n \n \n From here you can...",
@@ -386,8 +372,8 @@ class TutorialState extends State {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20),
-                Row(
+                SizedBox(height: _screenHeight / 38.79),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -397,8 +383,8 @@ class TutorialState extends State {
                     ),
                     Icon(Icons.account_circle_outlined, size: 32, color: Colors.white)
                   ],),
-                SizedBox(height: 15),
-                Row(
+                SizedBox(height: _screenHeight / 51.72),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -408,8 +394,8 @@ class TutorialState extends State {
                     ),
                     Icon(Icons.design_services_outlined, size: 32, color: Colors.white)
                   ],),
-                SizedBox(height: 15),
-                Row(
+                SizedBox(height: _screenHeight / 51.72),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
@@ -443,28 +429,28 @@ class TutorialState extends State {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 150),
-                  Text("Have fun using MoneyMate",
+                  SizedBox(height: _screenHeight / 5.17),
+                  const Text("Have fun using MoneyMate",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 40
                       ),
                       textAlign: TextAlign.center
                   ),
-                  SizedBox(height: 50),
-                  Text(
+                  SizedBox(height: _screenHeight / 15.51),
+                  const Text(
                     "We hope you like the App",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: _screenHeight / 15.51),
                   ElevatedButton(onPressed: () => tutorialCoachMark.next(), child: Text('Sure!')),
-                  SizedBox(height: 180),
+                  SizedBox(height: _screenHeight / 4.31),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       new Image.asset('images/icon.png', height: 80, width: 80),
-                      Text("Your helper in finance", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20))
+                      const Text("Your helper in finance", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),
                 ],
