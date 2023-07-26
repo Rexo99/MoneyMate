@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -7,11 +5,9 @@ import '../UserState.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 
-
-
-/// To-Do make CategoryOverview Stateful
-/// I still need to add set State
-/// seems to be correct
+/// Shows all Categories of an user
+///
+/// Code by Daniel Ottolien
 class CategoryOverview extends StatefulWidget {
   CategoryOverview({super.key});
 
@@ -19,20 +15,16 @@ class CategoryOverview extends StatefulWidget {
   State<StatefulWidget> createState() => CategoryOverviewContent();
 }
 
-///Seems to be correct to
-/// need to add a way to see if the data has been changed
+/// Shows an Overview of the Categories in a list
 class CategoryOverviewContent extends State<CategoryOverview> {
 
   @override
   void initState() {
-    /// check if the state of the items has changed
-    /// when name or budget is different
     super.initState();
   }
 
   void update() {
     setState(() {
-
     });
   }
 
@@ -48,33 +40,19 @@ class CategoryOverviewContent extends State<CategoryOverview> {
   }
 }
 
-///no changes required?
+/// Displays the data for each category as a card
 class CategoryCard extends StatelessWidget {
-  Category category;
 
+  Category category;
   List<Expense> categoryExpenseList = [];
-  // late List<Expense> categoryExpenseList = [Expense('test', 400, DateTime.now(), 56)];
-  // late final List<Expense> categoryExpenseList = await getexpenseList();
-  // late final List<Expense> exps;
 
   CategoryCard({required this.category, super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
-    /*Future<List<Expense>> initexpenseList() async {
-      List<Expense> categoryExpenseList = await getexpenseList();
-      return categoryExpenseList;
-    }
-    initexpenseList();*/
-
-    Future<void> initexpenseList() async {
-      categoryExpenseList = await getexpenseList();
-    }
-    initexpenseList();
 
     /// Method to get the icon of a category
+    /// If no data is found a square will be set as default
     String? catIcon = category.icon;
     IconData getCategoryIcon(catIcon) {
       switch(catIcon) {
@@ -101,17 +79,9 @@ class CategoryCard extends StatelessWidget {
       }
     }
 
-    /// Method to get the expense List
-    /*Future<List<Expense>> getexpenseList() async {
-      List<Expense> exps = (await HTTPRequestBuilder().get(
-          path: "expenditures",
-          returnType: List<Expense>)) as List<Expense>;
-      return exps;
-    }*/
 
     /// Method to get the spent budget of all expenses in a category
     int getBudgetofCategory() {
-
       int expensebudget = 0;
       for (var expense in categoryExpenseList) {
         if ( expense.categoryId == category.id) {
@@ -122,8 +92,7 @@ class CategoryCard extends StatelessWidget {
     }
 
 
-
-    ///Method the show a warning if your budget has been spent
+    /// Method the show a warning if your set budget for a category has been spent
     Icon getColor(){
       if(getBudgetofCategory() > category.budget.toInt()) {
         return Icon(Icons.warning,
@@ -138,15 +107,9 @@ class CategoryCard extends StatelessWidget {
 
 
 
-    // return Center(
+
     return SwipeActionCell(
-
-      // Required!
       key: ValueKey(category),
-
-      // Animation default value below
-      // normalAnimationDuration: 400,
-      // deleteAnimationDuration: 400,
       selectedForegroundColor: Colors.black.withAlpha(30),
       trailingActions: [
         SwipeAction(
@@ -170,7 +133,6 @@ class CategoryCard extends StatelessWidget {
             onTap: (handler) async {
               await handler(true);
               UserState.of(context).removeCategory(category);
-              // deleteCategoryPopup(category: category, context: context);
             }),
         SwipeAction(
             content: _getIconButton(Colors.green, Icons.mode_edit),
@@ -189,21 +151,9 @@ class CategoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              // leading: Icon(Icons.local_grocery_store),
-              // leading: Icon(MdiIcons.fromString(category.icon.toString())),
               leading: Icon(getCategoryIcon(catIcon)),
               title: Text(category.name),
               subtitle: Text(category.budget.toString() + ' €'),
-              /*subtitle: Column(
-                children: <Widget>[
-                  Text('inside column'),
-                  TextButton(child: Text('button'), onPressed: () {
-                    print(categoryExpenseList);
-                  })
-                ],
-              ),*/
-              /*trailing: Icon(Icons.circle,
-              color: getColor(),),*/
               trailing: getColor(),
             ),
             // Row(
@@ -235,15 +185,6 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
-/// get the ExpenseList
-Future<List<Expense>> getexpenseList() async {
-  List<Expense> exps = (await HTTPRequestBuilder().get(
-      path: "expenditures",
-      returnType: List<Expense>)) as List<Expense>;
-  print(exps);
-  return exps;
-}
-
 
 Widget _getIconButton(color, icon) {
   return Container(
@@ -251,8 +192,6 @@ Widget _getIconButton(color, icon) {
     height: 50,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(25),
-
-      /// set you real bg color in your content
       color: color,
     ),
     child: Icon(
@@ -262,7 +201,7 @@ Widget _getIconButton(color, icon) {
   );
 }
 
-/// doesn´t need any changes
+/// Builds a listview for the category cards
 class CategoryListView extends StatelessWidget {
   late final BuildContext context;
   late final List<Category> categoryListOverview;
@@ -289,8 +228,6 @@ class CategoryListView extends StatelessWidget {
         var cats = categoryListOverview[index];
         return CategoryCard(category: cats);
       },
-      // separatorBuilder: (BuildContext context, int index) =>
-      // const Divider(),
     );
   }
 }
