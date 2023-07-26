@@ -83,7 +83,7 @@ class HTTPRequestBuilder {
     print('Response status: ${response.statusCode}');
     print("Response body: ${response.body}");
     Map object = json.decode(response.body);
-    return object["id"];
+    return object['message']["id"];
   }
 
   Future<Object?> get({required String path, required Type returnType}) async {
