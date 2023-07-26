@@ -30,14 +30,13 @@ class TutorialState extends State {
   }
 
   void createTutorial() {
-    //todo - remove following lines
     _screenWidth = WidgetsBinding.instance.renderView.size.width;
     _screenHeight = WidgetsBinding.instance.renderView.size.height;
 
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
       textSkip: "SKIP",
-      paddingFocus: 10,
+      opacityShadow: 0.9,
       showSkipInLastTarget: false,
       onFinish: () {
         finished = true;
@@ -53,13 +52,12 @@ class TutorialState extends State {
     targets.add(
       TargetFocus(
         identify: "Introduction",
-        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -10)),
+        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -60)),
         alignSkip: Alignment.topRight,
-        paddingFocus: 0,
+        paddingFocus: 50,
         radius: 0,
-        color: Colors.black,
-        focusAnimationDuration: Duration(milliseconds: 5),
-        unFocusAnimationDuration: Duration(milliseconds: 1),
+        focusAnimationDuration: Duration(milliseconds: 1),
+        unFocusAnimationDuration: Duration(milliseconds: 700),
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
@@ -68,7 +66,7 @@ class TutorialState extends State {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: _screenHeight / 7.76),
+                  SizedBox(height: _screenHeight / 5),
                   const Text("Welcome to MoneyMate!",
                     style: TextStyle(
                         color: Colors.white,
@@ -170,7 +168,7 @@ class TutorialState extends State {
     );
     targets.add(
       TargetFocus(
-        identify: "SpeedDial",
+        identify: "Add Button",
         targetPosition: TargetPosition(Size.square(25), Offset(_screenWidth * 0.470, _screenHeight * 0.897)), //values perfect for pixel 2
         alignSkip: Alignment.topRight,
         contents: [
@@ -182,7 +180,7 @@ class TutorialState extends State {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                    "SpeedDial",
+                    "Add Button",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -221,7 +219,7 @@ class TutorialState extends State {
                     ],),
                   SizedBox(height: _screenHeight / 7.76),
                   const Text(
-                    "What the SpeedDial does depends \n on the tab you're on",
+                    "What the button does depends \n on the tab you're on",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -414,13 +412,11 @@ class TutorialState extends State {
     targets.add(
       TargetFocus(
         identify: "Message",
-        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -10)),
-        alignSkip: Alignment.topRight,
-        paddingFocus: 0,
+        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -60)),
+        paddingFocus: 50,
         radius: 0,
-        color: Colors.black,
-        focusAnimationDuration: Duration(milliseconds: 5),
-        unFocusAnimationDuration: Duration(milliseconds: 1),
+        focusAnimationDuration: Duration(milliseconds: 1),
+        unFocusAnimationDuration: Duration(milliseconds: 700),
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
@@ -429,7 +425,7 @@ class TutorialState extends State {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: _screenHeight / 5.17),
+                  SizedBox(height: _screenHeight / 4.5),
                   const Text("Have fun using MoneyMate",
                       style: TextStyle(
                           color: Colors.white,
