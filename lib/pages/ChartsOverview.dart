@@ -253,14 +253,12 @@ class BarChartWidget extends StatelessWidget {
 
   late final BuildContext context;
   late final List<Category> categoryListBarChart;
-  // late final List<Expense> categoryExpenseBarList
-  late final List<Expense> categoryExpenseBarList = [Expense('test', 100, DateTime.now(), 56)
-  , Expense('new', 100, DateTime.now(), 56), Expense('test2', 200, DateTime.now(), 56),
-  Expense('new', 50, DateTime.now(), 57)];
+  late final ExpenseList categoryExpenseBarList;
+
 
   BarChartWidget({required this.context}) {
     categoryListBarChart = UserState.of(context).categoryList;
-    // expenseList = UserState.of(context).expendList;
+    categoryExpenseBarList = UserState.of(context).expendList;
   }
 
   final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
@@ -278,11 +276,11 @@ class BarChartWidget extends StatelessWidget {
     for (var category in categoryListBarChart) {
       /// This code loops in the other for loop
       int expensebudget = 0;
-      for (var expense in categoryExpenseBarList) {
+      for (Prop<Expense> expense in categoryExpenseBarList.value) {
         /// if ( expense.value.categoryId == category.id)
-        if ( expense.categoryId == category.id) {
+        if ( expense.value.categoryId == category.id) {
           /// expensebudget += expense.value.amount.toInt();
-          expensebudget += expense.amount.toInt();
+          expensebudget += expense.value.amount.toInt();
         }
       }
       expensevalue = expensebudget;
