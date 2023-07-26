@@ -151,10 +151,6 @@ class HudState extends State<Hud> {
   final List<String> _titleList = ["Home", "Categories"];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _toggleEndDrawer() {
-    _scaffoldKey.currentState!.openEndDrawer();
-  }
-
   //Checks for a Connectivity
   late StreamSubscription connection; //todo - add cancellation of subscription
 
@@ -163,11 +159,6 @@ class HudState extends State<Hud> {
   /// _title dependant on _currentIndex and well update on change
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
-
-  //test
-  void changePage(int page) {
-    _pageController.jumpToPage(page);
-  }
 
   @override
   void initState() {
@@ -269,6 +260,10 @@ class HudState extends State<Hud> {
             )
         )
     );
+  }
+
+  void _toggleEndDrawer() {
+    _scaffoldKey.currentState!.openEndDrawer();
   }
 }
 
