@@ -70,7 +70,7 @@ class Register extends StatelessWidget {
                                 // Todo spaghetti code, move generating default data to backend
                                 await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400);
                                 await UserState.of(context).initListCategoryList();
-                                UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!, imageId: 0);
+                                UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!, imageId: null);
 
                                 if(context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
