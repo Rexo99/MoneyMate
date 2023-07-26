@@ -188,7 +188,6 @@ class HudState extends State<Hud> {
       }
     });
 
-    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
       _tutorial.createTutorial();
@@ -230,7 +229,6 @@ class HudState extends State<Hud> {
                 new CategoryOverview(),
               ],
             ),
-            //todo - change to simple button, as SpeedDial would only have one action when deployed anyway
             floatingActionButton: $(
               _currentIndex, (p0) => FloatingActionButton(
                 onPressed: () {

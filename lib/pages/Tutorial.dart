@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_mate/main.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-
-import 'ChartsOverview.dart';
 
 /// Code by Dorian Zimmermann
 class Tutorial extends StatefulWidget {
@@ -17,8 +14,6 @@ class TutorialState extends State {
   late double _screenHeight;
   late var buildContext;
   bool finished = false;
-  bool tapped = false;
-  int currentTab = 1;
 
   void showTutorial(BuildContext context) {
     buildContext = context;
@@ -28,7 +23,6 @@ class TutorialState extends State {
     } catch (exception) {
       finished = true;
       print('Exception occurred while showing the tutorial');
-      print(exception.toString()); //todo - remove line
     }
   }
 
@@ -49,51 +43,6 @@ class TutorialState extends State {
       onFinish: () {
         finished = true;
         print("Tutorial finished");
-
-        //tutorialCoachMark2.show(context: buildContext);
-      },
-      onClickTarget: (target) {
-        print('onClickTarget: $target $currentTab');
-
-        currentTab += 1;
-
-        /* //todo - doesnt work
-        if(currentTab == 2) {
-          HudState().openSpeedDial(true);
-          return;
-        }
-
-        if(currentTab == 3) {
-          HudState().openSpeedDial(false);
-          return;
-        }
-         */
-
-        if(currentTab == 4) {
-          //HudState().changePage(1);
-          //Navigator.push(buildContext, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
-        }
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
-      onSkip: () {
-        finished = true;
-        print("skip");
-      },
-    );
-
-    tutorialCoachMark2 = TutorialCoachMark(
-      targets: _createTargets2(),
-      textSkip: "SKIP",
-      paddingFocus: 10,
-      opacityShadow: 0.0,
-      onFinish: () {
-        finished = true;
-        print("Tutorial finished");
       },
       onClickTarget: (target) {
         print('onClickTarget: $target');
@@ -111,7 +60,6 @@ class TutorialState extends State {
     );
   }
 
-  //todo - save position of required widget in mains build() and reference them here? Alternatively hardcode tutorial locations for pixel 2 or try getting the usable screen margin
   //todo - add relative spacing for widgets
   List<TargetFocus> _createTargets(/*List<GlobalKey> keys*/) {
     List<TargetFocus> targets = [];
@@ -353,7 +301,6 @@ class TutorialState extends State {
         ],
       ),
     );
-
     targets.add(TargetFocus(
       identify: "Charts",
       targetPosition: TargetPosition(Size.square(30), Offset(_screenWidth * 0.906 - 50, 38)), //values perfect for pixel 2
@@ -530,55 +477,8 @@ class TutorialState extends State {
     return targets;
   }
 
-  List<TargetFocus> _createTargets2() {
-    List<TargetFocus> targets = [];
-    targets.add(
-      TargetFocus(
-        identify: "Introduction",
-        targetPosition: TargetPosition(
-            Size.square(.01), Offset(_screenWidth * 0.5, -10)),
-        alignSkip: Alignment.topRight,
-        paddingFocus: 0,
-        radius: 0,
-        color: Colors.black,
-        focusAnimationDuration: Duration(milliseconds: 1),
-        unFocusAnimationDuration: Duration(milliseconds: 1),
-        contents: [
-          TargetContent(
-            align: ContentAlign.bottom,
-            builder: (context, controller) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 150),
-                  AlertDialog(
-                    content: Column(children: [
-                      Text("This is your Home screen. \n Your most recent Expenses are listed here \n From here you can navigate the app.",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40
-                          ),
-                          textAlign: TextAlign.center
-                      ),
-                      SizedBox(height: 40),
-                      ElevatedButton(onPressed: () => tutorialCoachMark.next(),
-                          child: Text('Understood')),
-                    ],) ,
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    return targets;
-  }
-
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 }
