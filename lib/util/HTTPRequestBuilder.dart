@@ -18,8 +18,7 @@ class HTTPRequestBuilder {
   late String username;
   late String _bearerToken;
 
-  final String _rootURL = "192.168.0.99:6060";
-  //final String _rootURL = "192.168.178.55:6060"; Todo comment in
+  final String _rootURL = "hinkelmanns.org";
 
   bool _loggedIn = false;
 
@@ -31,7 +30,7 @@ class HTTPRequestBuilder {
 
   Future<bool> register(
       {required String name, required String password}) async {
-    Uri url = Uri.http(_rootURL, "api/register");
+    Uri url = Uri.https(_rootURL, "api/register");
     var response =
     await http.post(url, body: {"name": name, "password": password});
     print('Register: Response status: ${response.statusCode}');
@@ -47,7 +46,7 @@ class HTTPRequestBuilder {
 
   Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
-      Uri url = Uri.http(_rootURL, "api/login");
+      Uri url = Uri.https(_rootURL, "api/login");
       var response =
       await http.post(url, body: {"name": name, "password": password});print('Login: Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -77,7 +76,7 @@ class HTTPRequestBuilder {
 
   Future<int?> createModel<T extends DTO>(
       {required String path, required T tmp}) async {
-    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -93,7 +92,7 @@ class HTTPRequestBuilder {
 
 
   Future<int> createImage({required File file}) async {
-    var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/image"));
+    var request = http.MultipartRequest('POST', Uri.https(_rootURL,"api/image"));
     request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
 
     request.files.add(
@@ -129,7 +128,7 @@ class HTTPRequestBuilder {
   }
 
   Future<Uint8List> getImage({required int? imageId}) async {
-    Uri uri = Uri.http(_rootURL, "api/image/$imageId");
+    Uri uri = Uri.https(_rootURL, "api/image/$imageId");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -154,7 +153,7 @@ class HTTPRequestBuilder {
   }
 
   Future<Object?> get({required String path, required Type returnType}) async {
-    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -187,7 +186,7 @@ class HTTPRequestBuilder {
 
   Future<Model?> put<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -208,7 +207,7 @@ class HTTPRequestBuilder {
 
   Future<Model?> post<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -230,11 +229,11 @@ class HTTPRequestBuilder {
     Uri uri;
     switch (deleteType) {
       case Expense:
-        uri = Uri.http(_rootURL,
+        uri = Uri.https(_rootURL,
             "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
         break;
       case Category:
-        uri = Uri.http(_rootURL, "api/users/$userId/categories/$objId");
+        uri = Uri.https(_rootURL, "api/users/$userId/categories/$objId");
         break;
       default:
         throw ErrorDescription("$deleteType is not a valid Type");
