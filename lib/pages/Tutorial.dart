@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_mate/main.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'ChartsOverview.dart';
+
 /// Code by Dorian Zimmermann
 class Tutorial extends StatefulWidget {
   @override
@@ -66,6 +68,11 @@ class TutorialState extends State {
           return;
         }
          */
+
+        if(currentTab == 4) {
+          //HudState().changePage(1);
+          //Navigator.push(buildContext, MaterialPageRoute(builder: (context) => const ChartsOverview()),);
+        }
       },
       onClickTargetWithTapPosition: (target, tapDetails) {
         print("target: $target");
@@ -158,46 +165,66 @@ class TutorialState extends State {
         ],
       ),
     );
-
     targets.add(
       TargetFocus(
-        identify: "HomeScreen",
-        targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.5, -20)),
+        identify: "Expense Tab",
+        targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.239, _screenHeight * 0.948)), //values perfect for pixel 2
         alignSkip: Alignment.topRight,
-        paddingFocus: 0,
-        radius: 0,
-        color: Colors.black,
-        focusAnimationDuration: Duration(milliseconds: 5),
-        unFocusAnimationDuration: Duration(milliseconds: 1),
-        enableTargetTab: false,
-        enableOverlayTab: false,
-        shape: ShapeLightFocus.RRect,
+        paddingFocus: 26,
         contents: [
           TargetContent(
-            align: ContentAlign.bottom,
+            align: ContentAlign.top,
             builder: (context, controller) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 160),
-                  Text("This is your \n Home screen",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 38
-                      ),
-                      textAlign: TextAlign.center
+                children: const <Widget>[
+                  Text("This is the \n Expense tab",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 35),
-                  Text("Your most recent Expenses \n are listed here \n \n From here you can navigate the app.",
+                  SizedBox(height: 25),
+                  Text('Here you can view ...',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Your most recent expenses",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      Icon(Icons.refresh, size: 32, color: Colors.white)
+                    ],),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Daily and monthly spendings",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      Icon(Icons.calendar_today, size: 30, color: Colors.white)
+                    ],),
+                  SizedBox(height: 50),
+                  Text("Click 'See All' to view all expenses",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 80),
-                  ElevatedButton(onPressed: () => tutorialCoachMark.next(), child: Text('Understood')),
+                  SizedBox(height: 200)
                 ],
               );
             },
@@ -205,11 +232,9 @@ class TutorialState extends State {
         ],
       ),
     );
-
     targets.add(
       TargetFocus(
         identify: "SpeedDial",
-        //keyTarget: keys[2],
         targetPosition: TargetPosition(Size.square(25), Offset(_screenWidth * 0.470, _screenHeight * 0.897)), //values perfect for pixel 2
         alignSkip: Alignment.topRight,
         contents: [
@@ -240,20 +265,20 @@ class TutorialState extends State {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                    Text(
-                      "New Expenses",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                    Icon(Icons.euro, size: 32, color: Colors.white)
-                  ],),
+                      Text(
+                        "New Expenses",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      Icon(Icons.euro, size: 32, color: Colors.white)
+                    ],),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
                         "New Categories",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                       Icon(Icons.inventory_2_outlined, size: 32, color: Colors.white)
@@ -265,42 +290,6 @@ class TutorialState extends State {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 140),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: "Expense Tab",
-        //keyTarget: keys[0],
-        targetPosition: TargetPosition(Size.square(10), Offset(_screenWidth * 0.239, _screenHeight * 0.948)), //values perfect for pixel 2
-        alignSkip: Alignment.topRight,
-        paddingFocus: 26,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text("Expenses tab",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35
-                    ),
-                  ),
-                  Text('Here you can view your most recent expenses, as well as your daily and monthly spendings',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 250)
                 ],
               );
             },
@@ -322,14 +311,33 @@ class TutorialState extends State {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
+                children: <Widget>[
                   Text("Categories tab",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 35
                     ),
                   ),
-                  Text('Here you can view all of your categories',
+                  SizedBox(height: 30),
+                  Text('Here you can view your',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Categories  ",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      Icon(Icons.inventory_2_outlined, size: 32, color: Colors.white)
+                    ],),
+                  SizedBox(height: 30),
+                  Text('Click on a category to view \n all expenses of that category',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20
@@ -344,11 +352,10 @@ class TutorialState extends State {
         ],
       ),
     );
+
     targets.add(TargetFocus(
-      identify: "See All",
-      //keyTarget: keys[3],
-      targetPosition: TargetPosition(Size.square(40), Offset(_screenWidth * 0.45, _screenHeight * 0.485)), //values perfect for pixel 2
-      alignSkip: Alignment.topRight,
+      identify: "Charts",
+      targetPosition: TargetPosition(Size.square(30), Offset(_screenWidth * 0.906 - 50, 38)), //values perfect for pixel 2
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -359,7 +366,7 @@ class TutorialState extends State {
               children: const <Widget>[
                 SizedBox(height: 125),
                 Text(
-                  "Expenses",
+                  "Statistics",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -369,11 +376,33 @@ class TutorialState extends State {
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
-                    "Click here to see a list of all your expenses.",
+                    "Tap here to see detailed \n usage statistics. \n \n Statistics include:",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
-                )
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Your leftover budget \n per category",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    Icon(Icons.euro, size: 32, color: Colors.white)
+                  ],),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "How much you spent \n compared to last month",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    Icon(Icons.bar_chart, size: 32, color: Colors.white)
+                  ],),
               ],
             );
           },
@@ -391,29 +420,112 @@ class TutorialState extends State {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const <Widget>[
-                SizedBox(height: 125),
+                SizedBox(height: 100),
                 Text(
-                  "Drawer",
+                  "Menu",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: 35.0
                   ),
                 ),
+                SizedBox(height: 25),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
-                    "Tap this icon to open a drawer, \n from where you can logout, \n change how the app looks \n and more.",
+                    "Tap here to access the menu \n \n \n From here you can...",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Log out of MoneyMate",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    Icon(Icons.account_circle_outlined, size: 32, color: Colors.white)
+                  ],),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Change your theme",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    Icon(Icons.design_services_outlined, size: 32, color: Colors.white)
+                  ],),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Access the Info screen \n or rewatch this tutorial",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                    Icon(Icons.info_outlined, size: 32, color: Colors.white)
+                  ],),
               ],
             );
           },
         ),
       ],
     ));
+    targets.add(
+      TargetFocus(
+        identify: "Message",
+        targetPosition: TargetPosition(Size.square(.01), Offset(_screenWidth * 0.5, -10)),
+        alignSkip: Alignment.topRight,
+        paddingFocus: 0,
+        radius: 0,
+        color: Colors.black,
+        focusAnimationDuration: Duration(milliseconds: 5),
+        unFocusAnimationDuration: Duration(milliseconds: 1),
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 150),
+                  Text("Have fun using MoneyMate",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40
+                      ),
+                      textAlign: TextAlign.center
+                  ),
+                  SizedBox(height: 50),
+                  Text(
+                    "We hope you like the App",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 50),
+                  ElevatedButton(onPressed: () => tutorialCoachMark.next(), child: Text('Sure!')),
+                  SizedBox(height: 180),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      new Image.asset('images/icon.png', height: 80, width: 80),
+                      Text("Your helper in finance", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20))
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
     return targets;
   }
 
