@@ -18,8 +18,8 @@ class HTTPRequestBuilder {
   late String username;
   late String _bearerToken;
 
-  final String _rootURL = "hinkelmanns.org";
-
+  final String _rootURL = "192.168.0.99:6060";
+  //final String _rootURL = "192.168.178.55:6060"; Todo comment in
   bool _loggedIn = false;
 
   HTTPRequestBuilder._privateConstructor();
@@ -30,7 +30,7 @@ class HTTPRequestBuilder {
 
   Future<bool> register(
       {required String name, required String password}) async {
-    Uri url = Uri.https(_rootURL, "api/register");
+    Uri url = Uri.http(_rootURL, "api/register");
     var response =
     await http.post(url, body: {"name": name, "password": password});
     print('Register: Response status: ${response.statusCode}');
@@ -46,7 +46,7 @@ class HTTPRequestBuilder {
 
   Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
-      Uri url = Uri.https(_rootURL, "api/login");
+      Uri url = Uri.http(_rootURL, "api/login");
       var response =
       await http.post(url, body: {"name": name, "password": password});print('Login: Response status: ${response.statusCode}');
       if (response.statusCode == 200) {
@@ -76,7 +76,7 @@ class HTTPRequestBuilder {
 
   Future<int?> createModel<T extends DTO>(
       {required String path, required T tmp}) async {
-    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -152,8 +152,70 @@ class HTTPRequestBuilder {
     } return Uint8List(0);
   }
 
+
+  Future<int> createImage({required File file}) async {
+    var request = http.MultipartRequest('POST', Uri.http(_rootURL,"api/image"));
+    request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
+
+    request.files.add(
+    http.MultipartFile.fromBytes(
+        'image',
+        file.readAsBytesSync(),
+        filename: file.path,
+        )
+    );
+
+    request.fields['hash'] = file.hashCode.toString();
+
+    print("Request: $request");
+    //for completeing the request
+    var response = await request.send();
+
+    //for getting and decoding the response into json format
+    var responsed = await http.Response.fromStream(response);
+    Map<String, dynamic> responseData = json.decode(responsed.body);
+
+    if (response.statusCode == 200) {
+      print("SUCCESS");
+      print(responseData);
+
+      int imageId = responseData['message'];
+      return imageId;
+    }
+    else {
+      print(response.statusCode);
+      print("ERROR");
+      return 0;
+    }
+  }
+
+  Future<Uint8List> getImage({required int? imageId}) async {
+    Uri uri = Uri.http(_rootURL, "api/image/$imageId");
+    Map<String, String>? headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $_bearerToken',
+    };
+
+    final response = await http.get(uri, headers: headers);
+    Map object = json.decode(response.body);
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      List<dynamic> dataArray = object['message']['imageBytes']['data'];
+      List<int> intArray = dataArray.cast<int>();
+      Uint8List imageBytes = Uint8List.fromList(intArray);
+
+      return imageBytes;
+    }
+    else {
+      print(response.statusCode);
+      print("ERROR");
+    } return Uint8List(0);
+  }
+
   Future<Object?> get({required String path, required Type returnType}) async {
-    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -186,7 +248,7 @@ class HTTPRequestBuilder {
 
   Future<Model?> put<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -207,7 +269,7 @@ class HTTPRequestBuilder {
 
   Future<Model?> post<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
-    Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
+    Uri uri = Uri.http(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -229,11 +291,11 @@ class HTTPRequestBuilder {
     Uri uri;
     switch (deleteType) {
       case Expense:
-        uri = Uri.https(_rootURL,
+        uri = Uri.http(_rootURL,
             "api/users/$userId/expenditures/$objId"); //todo - correct to "expense"
         break;
       case Category:
-        uri = Uri.https(_rootURL, "api/users/$userId/categories/$objId");
+        uri = Uri.http(_rootURL, "api/users/$userId/categories/$objId");
         break;
       default:
         throw ErrorDescription("$deleteType is not a valid Type");
