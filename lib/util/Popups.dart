@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -11,10 +13,14 @@ import 'StateManagement.dart';
 /// so that they don't have to be created from scratch over and over again.
 
 /// A popup that allows the user to change the name and amount of an expense.
-/// Code by ...
-void updateExpensePopup(
-    {required Prop<Expense> expense, required BuildContext context}) {
+Future<void> updateExpensePopup(
+    {required Prop<Expense> expense, required BuildContext context}) async {
+  FilePickerResult? result;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
+  if (expense.value.imageId != null)
+    imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
   String name = expense.value.name;
+  int? imageId = expense.value.imageId;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
@@ -60,6 +66,55 @@ void updateExpensePopup(
                 return null;
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
+
+                    // Read the file as bytes
+                    File image = File(filePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text(''),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -74,9 +129,8 @@ void updateExpensePopup(
               ScaffoldMessenger.of(subContext).showSnackBar(
                 uniformSnackBar('Updated Expense'),
               );
-              //Todo not the right context?
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: double.parse(amount));
+                  expense: expense, name: name, amount: double.parse(amount), imageId: imageId);
               Navigator.pop(subContext, 'OK');
             }
           },
@@ -92,8 +146,11 @@ void updateExpensePopup(
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
+  int? imageId;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   late int categoryId;
   final formKey = GlobalKey<FormState>();
+  FilePickerResult? result;
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) => AlertDialog(
@@ -163,6 +220,55 @@ void createExpensePopup({required BuildContext context}) {
                 return null;
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
+
+                    // Read the file as bytes
+                    File image = File(filePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text(''),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -180,7 +286,8 @@ void createExpensePopup({required BuildContext context}) {
               UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: num.parse(amount),
-                  categoryId: categoryId);
+                  categoryId: categoryId,
+                  imageId: imageId);
               Navigator.push(
                   context,
                   MaterialPageRoute(
