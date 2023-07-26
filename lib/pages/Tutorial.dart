@@ -112,6 +112,7 @@ class TutorialState extends State {
   }
 
   //todo - save position of required widget in mains build() and reference them here? Alternatively hardcode tutorial locations for pixel 2 or try getting the usable screen margin
+  //todo - add relative spacing for widgets
   List<TargetFocus> _createTargets(/*List<GlobalKey> keys*/) {
     List<TargetFocus> targets = [];
     targets.add(
