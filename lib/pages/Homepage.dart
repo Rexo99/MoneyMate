@@ -184,12 +184,15 @@ class CardListBuilder extends ReactiveWidget {
             primary: true,
             itemCount: 3,
             itemBuilder: (BuildContext context, int index) {
-              Prop<Expense> expense = expenseList.value[index];
-              return ExpenseCard(
-                expense: expense,
-                index: index,
-                context: context,
-              );
+              if(expenseList.length > index) {
+                Prop<Expense> expense = expenseList.value[index];
+                return ExpenseCard(
+                  expense: expense,
+                  index: index,
+                  context: context,
+                );
+              }
+              return null;
             }),
       );
     });
