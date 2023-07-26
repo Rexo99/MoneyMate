@@ -36,16 +36,22 @@ class UserState extends InheritedWidget {
   }
 
   // Logs in the user and fills the [expendList] and [categoryList] with data from the backend
-  Future<void> loginUser({
+  Future<bool> loginUser({
     required String name,
     required String password,
   }) async {
     try {
-      await HTTPRequestBuilder().login(name: name, password: password);
-      await expendList.initListExpenseList();
-      await initListCategoryList();
+      bool loggedIn = await HTTPRequestBuilder().login(name: name, password: password);
+
+      if(loggedIn)
+      {
+        await expendList.initListExpenseList();
+        await initListCategoryList();
+      }
+      return loggedIn;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 

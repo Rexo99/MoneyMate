@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../util/Popups.dart';
 
+/// Info Page, that displays all team members, their respective implemented features,
+/// as well as many used widgets and all packages inside the app.
+/// All Code in [Info.dart] by Dorian Zimmermann
 class Info extends StatelessWidget {
   Info({super.key, required this.title});
 
@@ -8,6 +11,7 @@ class Info extends StatelessWidget {
 
 @override
   Widget build(BuildContext context) {
+  double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           title: Text(title),
@@ -17,13 +21,13 @@ class Info extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: ListView(
             children: [
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight / 38),
               const Text("The MoneyMate Team:",
                   textDirection: TextDirection.ltr,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 20)
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight / 38),
                 Row(children: [
                   Flexible(child:
                     Column(children: [
@@ -35,9 +39,9 @@ class Info extends StatelessWidget {
                         title: Text('Daniel Ottolien', textAlign: TextAlign.center),
                         subtitle: Text('1629292', textAlign: TextAlign.center),
                       ),
-                      const SizedBox(height: 40),
+                      SizedBox(height: screenHeight / 19),
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login/ Register Page \n Login/ Register Exception Handling \n HomePage (EndDrawer) \n Info Page \n  App Theme Composition \n Adjustable App Theme \n Camera Initialization' , textAlign: TextAlign.center), /*todo fill list*/], context: context),
+                        onTap: () => infoPopup(featureList: [const Text('App Tutorial \n Login/ Register Page \n Login/ Register Exception Handling \n HomePage (EndDrawer) \n Info Page \n  App Design \n Adjustable App Theme \n Camera Initialization' , textAlign: TextAlign.center)], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
@@ -56,7 +60,7 @@ class Info extends StatelessWidget {
                           title: Text('Dannie Krösche', textAlign: TextAlign.center),
                           subtitle: Text('1629522', textAlign: TextAlign.center)
                       ),
-                      const SizedBox(height: 40),
+                      SizedBox(height: screenHeight / 19),
                       GestureDetector(
                         onTap: () => infoPopup(featureList: [const Text('HUD \n Homepage \n ExpenseOverview \n models(expense) \n dtos(expense) \n Popups(ExpensePop) \n DateTimeExtensions \n HTTPRequestBuilder \n UserState', textAlign: TextAlign.center), /*todo fill list*/], context: context),
                         child: const Icon(Icons.account_circle_outlined, size: 90),
@@ -68,7 +72,7 @@ class Info extends StatelessWidget {
                     ],),
                   ),
                 ]),
-              const SizedBox(height: 30),
+              SizedBox(height: screenHeight / 25),
               const ExpansionTile(
                 title: Text("Used Widgets"),
                 children: <Widget>[
@@ -95,6 +99,10 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('BarChart', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Displays a bar for each data point'),
+                  ),
+                  ListTile(
+                    title: Text('WillPopScore', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Widget, that ignores the system back button for navigation'),
                   ),
                   ListTile(
                     title: Text('Widget', style: TextStyle(fontWeight: FontWeight.bold)),

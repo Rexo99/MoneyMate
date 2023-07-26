@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
@@ -44,15 +43,12 @@ class MyApp extends StatefulWidget {
     ///Default values for loading the app
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
-    Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
-    late final List<GlobalKey> _tutorialKeys; //todo - delete if no longer needed
     bool _loadTutorial = false;
 
     @override
     void initState() {
-      _tutorialKeys = List.generate(5, (index) => new GlobalKey(debugLabel: 'Tutorial')); //todo - delete if no longer needed
       checkFirstSeen();
       checkTheme();
       super.initState();
@@ -74,7 +70,7 @@ class MyApp extends StatefulWidget {
           useMaterial3: true,
         ),
         themeMode: _themeMode,
-        home: _startPage,
+        home: Login(title: 'Login'),
         debugShowCheckedModeBanner: false,
       );
     }
@@ -86,7 +82,6 @@ class MyApp extends StatefulWidget {
 
       if(_seen == null || _seen == false) {
         _loadTutorial = true;
-        _startPage = Hud();
         await prefs.setBool('tutorialSeen', true);
       }
     }
@@ -143,11 +138,6 @@ class MyApp extends StatefulWidget {
         Colors.brown
       ];
     }
-
-    ///Returns the GlobalKeys generated where they are needed to reference widgets to the tutorial
-    List<GlobalKey> getTutorialKeys() {
-      return _tutorialKeys;
-    }
   }
 
 class Hud extends StatefulWidget {
@@ -159,7 +149,6 @@ class Hud extends StatefulWidget {
 class HudState extends State<Hud> {
   int _currentIndex = 0;
   final List<String> _titleList = ["Home", "Categories"];
-  final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _openEndDrawer() {
@@ -175,7 +164,7 @@ class HudState extends State<Hud> {
   //Checks for a Connectivity
   late StreamSubscription connection; //todo - add cancellation of subscription
 
-  Tutorial _tutorial = Tutorial();
+  TutorialState _tutorial = TutorialState();
 
   /// _title dependant on _currentIndex and well update on change
   late String _title = _titleList[_currentIndex];
@@ -184,7 +173,6 @@ class HudState extends State<Hud> {
   @override
   void initState() {
     super.initState();
-
 
     //Code to check if there is a valid network connection
     connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -201,10 +189,9 @@ class HudState extends State<Hud> {
       }
     });
 
-    //todo - open overlay automatically when tutorial is shown, so that it opens the login screen of the app
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
-      _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
+      _tutorial.createTutorial();
       _tutorial.showTutorial(context);
     }
   }
@@ -229,7 +216,7 @@ class HudState extends State<Hud> {
                     iconSize: 30.0,
                     icon: const Icon(Icons.menu),
                     onPressed:
-                      _openEndDrawer,
+                      _toggleEndDrawer,
                   ),
                 ],
                 automaticallyImplyLeading: false),
@@ -243,68 +230,16 @@ class HudState extends State<Hud> {
                 new CategoryOverview(),
               ],
             ),
-            floatingActionButton: SpeedDial(
-              //key: MyApp.of(context).getTutorialKeys()[2],
-              // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
-              animatedIcon: AnimatedIcons.menu_close,
-              spaceBetweenChildren: 10,
-              openCloseDial: isDialOpen,
-              children: [
-                _currentIndex == 0 ? SpeedDialChild(
-                  child: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      createExpensePopup(context: context);
-                      isDialOpen.value = false;
-                    },
-                  ),
-                  label: "Add Expense",
-                ) : SpeedDialChild(
-                  child: IconButton(
-                    icon: const Icon(Icons.category),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
-                      isDialOpen.value = false;
-                    },
-                  ),
-                  label: "Add Category",
-                ),
-                // TODO: remove this button when the app is finished
-                SpeedDialChild(
-                    visible: false,
-                    child: IconButton(
-                      icon: const Icon(Icons.bug_report),
-                      onPressed: () async {
-                        UserState.of(context).categoryList.forEach((element) {print(element.name);});
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "DevelopmentButton"),
-                SpeedDialChild(
-                    visible: _currentIndex == 0,
-                    child: IconButton(
-                      icon: const Icon(Icons.camera),
-                      onPressed: ()  async {
-                        final cameras = await availableCameras();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: cameras.first)));
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "Open Camera"),
-                //todo - remove button
-                SpeedDialChild(
-                    visible: true,
-                    child: IconButton(
-                      icon: const Icon(Icons.info_sharp),
-                      onPressed: () async {
-                        _tutorial.createTutorial(MyApp.of(context).getTutorialKeys());
-                        _tutorial.showTutorial(context);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "TutorialButton"),
-              ],
-            ),
+            floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  if(_currentIndex.value == 0) {
+                    createExpensePopup(context: context);
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
+                  }
+                },
+                child: Icon(Icons.add),
+              ),
             endDrawer: MenuDrawer(),
             floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
             /// BottomNavigation bar will be rebuild when _currentIndex get changed
@@ -331,6 +266,10 @@ class HudState extends State<Hud> {
             )
         )
     );
+  }
+
+  void _toggleEndDrawer() {
+    _scaffoldKey.currentState!.openEndDrawer();
   }
 }
 
@@ -375,7 +314,7 @@ class MenuDrawer extends ReactiveWidget{
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(width: 40),
+                        SizedBox(width: 25),
                         Icon(Icons.login_outlined, size: 24.0),
                         SizedBox(width: 10),
                         Text("Logout"),
@@ -396,19 +335,19 @@ class MenuDrawer extends ReactiveWidget{
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(width: 40),
+                        SizedBox(width: 25),
                         Icon(Icons.login_outlined, size: 24.0),
                         SizedBox(width: 10),
                         Text("Login"),
                       ],
                     )),
             ElevatedButton(
-              onPressed: () => colorPicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
+              onPressed: () => themePicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 40),
+                SizedBox(width: 25),
                 Icon(Icons.design_services_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Theme Settings'),
@@ -421,13 +360,49 @@ class MenuDrawer extends ReactiveWidget{
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 40),
+                SizedBox(width: 25),
                 Icon(Icons.info_outlined, size: 24.0),
                 SizedBox(width: 10),
                 Text('Info Screen'),
               ],
             ),
           ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                TutorialState _tutorial = TutorialState();
+                _tutorial.createTutorial();
+                _tutorial.showTutorial(context);
+              },
+              style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 25),
+                  Icon(Icons.accessibility, size: 24.0),
+                  SizedBox(width: 10),
+                  Text('Rewatch Tutorial'),
+                ],
+              ),
+            ),
+              //todo - remove camera button
+              ElevatedButton(
+                onPressed: () async {
+                Navigator.of(context).pop();
+                final cameras = await availableCameras();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => InitializeCamera(camera: cameras.first)));
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 25),
+                    Icon(Icons.accessibility, size: 24.0),
+                    SizedBox(width: 10),
+                    Text('Camera Test'),
+                  ],
+                ),
+              ),
         ],
         )
     );

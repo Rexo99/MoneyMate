@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +9,18 @@ import '../main.dart';
 import '../models/models.dart';
 import 'StateManagement.dart';
 
+/// [Popups.dart] consists of all frequently used popups and overlays,
+/// so that they don't have to be created from scratch over and over again.
+
 /// A popup that allows the user to change the name and amount of an expense.
-void updateExpensePopup(
-    {required Prop<Expense> expense, required BuildContext context}) {
+Future<void> updateExpensePopup(
+    {required Prop<Expense> expense, required BuildContext context}) async {
+  FilePickerResult? result;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
+  if (expense.value.imageId != null)
+    imageBytes.value = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
   String name = expense.value.name;
+  int? imageId = expense.value.imageId;
   String amount = expense.value.amount.toString();
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
@@ -56,6 +66,55 @@ void updateExpensePopup(
                 return null;
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
+
+                    // Read the file as bytes
+                    File image = File(filePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text(''),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -70,9 +129,8 @@ void updateExpensePopup(
               ScaffoldMessenger.of(subContext).showSnackBar(
                 uniformSnackBar('Updated Expense'),
               );
-              //Todo not the right context?
               UserState.of(context).expendList.updateItem(
-                  expense: expense, name: name, amount: double.parse(amount));
+                  expense: expense, name: name, amount: double.parse(amount), imageId: imageId);
               Navigator.pop(subContext, 'OK');
             }
           },
@@ -83,12 +141,16 @@ void updateExpensePopup(
   );
 }
 
-
+/// A popup that allows the user to create an expense.
+/// Code by ...
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
+  int? imageId;
+  Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   late int categoryId;
   final formKey = GlobalKey<FormState>();
+  FilePickerResult? result;
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) => AlertDialog(
@@ -158,6 +220,55 @@ void createExpensePopup({required BuildContext context}) {
                 return null;
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    // Get the selected file path
+                    String filePath = result!.files.single.path!;
+
+                    // Read the file as bytes
+                    File image = File(filePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(filePath).readAsBytes();
+                  }
+                },
+                child: const Text('Select Image'),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                if (imageBytes.value.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: Image.memory(
+                        imageBytes.value,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                height: 100,
+                width: 100,
+                child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
+                    ? Image.memory(
+                  imageBytes.value,
+                  fit: BoxFit.cover,
+                )
+                    : const Text(''),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -175,7 +286,8 @@ void createExpensePopup({required BuildContext context}) {
               UserState.of(context).expendList.addExpense(
                   name: name,
                   amount: num.parse(amount),
-                  categoryId: categoryId);
+                  categoryId: categoryId,
+                  imageId: imageId);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -189,6 +301,8 @@ void createExpensePopup({required BuildContext context}) {
   );
 }
 
+///
+/// Code by Daniel Ottolien
 void connectivityPopup({required BuildContext context}) {
   showDialog<String>(
     context: context,
@@ -206,6 +320,10 @@ void connectivityPopup({required BuildContext context}) {
   );
 }
 
+/// Popup used in [Info.dart] to show
+/// the implemented features of a team member
+///
+/// Code by Dorian Zimmermann
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
     context: context,
@@ -225,16 +343,10 @@ void infoPopup({required List featureList, required BuildContext context}) {
   );
 }
 
-Color getBackgroundColor(context) {
-  if(Theme.of(context).brightness == Brightness.dark) {
-    return Color(0xff201a18);
-    //dark: color: Color(0xffe8e2d9)
-  } else {
-    return Color(0xfffffbff);
-    //light: color: Color(0xff1d1b16)
-  }
-}
-
+/// Determines which theme is currently in use
+/// and returns the according color palette
+///
+/// Code by Dorian Zimmermann
 List<Color> getSystemColor(context) {
   if(SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
     return [Color(0xff201a18), Color(0xffe8e2d9)]; //dark (first is backgroundColor, second is textColor)
@@ -243,7 +355,11 @@ List<Color> getSystemColor(context) {
   }
 }
 
-void colorPicker(
+/// [themePicker] popup, that lets the user change the accent color of the app,
+/// as well as switching between light, dark and system mode.
+///
+/// Code by Dorian Zimmermann
+void themePicker(
     {required Color currentColor, required ThemeMode currentThemeMode, required BuildContext context}) {
   List<Color> _colors = MyApp.of(context).getThemeColors();
   List<bool> _selection = List.generate(3, (index) => false); //List for switching app design
@@ -271,11 +387,10 @@ void colorPicker(
               content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Text(
                         'Choose your Theme Color', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
                     SizedBox(height: 10),
-                    //todo - find a way to highlight the selected button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -301,7 +416,7 @@ void colorPicker(
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -326,11 +441,11 @@ void colorPicker(
 
                       ],
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Divider(color: _newColor.withAlpha(100)),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Text('Choose your Theme Mode', textAlign: TextAlign.center, style: TextStyle(color: _textColor)),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Center(
                         child: ToggleButtons(
                           color: _isDark ? Colors.white70 : Colors.black87,
@@ -379,7 +494,7 @@ void colorPicker(
                           },
                         )
                     ),
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                   ]),
               actions: <Widget>[
                 TextButton(
@@ -407,8 +522,13 @@ void colorPicker(
     });
 }
 
+/// Erstellt einen floating [SnackBar] mit abgerundeten Ecken
+/// [text] ist ein String, der im SnackBar zu sehen ist, von
+/// diesem wird auch die [width] des SnackBars bestimmt.
+///
+/// Code von Dorian Zimmermann
 SnackBar uniformSnackBar(String text) {
-  SnackBar snackBar = SnackBar(
+  return SnackBar(
       content: Text(text, textAlign: TextAlign.center),
       behavior: SnackBarBehavior.floating,
       elevation: 10,
@@ -417,6 +537,4 @@ SnackBar uniformSnackBar(String text) {
       width: (text.length * 10),
       clipBehavior: Clip.none,
   );
-
-  return snackBar;
 }

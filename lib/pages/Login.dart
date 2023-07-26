@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +7,15 @@ import '../UserState.dart';
 import '../main.dart';
 import 'Register.dart';
 
+/// Login Page, loaded first when starting the app.
+/// The user enters their credentials in the two [TextFormField]s
+/// or clicks on the [Text] beneath to switch to [Register.dart].
+/// If the user opens the app again and has [staySignedIn] activated,
+/// they will be logged in automatically.
+/// User is forwarded to the [Homepage] / [Hud] upon successful login.
+///
+/// Code in [Login.dart] by Erik Hinkelmanns, Dannie Krösche (Processing user data and login)
+/// and Dorian Zimmermann (Page Composition, Widgets and User-Feedback)
 class Login extends StatefulWidget {
   Login({super.key, required this.title});
 
@@ -27,18 +37,27 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
+    /// Checks if the user activated [staySignedIn].
+    /// If so, the user is logged in automatically
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getBool("staySignedIn") ?? false) {
         _usernameController.text = prefs.getString("username") ?? "";
         _passwordController.text = prefs.getString("password") ?? "";
-        await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
-
-        Navigator.push(context,
-            MaterialPageRoute(
-                builder: (context) => Hud()
-            )
-        );
+        bool loggedIn = await UserState.of(context).loginUser(name: _usernameController.text, password: _passwordController.text);
+        if (loggedIn)
+        {
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context) => Hud()
+              )
+          );
+        }
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              uniformSnackBar('Please check your internet connection')
+          );
+        }
       }
     });
 
@@ -142,6 +161,8 @@ class _Login extends State<Login> {
     );
   }
 
+  /// Checks the entered user data after clicking the [SubmitButton],
+  /// and logs the user in
   Future<void> submitButtonClick() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_formKey.currentState!.validate()) {
@@ -179,6 +200,7 @@ class _Login extends State<Login> {
     }
   }
 
+  /// Changes focus to the next [TextFormField]
   _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);

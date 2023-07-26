@@ -1,9 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:money_mate/util/Popups.dart';
 import '../UserState.dart';
 import '../main.dart';
 import 'Login.dart';
 
+/// Register Page, opened from [Login.dart] if the user has no account yet.
+/// The user enters their credentials in the two [TextFormField]s
+/// User is forwarded to the [Homepage] / [Hud] upon successful registering.
+///
+/// Code in [Login.dart] by Erik Hinkelmanns, Dannie Krösche (Processing user data and login)
+/// and Dorian Zimmermann (Page Composition, Widgets and User-Feedback)
 class Register extends StatelessWidget {
   Register({super.key, required this.title});
 
@@ -101,6 +109,8 @@ class Register extends StatelessWidget {
     );
   }
 
+  /// Checks the entered user data after clicking the [SubmitButton],
+  /// and logs the user in
   Future<void> submitButtonClick(context) async {
     if (_formKey.currentState!.validate()) {
       if(await UserState.of(context).registerUser(name: _usernameController.value.text, password: _passwordController.value.text) == false) {
@@ -113,7 +123,7 @@ class Register extends StatelessWidget {
         //Todo spaghetti code, move generating default data to backend
         await UserState.of(context).addCategory(name: 'Lebensmittel', budget: 400, icon: 'local_grocery_store');
         await UserState.of(context).initListCategoryList();
-        UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!);
+        UserState.of(context).expendList.addExpense(name: 'Mensa-Guthaben', amount: 20, categoryId: UserState.of(context).categoryList[0].id!, imageId: null);
 
         if(context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -132,6 +142,7 @@ class Register extends StatelessWidget {
     }
   }
 
+  /// Changes focus to the next [TextFormField]
   _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
