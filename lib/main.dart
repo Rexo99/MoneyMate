@@ -45,7 +45,6 @@ class MyApp extends StatefulWidget {
     ///Default values for loading the app
     ThemeMode _themeMode = ThemeMode.system;
     Color _themeColor = Color(0xff6750a4);
-    Widget _startPage = Login(title: 'Login');
 
     ///Tutorial related
     bool _loadTutorial = false;
@@ -73,7 +72,7 @@ class MyApp extends StatefulWidget {
           useMaterial3: true,
         ),
         themeMode: _themeMode,
-        home: _startPage,
+        home: Login(title: 'Login'),
         debugShowCheckedModeBanner: false,
       );
     }
@@ -85,7 +84,6 @@ class MyApp extends StatefulWidget {
 
       if(_seen == null || _seen == false) {
         _loadTutorial = true;
-        _startPage = Hud();
         await prefs.setBool('tutorialSeen', true);
       }
     }
@@ -173,6 +171,11 @@ class HudState extends State<Hud> {
   late final ComputedProp<String> _title = ComputedProp(() => _titleList[_currentIndex.value], [_currentIndex]);
   final PageController _pageController = PageController(initialPage: 0);
 
+  //test
+  void changePage(int page) {
+    _pageController.jumpToPage(page);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -237,7 +240,6 @@ class HudState extends State<Hud> {
             //todo - change to simple button, as SpeedDial would only have one action when deployed anyway
             floatingActionButton: $(
               _currentIndex, (p0) => SpeedDial(
-                // ToDo: menu_close is not the perfect icon, but not as confusing as the add event icon
                 animatedIcon: AnimatedIcons.menu_close,
                 spaceBetweenChildren: 10,
                 openCloseDial: isDialOpen,
