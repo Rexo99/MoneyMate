@@ -73,7 +73,7 @@ class CategoryCard extends StatelessWidget {
     initexpenseList();
 
     /// Method to get the icon of a category
-    String? catIcon ='';
+    String? catIcon = category.icon;
     IconData getCategoryIcon(catIcon) {
       switch(catIcon) {
         case '':
