@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
@@ -18,7 +17,6 @@ import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'UserState.dart';
 
 Future<void> main() async {
@@ -151,15 +149,10 @@ class Hud extends StatefulWidget {
 class HudState extends State<Hud> {
   final Prop<int> _currentIndex = Prop(0);
   final List<String> _titleList = ["Home", "Categories"];
-  final ValueNotifier<bool> isDialOpen = ValueNotifier(false);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _toggleEndDrawer() {
     _scaffoldKey.currentState!.openEndDrawer();
-  }
-
-  void openSpeedDial(bool value) {
-    isDialOpen.value = value;
   }
 
   //Checks for a Connectivity
@@ -239,54 +232,15 @@ class HudState extends State<Hud> {
             ),
             //todo - change to simple button, as SpeedDial would only have one action when deployed anyway
             floatingActionButton: $(
-              _currentIndex, (p0) => SpeedDial(
-                animatedIcon: AnimatedIcons.menu_close,
-                spaceBetweenChildren: 10,
-                openCloseDial: isDialOpen,
-                children: [
-                  _currentIndex.value == 0 ? SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        createExpensePopup(context: context);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "Add Expense",
-                  ) : SpeedDialChild(
-                    child: IconButton(
-                      icon: const Icon(Icons.category),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
-                        isDialOpen.value = false;
-                      },
-                    ),
-                    label: "Add Category",
-                  ),
-                  // TODO: remove this button when the app is finished
-                  SpeedDialChild(
-                    visible: false,
-                      child: IconButton(
-                        icon: const Icon(Icons.bug_report),
-                        onPressed: () async {
-                          UserState.of(context).categoryList.forEach((element) {print(element.name);});
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "DevelopmentButton"),
-                  SpeedDialChild(
-                      visible: _currentIndex.value == 0,
-                      child: IconButton(
-                        icon: const Icon(Icons.camera),
-                        onPressed: ()  async {
-                          final cameras = await availableCameras();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => InitializeCamera(camera: cameras.first)));
-                          isDialOpen.value = false;
-                        },
-                      ),
-                      label: "Open Camera"),
-                  //todo - remove button
-                ],
+              _currentIndex, (p0) => FloatingActionButton(
+                onPressed: () {
+                  if(_currentIndex.value == 0) {
+                    createExpensePopup(context: context);
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategory()),);
+                  }
+                },
+                child: Icon(Icons.add),
               ),
             ),
             endDrawer: MenuDrawer(),
@@ -422,6 +376,24 @@ class MenuDrawer extends StatelessWidget{
                 ],
               ),
             ),
+              //todo - remove camera button
+              ElevatedButton(
+                onPressed: () async {
+                Navigator.of(context).pop();
+                final cameras = await availableCameras();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => InitializeCamera(camera: cameras.first)));
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 25),
+                    Icon(Icons.accessibility, size: 24.0),
+                    SizedBox(width: 10),
+                    Text('Camera Test'),
+                  ],
+                ),
+              ),
         ],
         )
     );
