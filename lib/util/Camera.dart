@@ -4,6 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:money_mate/util/Popups.dart';
 
+/// Initializes the camera, so that the user can take a picture,
+/// which is then displayed on the [DisplayPictureScreen].
+/// The user can decide if they would like to use the current picture or take a new one.
+///
+///Code by Dorian Zimmermann
 class InitializeCamera extends StatefulWidget {
   const InitializeCamera({
     super.key,
@@ -84,6 +89,7 @@ class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingO
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   const DisplayPictureScreen({super.key, required this.imagePath});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +115,8 @@ class DisplayPictureScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text('Retry'),
-              ),)
+              ),
+          )
         ],
       )
     );
