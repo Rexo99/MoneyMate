@@ -37,7 +37,7 @@ class PieChartState extends StatelessWidget{
 
   late final BuildContext context;
   late final List<Category> categoryListOverview;
-  late final List<Expense> categoryExpenseList;
+  late final ExpenseList categoryExpenseList;
   /*late final List<Expense> categoryExpenseList = [Expense('test', 100, DateTime.now(), 56)
   , Expense('new', 100, DateTime.now(), 56), Expense('test2', 200, DateTime.now(), 56),
     Expense('new', 50, DateTime.now(), 57)];*/
@@ -50,7 +50,7 @@ class PieChartState extends StatelessWidget{
 
   PieChartState({required this.context}) {
     categoryListOverview = UserState.of(context).categoryList;
-    /// expenseList = UserState.of(context).expendList;
+    categoryExpenseList = UserState.of(context).expendList;
   }
 
   final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
@@ -101,9 +101,9 @@ class PieChartState extends StatelessWidget{
     for (var category in categoryListOverview) {
         /// This code loops in the other for loop
         int expensecounter = 0;
-        for (var expense in categoryExpenseList) {
+        for (Prop<Expense> expense in categoryExpenseList.value) {
           /// if ( expense.value.categoryId == category.id)
-        if ( expense.categoryId == category.id) {
+        if ( expense.value.categoryId == category.id) {
         expensecounter += 1;
         }
         }
@@ -111,14 +111,6 @@ class PieChartState extends StatelessWidget{
         pielist.add(expensevalue);
     }
     return pielist;
-  }
-
-  /// Method to get the expense List
-  Future<List<Expense>> getexpenseList() async {
-    List<Expense> exps = (await HTTPRequestBuilder().get(
-        path: "expenditures",
-        returnType: List<Expense>)) as List<Expense>;
-    return exps;
   }
 
   /// Method to generate a legend for the chart from a catgeory
@@ -166,11 +158,11 @@ class PieChartState extends StatelessWidget{
     final List<int> pielist = expenseSectionData();
     for (var category in categoryListOverview) {
       final data = PieChartSectionData(
-        value: pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.length*100,
+        value: pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.value.length*100,
         // value: 1/categoryListOverview.length*100,
         color: colors[categoryListOverview.indexOf(category)],
 
-        title: (pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.length*100).toStringAsFixed(2) + '%',
+        title: (pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.value.length*100).toStringAsFixed(2) + '%',
         // title: (1/categoryListOverview.length*100).toStringAsFixed(2) + '%',
         radius: 100,
     );
