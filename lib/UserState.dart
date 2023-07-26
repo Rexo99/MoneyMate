@@ -13,9 +13,6 @@ class UserState extends InheritedWidget {
 
   //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
-  ///
-  List<Expense> categoryExpenseList = [];
-  ///
   final ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
 
   static UserState? maybeOf(BuildContext context) =>
@@ -29,16 +26,6 @@ class UserState extends InheritedWidget {
 
   //clears the categoryList and fills it with fresh data from the backend
   Future<void> initListCategoryList() async {
-    categoryList.clear();
-    List<Category> exps = (await HTTPRequestBuilder()
-        .get(path: "categories", returnType: List<Category>)) as List<Category>;
-    for (Category element in exps) {
-      categoryList.add(element);
-    }
-  }
-
-  ///
-  Future<void> initListCategoryExpenseList() async {
     categoryList.clear();
     List<Category> exps = (await HTTPRequestBuilder()
         .get(path: "categories", returnType: List<Category>)) as List<Category>;
