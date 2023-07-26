@@ -13,8 +13,7 @@ abstract class Model{
   }
 }
 
-///
-///
+
 class Expense implements Model {
   @override
   int? _id;

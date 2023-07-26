@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:money_mate/models/ExpenseList.dart';
+import '../util/StateManagement.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../UserState.dart';
 import '../models/models.dart';
@@ -34,15 +37,20 @@ class PieChartState extends StatelessWidget{
 
   late final BuildContext context;
   late final List<Category> categoryListOverview;
-  // late final List<Expense> categoryExpenseList;
-  late final List<Expense> categoryExpenseList = [Expense('test', 100, DateTime.now(), 56)
+  late final List<Expense> categoryExpenseList;
+  /*late final List<Expense> categoryExpenseList = [Expense('test', 100, DateTime.now(), 56)
   , Expense('new', 100, DateTime.now(), 56), Expense('test2', 200, DateTime.now(), 56),
-    Expense('new', 50, DateTime.now(), 57)];
+    Expense('new', 50, DateTime.now(), 57)];*/
+
+  /// late final ExpenseList expenseList;
+  /// final Prop<Expense> expense;
+  /// final int index;
 
 
 
   PieChartState({required this.context}) {
     categoryListOverview = UserState.of(context).categoryList;
+    /// expenseList = UserState.of(context).expendList;
   }
 
   final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
@@ -94,6 +102,7 @@ class PieChartState extends StatelessWidget{
         /// This code loops in the other for loop
         int expensecounter = 0;
         for (var expense in categoryExpenseList) {
+          /// if ( expense.value.categoryId == category.id)
         if ( expense.categoryId == category.id) {
         expensecounter += 1;
         }
@@ -261,6 +270,7 @@ class BarChartWidget extends StatelessWidget {
 
   BarChartWidget({required this.context}) {
     categoryListBarChart = UserState.of(context).categoryList;
+    // expenseList = UserState.of(context).expendList;
   }
 
   final List<Color> colors = <Color>[Colors.red, Colors.blue, Colors.green, Colors.yellow, Colors.orange,
@@ -279,7 +289,9 @@ class BarChartWidget extends StatelessWidget {
       /// This code loops in the other for loop
       int expensebudget = 0;
       for (var expense in categoryExpenseBarList) {
+        /// if ( expense.value.categoryId == category.id)
         if ( expense.categoryId == category.id) {
+          /// expensebudget += expense.value.amount.toInt();
           expensebudget += expense.amount.toInt();
         }
       }

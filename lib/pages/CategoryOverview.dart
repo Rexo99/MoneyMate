@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
@@ -50,8 +52,8 @@ class CategoryOverviewContent extends State<CategoryOverview> {
 class CategoryCard extends StatelessWidget {
   Category category;
 
-  // late List<Expense> categoryExpenseList;
-  late List<Expense> categoryExpenseList = [Expense('test', 400, DateTime.now(), 56)];
+  List<Expense> categoryExpenseList = [];
+  // late List<Expense> categoryExpenseList = [Expense('test', 400, DateTime.now(), 56)];
   // late final List<Expense> categoryExpenseList = await getexpenseList();
   // late final List<Expense> exps;
 
@@ -109,6 +111,7 @@ class CategoryCard extends StatelessWidget {
 
     /// Method to get the spent budget of all expenses in a category
     int getBudgetofCategory() {
+
       int expensebudget = 0;
       for (var expense in categoryExpenseList) {
         if ( expense.categoryId == category.id) {
