@@ -247,8 +247,6 @@ class ChartLegend extends StatelessWidget {
         // const Divider(),
       );
   }
-
-
   }
 
 class BarChartWidget extends StatelessWidget {
