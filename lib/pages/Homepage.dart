@@ -34,10 +34,10 @@ class Homepage extends StatelessWidget {
                       count: 3))
               : const Text("Please login"),
               ElevatedButton(
-                  //key: MyApp.of(context).getTutorialKeys()[3],
-              onPressed: () => Navigator.push(context,
+                //key: MyApp.of(context).getTutorialKeys()[3],
+                onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ExpenseOverview())),
-              child: const Text("See All")),
+                child: const Text("See All")),
               $(
                 expenseList,
                 (p) => Column(
@@ -54,7 +54,8 @@ class Homepage extends StatelessWidget {
                               amount: num.tryParse(expenseList.getTotalMonth().toStringAsFixed(1)))
                           : TotalExpense(title: "Month", amount: 0)
                     ],
-                  ))
+                  )
+              )
         ],
       )),
     );
