@@ -161,10 +161,6 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('App Icon', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Euro icons created by Smashicons - Flaticon'),
-                  ),
-                  ListTile(
-                    title: Text('Icon n', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Name'),
                   )
                 ],
               ),
