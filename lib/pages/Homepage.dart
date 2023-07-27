@@ -10,6 +10,9 @@ import '../models/models.dart';
 import '../util/StateManagement.dart';
 import 'ExpenseOverview.dart';
 
+/// The Homepage widget represents the main page of the application,
+/// displaying the last 3 expenses and total expense amounts for today and the month.
+/// Code by Erik Hinkelmanns
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
@@ -60,6 +63,9 @@ class Homepage extends StatelessWidget {
   }
 }
 
+/// expense card with swipe actions for deleting and editing expenses,
+/// as well as displaying details and handling image functionality.
+/// Code by Erik Hinkelmanns
 class ExpenseCard extends StatelessWidget {
   late final ExpenseList expenseList;
   final Prop<Expense> expense;
@@ -197,6 +203,7 @@ Widget _getIconButton(color, icon) {
 /// [objectList] needs an [IList] of [Model]
 /// [cardType] needs a [Model]
 /// [count] of cards that should be build (default = 3)
+/// Code by Erik Hinkelmanns
 class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
   final T objectList;
   final Type cardType;
@@ -241,6 +248,8 @@ class CardListBuilder<T extends IList<Prop<Expense>>> extends StatelessWidget {
   }
 }
 
+/// Widget with titel and amount used for displaying monthly and daly total expenses
+/// Code by Erik Hinkelmanns
 class TotalExpense extends StatelessWidget {
   final String title;
   final num? amount;

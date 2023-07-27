@@ -5,21 +5,28 @@ import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 import 'models.dart';
 
+/// Code by Erik Hinkelmanns
 class ExpenseList extends Prop<IList<Prop<Expense>>> {
   ExpenseList(super.value);
 
-
-  //Creates an Expense and adds it to the [expendList]
+  ///Creates an Expense and adds it to the [ExpenseList]
   void addExpense({
     required String name,
     required num amount,
     required int categoryId,
     required int? imageId,
   }) {
-    value = value.insert(0, Prop(Expense(name, amount, DateTime.now(), categoryId, imageId)));
+    value = value.insert(
+        0, Prop(Expense(name, amount, DateTime.now(), categoryId, imageId)));
   }
 
-  void updateItem({required Prop<Expense> expense, String? name, num? amount, int? imageId}) {
+  /// update existing expense [expense] client and server side
+  /// if [name], [expense] or [imageId] is null the default value of [expense] will be used
+  void updateItem(
+      {required Prop<Expense> expense,
+      String? name,
+      num? amount,
+      int? imageId}) {
     if (name != null) {
       expense.value = expense.value.setName(name);
     }
@@ -31,29 +38,37 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
     }
     HTTPRequestBuilder().put(
         path: "expenditures/${expense.value.id}",
-        obj: ExpenseDTO(expense.value.name, expense.value.amount,
-            expense.value.date, expense.value.categoryId, expense.value.imageId),
+        obj: ExpenseDTO(
+            expense.value.name,
+            expense.value.amount,
+            expense.value.date,
+            expense.value.categoryId,
+            expense.value.imageId),
         returnType: Expense);
   }
 
+  /// remove [expense] from [ExpenseList]
   void removeItem(Prop<Expense> expense) {
     value = value.remove(expense);
     HTTPRequestBuilder().delete(deleteType: Expense, objId: expense.value.id);
   }
 
-  num getTotalToday(){
+  /// return [total] of today's expenses
+  num getTotalToday() {
     num total = 0;
     for (var expense in value) {
-      if(expense.value.date.isToday()){
+      if (expense.value.date.isToday()) {
         total += expense.value.amount;
       }
     }
     return total;
   }
-  num getTotalMonth(){
+
+  /// return [total] of all expenses in this month
+  num getTotalMonth() {
     num total = 0;
     for (var expense in value) {
-      if(expense.value.date.inMonth()){
+      if (expense.value.date.inMonth()) {
         total += expense.value.amount;
       }
     }
@@ -77,14 +92,14 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
   IList<Prop<Expense>> findNewest(int count) {
     if (value.isEmpty) {
       return value;
-      //throw Exception('The list of DateTimes is empty.');
     }
 
     //expenseList.value.sort(); // Sort in descending order
     value.sortOrdered((a, b) => a.value.date.compareTo(b.value.date));
 
     if (count > value.length) {
-      count = value.length; // Adjust count if it exceeds the number of available DateTimes
+      count = value
+          .length; // Adjust count if it exceeds the number of available DateTimes
     }
 
     return value.sublist(0, count);

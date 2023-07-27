@@ -8,7 +8,6 @@ typedef BuilderWithContext<T> = Widget Function(BuildContext, T);
 typedef BuilderWithoutContext<T> = Widget Function(T);
 
 /// Get the value out of a [ValueListenable]
-/// Code by Erik Hinkelmanns
 class $<T> extends StatelessWidget {
   const $.$(this._listenable, this._builderWithContext, {super.key})
       : _builderWithoutContext = null;
@@ -35,7 +34,6 @@ class $<T> extends StatelessWidget {
 /// When any of the [dependencies] changes,
 /// the value changes and all listeners are notified.
 /// Make sure to list all used properties as dependencies!
-/// Code by Erik Hinkelmanns
 class ComputedProp<T> extends ChangeNotifier implements ValueListenable<T> {
   ComputedProp(
       this.transform,

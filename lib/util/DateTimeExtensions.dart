@@ -18,6 +18,7 @@ extension DateHelpers on DateTime {
     return now.month == this.month && now.year == this.year;
   }
 
+  /// return DateTime as formatted string for displaying
   /// Code by Erik Hinkelmanns
   String dateFormatter() {
     initializeDateFormatting('de_DE', null);
