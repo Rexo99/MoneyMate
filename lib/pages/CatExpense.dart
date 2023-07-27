@@ -59,7 +59,7 @@ class _CatExpenseOverview extends State<CatExpense> {
     ExpenseList newexp = ExpenseList(<Prop<Expense>>[].lockUnsafe);
     for (Prop<Expense> expense in exp.value) {
       if ( expense.value.categoryId == category.id) {
-        newexp.value.add(expense);
+        newexp.value = newexp.value.add(expense);
       }
     }
     print(category.id);

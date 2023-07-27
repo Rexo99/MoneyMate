@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 
+
 abstract class Model{
   int? _id;
   get id => _id;
 
+  //copyWith approach for futur "undo" implementation
   Model copyWith();
 
   static Model? fromJson(Map json) {
@@ -15,7 +17,7 @@ abstract class Model{
 }
 
 /// Model for expenses
-/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann
+/// Code by Erik Hinkelmanns, Dannie Krösche
 class Expense implements Model {
   @override
   int? _id;
@@ -60,7 +62,7 @@ class Expense implements Model {
 }
 
 /// Model for categories
-/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann, Daniel Ottolien
+/// Code by Dannie Krösche, Dorian Zimmermann, Daniel Ottolien
 class Category implements Model {
   @override
   int? _id;
