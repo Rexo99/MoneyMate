@@ -69,16 +69,6 @@ class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingO
             if (!mounted) return;
 
             Navigator.pop(context, image.path);
-
-            /*
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  imagePath: image.path,
-                ),
-              ),
-            );
-             */
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(uniformSnackBar("An error occurred. Please try again."));
             Navigator.pop(context);
@@ -86,44 +76,6 @@ class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingO
         },
         child: const Icon(Icons.camera_alt),
       ),
-    );
-  }
-}
-
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      body: Stack(
-        children: [
-          Image.file(File(imagePath)),
-          Positioned(
-            bottom: 15,
-            right: 15,
-            child: FloatingActionButton(
-              onPressed: () {
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
-
-              },
-              child: Text('Done'),
-            ),),
-          Positioned(
-            bottom: 15,
-              left: 15,
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Retry'),
-              ),
-          )
-        ],
-      )
     );
   }
 }

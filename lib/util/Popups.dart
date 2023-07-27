@@ -151,6 +151,7 @@ void createExpensePopup({required BuildContext context}) {
   int? imageId;
   Prop<Uint8List> imageBytes = Prop(Uint8List(0));
   late int categoryId;
+  late String imagePath;
   final formKey = GlobalKey<FormState>();
   FilePickerResult? result;
   showDialog<String>(
@@ -231,8 +232,8 @@ void createExpensePopup({required BuildContext context}) {
                 if(selectedAction == "Take Picture") {
                   final cameras = await availableCameras();
                   Widget camera = InitializeCamera(camera: cameras.first);
-                  final imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
-                  if(imagePath != null) {
+                  imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
+                  if(imagePath != null && imagePath.isNotEmpty) {
                     // Read the file as bytes
                     File image = File(imagePath);
 
@@ -267,15 +268,19 @@ void createExpensePopup({required BuildContext context}) {
             ),
             SizedBox(height: 50),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (imageBytes.value.isNotEmpty) {
                   showDialog(
                     context: context,
                     builder: (_) => Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))
+                      ),
+                      clipBehavior: Clip.antiAlias,
                       child: Image.memory(
                         imageBytes.value,
-                        fit: BoxFit.cover,
-                      ),
+                        fit: BoxFit.fill,
+                        ),
                     ),
                   );
                 }
