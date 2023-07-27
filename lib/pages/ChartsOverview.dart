@@ -26,7 +26,8 @@ class ChartsOverview extends StatelessWidget{
             'Percentage per Category',
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle( color: Theme.of(context).iconTheme.color,
+            style: TextStyle(
+                color: Theme.of(context).iconTheme.color,
                 fontSize: 20),
           ),
           PieChartState(context: context),
@@ -36,7 +37,8 @@ class ChartsOverview extends StatelessWidget{
               'Expenses by Category',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle( color: Theme.of(context).iconTheme.color,
+              style: TextStyle(
+                  color: Theme.of(context).iconTheme.color,
                   fontSize: 20),
             ),
           ),
@@ -74,27 +76,13 @@ class PieChartState extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
-      child:  Row(
-        children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
-          AspectRatio(aspectRatio: 1,
+      aspectRatio: 1.4,
             child: PieChart(PieChartData(
                 sectionsSpace: 0,
                 centerSpaceRadius: 0,
                 sections: section()
             ),
             ),
-          ),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: []
-          )
-        ],
-      ),
     );
   }
 
@@ -260,8 +248,9 @@ class BarChartWidget extends StatelessWidget {
                 barGroups: _chartGroups(),
                 barTouchData: barTouchData,
                 borderData: FlBorderData(
-                    border: const Border( top: BorderSide.none, right: BorderSide.none,
-                        left: BorderSide(width: 1), bottom: BorderSide(width: 1))
+                    border: Border( top: BorderSide.none, right: BorderSide.none,
+                        left: BorderSide(color: Theme.of(context).iconTheme.color!, width: 1),
+                        bottom: BorderSide(color: Theme.of(context).iconTheme.color!, width: 1))
                 ),
                 gridData: FlGridData(show: true),
                 titlesData: FlTitlesData(
