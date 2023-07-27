@@ -8,8 +8,9 @@ import '../util/StateManagement.dart';
 
 
 /// Shows all Categories of an user
+/// The Overview is updated when an instance of a category is added or changed
 ///
-/// Code by Daniel Ottolien
+/// Code in [CategoryOverview.dart] by Daniel Ottolien
 class CategoryOverview extends StatefulWidget {
   CategoryOverview({super.key});
 
@@ -58,6 +59,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     /// Method to get the icon of a category
+    /// compares the data of the variable catIcon to each case and returns IconData
     /// If no data is found a square will be set as default
     String? catIcon = category.icon;
     IconData getCategoryIcon(catIcon) {
@@ -87,6 +89,7 @@ class CategoryCard extends StatelessWidget {
 
 
     /// Method to get the spent budget of all expenses in a category
+    /// Iterates over all expenses and returns the budget for those that match the categoryId
     int getBudgetofCategory() {
 
       int expensebudget = 0;
@@ -100,6 +103,8 @@ class CategoryCard extends StatelessWidget {
 
 
     /// Method the show a warning if your set budget for a category has been spent
+    /// If the spent budget of the expenses is bigger than the budget of the category
+    /// a warning will be shown in the form of an Icon
     Icon getColor(){
       if(getBudgetofCategory() > category.budget.toInt()) {
         return Icon(Icons.warning,

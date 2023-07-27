@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 
 
 /// Used to update an instance of a category
+/// The user changed the category name and budget through the two [TextFormField]s
+/// and updates the Icon through an [IconButton]
 ///
-/// Code by Daniel Ottolien
+/// Code in [EditCategory.dart] by Daniel Ottolien
 class EditCategory extends StatelessWidget {
   Category category;
   EditCategory({required this.category, super.key});
@@ -18,6 +20,7 @@ class EditCategory extends StatelessWidget {
 
 
   ///Method to change the icon
+  /// the int iconCase is changed on the Press of an [IconButton]
   int iconCase = 0;
 
   String? getIcon(iconCase){
