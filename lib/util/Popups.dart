@@ -24,6 +24,7 @@ Future<void> updateExpensePopup(
   String name = expense.value.name;
   int? imageId = expense.value.imageId;
   String amount = expense.value.amount.toString();
+  late String imagePath;
   final formKey = GlobalKey<FormState>();
   showDialog<String>(
     context: context,
@@ -68,10 +69,27 @@ Future<void> updateExpensePopup(
                 return null;
               },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: ElevatedButton(
-                onPressed: () async {
+            DropdownButtonFormField(
+              items: <String>['Take Picture', 'Choose existing Image'].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (selectedAction) async {
+                if(selectedAction == "Take Picture") {
+                  final cameras = await availableCameras();
+                  Widget camera = InitializeCamera(camera: cameras.first);
+                  imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
+                  if(imagePath != null && imagePath.isNotEmpty) {
+                    // Read the file as bytes
+                    File image = File(imagePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(imagePath).readAsBytes();
+                  }
+                } else if(selectedAction == "Choose existing Image") {
                   result = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['jpg', 'png'],
@@ -83,19 +101,29 @@ Future<void> updateExpensePopup(
                     imageId = await UserState.of(context).builder.createImage(file: image);
                     imageBytes.value = await File(filePath).readAsBytes();
                   }
-                },
-                child: const Text('Select Image'),
+                }
+              },
+              decoration: const InputDecoration(
+                icon: Icon(Icons.image),
+                hintText: 'Select image',
+                hintStyle: TextStyle(overflow: TextOverflow.fade),
+                labelText: 'Image',
               ),
             ),
+            SizedBox(height: 50),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (imageBytes.value.isNotEmpty) {
                   showDialog(
                     context: context,
                     builder: (_) => Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))
+                      ),
+                      clipBehavior: Clip.antiAlias,
                       child: Image.memory(
                         imageBytes.value,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                       ),
                     ),
                   );
@@ -135,6 +163,7 @@ Future<void> updateExpensePopup(
           child: const Text('OK'),
         ),
       ],
+      scrollable: true,
     ),
   );
 }
@@ -317,6 +346,7 @@ void createExpensePopup({required BuildContext context}) {
           child: const Text('OK'),
         ),
       ],
+      scrollable: true,
     ),
   );
 }
@@ -327,16 +357,16 @@ void connectivityPopup({required BuildContext context}) {
   showDialog<String>(
     context: context,
     builder: (BuildContext subContext) =>
-        AlertDialog(
-          title: const Text('No connectivity found'),
-          content: const Text('If this error persists, check your phones network connection  \n  \nYour Data will not be saved'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
+      AlertDialog(
+        title: const Text('No connectivity found'),
+        content: const Text('If this error persists, check your phones network connection  \n  \nYour Data will not be saved'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
   );
 }
 

@@ -144,9 +144,13 @@ class ExpenseCard extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (_) => Dialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(32.0))
+                        ),
+                        clipBehavior: Clip.antiAlias,
                         child: Image.memory(
                           imageBytes,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                       ),
                     );
