@@ -9,7 +9,7 @@ import '../util/HTTPRequestBuilder.dart';
 
 /// Visualizes the Expense Data as Charts
 ///
-/// Code by Daniel Ottolien
+/// Code in [ChartsOverview.dart] by Daniel Ottolien
 class ChartsOverview extends StatelessWidget{
   const ChartsOverview({ super.key });
 
@@ -80,6 +80,7 @@ class PieChartState extends StatelessWidget{
   }
 
   /// Method to get the SectionData for each expenses of each category
+  /// For each category list the amount of expenses in it
   List<int> expenseSectionData() {
     final List<int> pielist = [];
     int expensevalue = 0;
@@ -284,6 +285,7 @@ class BarChartWidget extends StatelessWidget {
   );
 
   /// Get the Values from teh spent Budget in each Category and visualizes it as a bar
+  /// For each category shows the spent budget in all Expenses
   List<BarChartGroupData> _chartGroups() {
     final List<BarChartGroupData> list = [];
     final List<int> barlist = expenseBarData();

@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import '../main.dart';
 
 /// Used to create a new instance of a category
+/// The user enters the category name and budget in the two [TextFormField]s
+/// and chooses the Icon through an [IconButton]
 ///
-/// Code by Daniel Ottolien
+/// Code in [AddCategory.dart] by Daniel Ottolien
 class AddCategory extends StatelessWidget {
   AddCategory({super.key});
 
@@ -14,7 +16,8 @@ class AddCategory extends StatelessWidget {
   TextEditingController budgetController = TextEditingController();
 
 
-  ///Method to set the Icon of a category
+  /// Method to set the Icon of a category
+  /// the int iconCase is changed on the Press of an [IconButton]
   int iconCase = 0;
   String getIcon(iconCase){
     String result = '';
