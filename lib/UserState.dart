@@ -11,8 +11,6 @@ class UserState extends InheritedWidget {
   UserState({super.key, required super.child});
 
   late final HTTPRequestBuilder builder = HTTPRequestBuilder();
-
-  //Prop<IList<Prop<Category>>> categoryList = Prop(<Prop<Category>>[].lockUnsafe);
   List<Category> categoryList = [];
   final ExpenseList expendList = ExpenseList(<Prop<Expense>>[].lockUnsafe);
 
@@ -25,7 +23,8 @@ class UserState extends InheritedWidget {
     return result!;
   }
 
-  //clears the categoryList and fills it with fresh data from the backend
+  /// Method to initialize the [categoryList] with data from the backend
+  /// Code by Dannie Krösche
   Future<void> initListCategoryList() async {
     categoryList.clear();
     List<Category> exps = (await HTTPRequestBuilder()
@@ -35,7 +34,8 @@ class UserState extends InheritedWidget {
     }
   }
 
-  // Logs in the user and fills the [expendList] and [categoryList] with data from the backend
+  /// Method to login a user and initialize the [expendList] and [categoryList]
+  /// Code by Dannie Krösche, Erik Hinkelmanns, Daniel Ottolien
   Future<void> loginUser({
     required String name,
     required String password,
@@ -53,31 +53,34 @@ class UserState extends InheritedWidget {
     }
   }
 
-  // Registers a user with the backend
+  /// Method to register a user
+  /// Code by Dorian Zimmermann
   Future<bool> registerUser({
     required String name, required String password })
   async {
      return await HTTPRequestBuilder().register(name: name, password: password);
   }
 
-  //Logs out the user and clears the data
+  /// Method to log out the user and clear the data
+  /// Code by Dannie Krösche
   Future<void> logoutUser() async {
     categoryList.clear();
     await builder.logout();
   }
 
-  //Creates a Category and adds it to the [categoryList]
+  /// Method to add a category to the [categoryList] and backend
+  /// Code by Dannie Krösche
   Future<void> addCategory({
     required String name,
     required int budget,
     String? icon,
   }) async {
     Category cat = Category.create(name, budget, icon);
-
     await cat.create();
   }
 
-  // Removes a category from the [categoryList] and backend
+  /// Method to remove a category from the [categoryList] and backend
+  /// Code by Dannie Krösche
   Future<void> removeCategory(Category category) async {
     categoryList.remove(category);
     await HTTPRequestBuilder().delete(deleteType: Category, objId: category.id);
@@ -85,11 +88,10 @@ class UserState extends InheritedWidget {
     await expendList.initListExpenseList();
   }
 
-  // Updates a category on the [categoryList] and backend
+  /// Method to update a category in the [categoryList] and backend
+  /// Code by Dannie Krösche, Daniel Ottolien
   Future<void> updateCategory(
       {required Category category, String? name, int? budget, String? icon}) async {
-    // GET, SET name and budget methods on category not working rn, kinda hacky method to change the
-    // attributes, but it works tho *Grinning Face With Sweat emoji*
     name ??= category.name;
     budget ??= category.budget;
     icon ??= category.icon;
@@ -101,6 +103,8 @@ class UserState extends InheritedWidget {
     initListCategoryList();
   }
 
+  /// Method to get a category by its id
+  /// Code by Erik Hinkelmanns
   Category? getCategoryById({required categoryId}){
     for(Category c in categoryList) {
       if(c.id == categoryId) {
@@ -110,6 +114,8 @@ class UserState extends InheritedWidget {
     return null;
   }
 
+  /// Method to get the icon of a category by its id
+  /// Code by Erik Hinkelmanns
   IconData getIconFromCategoryId({required categoryId}){
     Category? category = getCategoryById(categoryId: categoryId);
     if (category == null){
