@@ -53,6 +53,7 @@ class _ExpenseOverview extends State<ExpenseOverview> {
   @override
   Widget build(BuildContext context) {
     allItems = UserState.of(context).expendList;
+    //Todo hier nach category iterieren
     return Scaffold(
       appBar: AppBar(
         title: const Text("Search"),
