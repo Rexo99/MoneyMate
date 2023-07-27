@@ -12,7 +12,7 @@ import 'ExpenseOverview.dart';
 
 /// The Homepage widget represents the main page of the application,
 /// displaying the last 3 expenses and total expense amounts for today and the month.
-/// Code by Erik Hinkelmanns
+/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann
 class Homepage extends StatelessWidget {
   late ExpenseList expenseList;
 
@@ -65,7 +65,7 @@ class Homepage extends StatelessWidget {
 
 /// expense card with swipe actions for deleting and editing expenses,
 /// as well as displaying details and handling image functionality.
-/// Code by Erik Hinkelmanns
+/// Code by Erik Hinkelmanns, Dannie Krösche
 class ExpenseCard extends StatelessWidget {
   late final ExpenseList expenseList;
   final Prop<Expense> expense;
@@ -122,11 +122,6 @@ class ExpenseCard extends StatelessWidget {
 
             }),
       ],
-      /* child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Text("This is index of ${list[index]}",
-            style: const TextStyle(fontSize: 30)),
-      ),*/
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -188,8 +183,6 @@ Widget _getIconButton(color, icon) {
     height: 50,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(25),
-
-      /// set you real bg color in your content
       color: color,
     ),
     child: Icon(
