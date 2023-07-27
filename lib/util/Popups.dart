@@ -77,14 +77,10 @@ Future<void> updateExpensePopup(
                     allowedExtensions: ['jpg', 'png'],
                   );
                   if (result != null) {
-                    // Get the selected file path
                     String filePath = result!.files.single.path!;
-
-                    // Read the file as bytes
                     File image = File(filePath);
 
                     imageId = await UserState.of(context).builder.createImage(file: image);
-
                     imageBytes.value = await File(filePath).readAsBytes();
                   }
                 },
@@ -246,14 +242,10 @@ void createExpensePopup({required BuildContext context}) {
                     allowedExtensions: ['jpg', 'png'],
                   );
                   if (result != null) {
-                    // Get the selected file path
                     String filePath = result!.files.single.path!;
-
-                    // Read the file as bytes
                     File image = File(filePath);
 
                     imageId = await UserState.of(context).builder.createImage(file: image);
-
                     imageBytes.value = await File(filePath).readAsBytes();
                   }
                 }
