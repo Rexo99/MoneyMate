@@ -5,6 +5,7 @@ import '../models/ExpenseList.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/StateManagement.dart';
+import 'CatExpense.dart';
 
 
 /// Shows all Categories of an user
@@ -117,9 +118,6 @@ class CategoryCard extends StatelessWidget {
     }
 
 
-
-
-
     return SwipeActionCell(
       key: ValueKey(category),
       selectedForegroundColor: Colors.black.withAlpha(30),
@@ -153,7 +151,7 @@ class CategoryCard extends StatelessWidget {
             onTap: (handler) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditCategory(category: category,)),
+                MaterialPageRoute(builder: (context) => EditCategory(category: category,))
               );
               handler(false);
             }),
@@ -165,31 +163,17 @@ class CategoryCard extends StatelessWidget {
             ListTile(
               leading: Icon(getCategoryIcon(catIcon)),
               title: Text(category.name),
-              subtitle: Text(category.budget.toString() + ' €'),
+              subtitle: Row(
+                  children: [Text(category.budget.toString() + ' €') ]
+              ),
               trailing: getColor(),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CatExpense(category: category,))
+          );
+        },
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: <Widget>[
-            //     TextButton(
-            //       child: const Text('Edit'),
-            //       onPressed: () {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(builder: (context) => EditCategory(category: category,)),
-            //         );
-            //       },
-            //     ),
-            //     const SizedBox(width: 8),
-            //     TextButton(
-            //       child: const Text('Delete'),
-            //       onPressed: () {
-            //         deleteCategoryPopup(category: category, context: context);
-            //       },
-            //     ),
-            //     const SizedBox(width: 8),
-            //   ],
-            // ),
           ],
         ),
       ),
