@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 
+///Defines a basic DataTransferObject
 abstract class DTO {
   String get name;
 
+  ///Write and encode a JSON file for the object it is called on
   String toJson();
 }
 

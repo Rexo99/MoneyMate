@@ -1,7 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-import 'dart:typed_data';
-
 import 'package:money_mate/util/DateTimeExtensions.dart';
 import '../util/StateManagement.dart';
 import '../util/HTTPRequestBuilder.dart';
@@ -92,5 +89,4 @@ class ExpenseList extends Prop<IList<Prop<Expense>>> {
 
     return value.sublist(0, count);
   }
-
 }
