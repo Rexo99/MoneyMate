@@ -8,6 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/dtos.dart';
 import '../models/models.dart';
 
+/// Class to build HTTP requests to the backend server.
+/// It is a singleton class, so it can be accessed from anywhere in the app.
+/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann
 class HTTPRequestBuilder {
   static final HTTPRequestBuilder _instance =
   HTTPRequestBuilder._privateConstructor();
@@ -25,6 +28,8 @@ class HTTPRequestBuilder {
     return _instance;
   }
 
+  /// Function to register a new user on the remote server via HTTP POST request.
+  /// Code by Dorian Zimmermann
   Future<bool> register(
       {required String name, required String password}) async {
     Uri url = Uri.https(_rootURL, "api/register");
@@ -41,6 +46,8 @@ class HTTPRequestBuilder {
     }
   }
 
+  /// Function to log in a user on the remote server via HTTP POST request.
+  /// Code by Erik Hinkelmanns, Dannie Krösche
   Future<void> login({required String name, required String password}) async {
     if (!_loggedIn) {
       Uri url = Uri.https(_rootURL, "api/login");
@@ -62,6 +69,8 @@ class HTTPRequestBuilder {
     }
   }
 
+  /// Function to log out a user
+  /// Code by Dannie Krösche
   logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -72,6 +81,7 @@ class HTTPRequestBuilder {
     prefs.clear();
   }
 
+  /// Code by Erik Hinkelmanns
   Future<int?> createModel<T extends DTO>(
       {required String path, required T tmp}) async {
     Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
@@ -98,6 +108,7 @@ class HTTPRequestBuilder {
   ///
   /// Returns:
   /// - [Future<int>]: A `Future` that represents the image ID (if successful) or 0 (if unsuccessful).
+  /// Code by Dannie Krösche, Erik Hinkelmanns
   Future<int> createImage({required File file}) async {
     var request = http.MultipartRequest('POST', Uri.https(_rootURL,"api/image"));
     request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
@@ -137,6 +148,7 @@ class HTTPRequestBuilder {
   /// Returns:
   /// - [Future<Uint8List>]: A `Future` that represents the image as `Uint8List`
   ///   if the retrieval is successful, or an empty `Uint8List` (length 0) if unsuccessful.
+  ///   Code by Dannie Krösche, Erik Hinkelmanns
   Future<Uint8List> getImage({required int? imageId}) async {
     Uri uri = Uri.https(_rootURL, "api/image/$imageId");
     Map<String, String>? headers = {
@@ -161,6 +173,8 @@ class HTTPRequestBuilder {
     } return Uint8List(0);
   }
 
+  /// Method to send a HTTP GET request to the remote server.
+  /// Code by Erik Hinkelmanns, Dorian Zimmermann, Dannie Krösche
   Future<Object?> get({required String path, required Type returnType}) async {
     Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
     Map<String, String>? headers = {
@@ -192,6 +206,8 @@ class HTTPRequestBuilder {
     return null;
   }
 
+  /// Method to send a HTTP PUT request to the remote server.
+  /// Code by Erik Hinkelmanns, Dorian Zimmermann, Dannie Krösche
   Future<Model?> put<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
     Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
@@ -211,6 +227,8 @@ class HTTPRequestBuilder {
     return null;
   }
 
+  /// Method to send a HTTP POST request to the remote server.
+  /// Code by Erik Hinkelmanns, Dorian Zimmermann, Dannie Krösche
   Future<Model?> post<T extends DTO>(
       {required String path, required T obj, required Type returnType}) async {
     Uri uri = Uri.https(_rootURL, "api/users/$userId/$path");
@@ -230,6 +248,8 @@ class HTTPRequestBuilder {
     return null;
   }
 
+  /// Method to send a HTTP DELETE request to the remote server.
+  /// Code by Erik Hinkelmanns, Dorian Zimmermann, Dannie Krösche
   delete({required Type deleteType, required objId}) async {
     //Todo refresh local category
     Uri uri;
@@ -259,7 +279,8 @@ class HTTPRequestBuilder {
 
   set loggedIn(bool state) => _loggedIn = state;
 
-
+  /// Returns the username of the currently logged in user.
+  /// Code by Erik Hinkelmanns
   String? getUsername() {
     if (_loggedIn) {
       return username;

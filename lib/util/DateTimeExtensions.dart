@@ -1,6 +1,8 @@
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+/// Class for DateTime extensions.
+/// Code by Erik Hinkelmanns
 extension DateHelpers on DateTime {
   bool isToday() {
     final now = DateTime.now();
@@ -9,11 +11,14 @@ extension DateHelpers on DateTime {
         now.year == this.year;
   }
 
+  /// Returns true if the date is in the current month.
+  /// Code by Erik Hinkelmanns
   bool inMonth() {
     final now = DateTime.now();
     return now.month == this.month && now.year == this.year;
   }
 
+  /// Code by Erik Hinkelmanns
   String dateFormatter() {
     initializeDateFormatting('de_DE', null);
     //var formatter = DateFormat("HH:mm'Uhr' dd-MM-yy");
