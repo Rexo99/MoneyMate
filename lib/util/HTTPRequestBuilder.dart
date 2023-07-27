@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/dtos.dart';
@@ -13,7 +12,6 @@ class HTTPRequestBuilder {
   static final HTTPRequestBuilder _instance =
   HTTPRequestBuilder._privateConstructor();
 
-  // Variables were final, but I had to remove the final keyword to make the logout function work
   late int userId;
   late String username;
   late String _bearerToken;
@@ -90,7 +88,16 @@ class HTTPRequestBuilder {
     return object['message']["id"];
   }
 
-
+  /// Function to upload an image file to a remote server via HTTP POST request.
+  /// It sends the image file as a multi-part request along with some additional data.
+  /// The server's response is then processed, and if the image upload is successful,
+  /// it returns the image ID received from the server. Otherwise, it returns 0 as an error code.
+  ///
+  /// Parameters:
+  /// - [file]: The image file to be uploaded.
+  ///
+  /// Returns:
+  /// - [Future<int>]: A `Future` that represents the image ID (if successful) or 0 (if unsuccessful).
   Future<int> createImage({required File file}) async {
     var request = http.MultipartRequest('POST', Uri.https(_rootURL,"api/image"));
     request.headers.addAll({"Authorization": 'Bearer $_bearerToken'});
@@ -105,16 +112,12 @@ class HTTPRequestBuilder {
 
     request.fields['hash'] = file.hashCode.toString();
 
-    //for completeing the request
     var response = await request.send();
-
-    //for getting and decoding the response into json format
     var responsed = await http.Response.fromStream(response);
     Map<String, dynamic> responseData = json.decode(responsed.body);
 
     if (response.statusCode == 200) {
       print("SUCCESS");
-
       int imageId = responseData['message'];
       return imageId;
     }
@@ -125,6 +128,15 @@ class HTTPRequestBuilder {
     }
   }
 
+  /// Asynchronous method to retrieve an image as raw bytes from a remote server
+  /// by making an HTTP GET request with the specified `imageId`.
+  ///
+  /// Parameters:
+  /// - [imageId]: The unique identifier of the image to retrieve.
+  ///
+  /// Returns:
+  /// - [Future<Uint8List>]: A `Future` that represents the image as `Uint8List`
+  ///   if the retrieval is successful, or an empty `Uint8List` (length 0) if unsuccessful.
   Future<Uint8List> getImage({required int? imageId}) async {
     Uri uri = Uri.https(_rootURL, "api/image/$imageId");
     Map<String, String>? headers = {
@@ -146,7 +158,6 @@ class HTTPRequestBuilder {
     }
     else {
       print(response.statusCode);
-      print("ERROR");
     } return Uint8List(0);
   }
 
