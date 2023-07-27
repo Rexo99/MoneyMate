@@ -15,6 +15,7 @@ import 'StateManagement.dart';
 /// so that they don't have to be created from scratch over and over again.
 
 /// A popup that allows the user to change the name and amount of an expense.
+/// Code by Dorian Zimmermann, Erik Hinkelmanns, Dannie Krösche
 Future<void> updateExpensePopup(
     {required Prop<Expense> expense, required BuildContext context}) async {
   FilePickerResult? result;
@@ -169,7 +170,7 @@ Future<void> updateExpensePopup(
 }
 
 /// A popup that allows the user to create an expense.
-/// Code by ...
+/// Code by Dorian Zimmermann, Erik Hinkelmanns, Dannie Krösche
 void createExpensePopup({required BuildContext context}) {
   String name = "";
   String amount = "";
@@ -373,7 +374,7 @@ void connectivityPopup({required BuildContext context}) {
 /// Popup used in [Info.dart] to show
 /// the implemented features of a team member
 ///
-/// Code by Dorian Zimmermann
+/// Code by Dorian Zimmermann, Erik Hinkelmanns
 void infoPopup({required List featureList, required BuildContext context}) {
   showDialog<String>(
     context: context,
