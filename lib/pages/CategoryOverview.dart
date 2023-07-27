@@ -5,6 +5,7 @@ import '../models/ExpenseList.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
 import '../util/StateManagement.dart';
+import 'CatExpense.dart';
 
 
 /// Shows all Categories of an user
@@ -153,7 +154,8 @@ class CategoryCard extends StatelessWidget {
             onTap: (handler) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditCategory(category: category,)),
+                // MaterialPageRoute(builder: (context) => EditCategory(category: category,))
+                MaterialPageRoute(builder: (context) => CatExpense(category: category,)),
               );
               handler(false);
             }),
