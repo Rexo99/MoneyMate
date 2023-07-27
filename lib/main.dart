@@ -269,48 +269,47 @@ class HudState extends State<Hud> {
 class MenuDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    Prop<bool> _loginState = Prop(HTTPRequestBuilder().loggedIn);
+    bool loginState = HTTPRequestBuilder().loggedIn;
     return Drawer(
         width: 250,
         child: ListView(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 60.0),
           children: [
           const Icon(Icons.account_circle_outlined, size: 100),
-          $(_loginState, (p0) => _loginState.value
-            ? ListTile(
+            loginState
+                ? ListTile(
                 title: Text(HTTPRequestBuilder().username[0].toUpperCase() + HTTPRequestBuilder().username.substring(1), textAlign: TextAlign.center),
                 subtitle: const Text('', textAlign: TextAlign.center))
-            : const ListTile(
+                : const ListTile(
                 title: Text('User', textAlign: TextAlign.center),
-              subtitle: Text('', textAlign: TextAlign.center)),
-           ),
-          $(_loginState, (p0) => _loginState.value
-              ? ElevatedButton(
-                  onPressed: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        uniformSnackBar('Logged out!')
-                    );
-                    //Navigate to the Login-Screen
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
-                    UserState.of(context).logoutUser();
-                  },
-                  style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 25),
-                      Icon(Icons.login_outlined, size: 24.0),
-                      SizedBox(width: 10),
-                      Text("Logout"),
-                    ],
-                  )
-              )
-              :ElevatedButton(
+                subtitle: Text('', textAlign: TextAlign.center)),
+            loginState
+                ? ElevatedButton(
                 onPressed: () async {
-                // Close drawer due to catch name and email from logged in user on successful login
-                Navigator.pop(context);
-                //Navigate to the Login-Screen
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      uniformSnackBar('Logged out!')
+                  );
+                  //Navigate to the Login-Screen
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')),);
+                  UserState.of(context).logoutUser();
+                },
+                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: 25),
+                    Icon(Icons.login_outlined, size: 24.0),
+                    SizedBox(width: 10),
+                    Text("Logout"),
+                  ],
+                )
+            )
+                :ElevatedButton(
+                onPressed: () async {
+                  // Close drawer due to catch name and email from logged in user on successful login
+                  Navigator.pop(context);
+                  //Navigate to the Login-Screen
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
                 },
                 style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
                 child: const Row(
@@ -322,8 +321,7 @@ class MenuDrawer extends StatelessWidget{
                     Text("Login"),
                   ],
                 )
-              )
-          ),
+            ),
           ElevatedButton(
             onPressed: () => themePicker(currentColor: MyApp.of(context)._themeColor, currentThemeMode: MyApp.of(context)._themeMode, context: context),
             style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
