@@ -113,7 +113,9 @@ class PieChartState extends StatelessWidget{
       final data = PieChartSectionData(
         value: pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.value.length*100,
         color: colors[categoryListOverview.indexOf(category)],
-        title: (pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.value.length*100).toStringAsFixed(2) + '%',
+        title: (pielist[categoryListOverview.indexOf(category)]/categoryExpenseList.value.length*100).toStringAsFixed(1) + '%',
+        titleStyle:
+        TextStyle(fontSize: 14, color:  Colors.black ,fontWeight: FontWeight.normal),
         radius: 100,
       );
       list.add(data);
