@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:money_mate/UserState.dart';
 import '../main.dart';
 import '../models/models.dart';
+import 'Camera.dart';
 import 'StateManagement.dart';
 
 /// [Popups.dart] consists of all frequently used popups and overlays,
@@ -195,9 +197,7 @@ void createExpensePopup({required BuildContext context}) {
               },
             ),
             DropdownButtonFormField<Category>(
-              items: UserState.of(context)
-                  .categoryList
-                  .map<DropdownMenuItem<Category>>((Category category) {
+              items: UserState.of(context).categoryList.map<DropdownMenuItem<Category>>((Category category) {
                 return DropdownMenuItem<Category>(
                   value: category,
                   child: Text(category.name),
@@ -214,16 +214,33 @@ void createExpensePopup({required BuildContext context}) {
               ),
               validator: (value) {
                 if (value == null || value.id == null) {
-                  return 'Pleas choose a category';
+                  return 'Please choose a category';
                 }
                 categoryId = value.id!;
                 return null;
               },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: ElevatedButton(
-                onPressed: () async {
+            DropdownButtonFormField(
+              items: <String>['Take Picture', 'Choose existing Image'].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (selectedAction) async {
+                if(selectedAction == "Take Picture") {
+                  final cameras = await availableCameras();
+                  Widget camera = InitializeCamera(camera: cameras.first);
+                  final imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
+                  if(imagePath != null) {
+                    // Read the file as bytes
+                    File image = File(imagePath);
+
+                    imageId = await UserState.of(context).builder.createImage(file: image);
+
+                    imageBytes.value = await File(imagePath).readAsBytes();
+                  }
+                } else if(selectedAction == "Choose existing Image") {
                   result = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['jpg', 'png'],
@@ -239,10 +256,16 @@ void createExpensePopup({required BuildContext context}) {
 
                     imageBytes.value = await File(filePath).readAsBytes();
                   }
-                },
-                child: const Text('Select Image'),
+                }
+              },
+              decoration: const InputDecoration(
+                icon: Icon(Icons.image),
+                hintText: 'Select image',
+                hintStyle: TextStyle(overflow: TextOverflow.fade),
+                labelText: 'Image',
               ),
             ),
+            SizedBox(height: 50),
             GestureDetector(
               onTap: () {
                 if (imageBytes.value.isNotEmpty) {

@@ -68,6 +68,9 @@ class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingO
 
             if (!mounted) return;
 
+            Navigator.pop(context, image.path);
+
+            /*
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
@@ -75,6 +78,7 @@ class InitializeCameraState extends State<InitializeCamera> with WidgetsBindingO
                 ),
               ),
             );
+             */
           } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(uniformSnackBar("An error occurred. Please try again."));
             Navigator.pop(context);
@@ -104,6 +108,7 @@ class DisplayPictureScreen extends StatelessWidget {
               onPressed: () {
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2); //todo - needs to be changed when embedded into expense popup! Currently pops two times
+
               },
               child: Text('Done'),
             ),),
