@@ -1,4 +1,3 @@
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:money_mate/models/ExpenseList.dart';
@@ -7,6 +6,10 @@ import '../UserState.dart';
 import '../models/models.dart';
 import '../util/StateManagement.dart';
 
+/// Shows the expenses for a given Category
+///
+/// Code in [CatExpense.dart] by Erik Hinkelsmann
+/// Widget adjusment by Daniel Ottolien
 class CatExpense extends StatefulWidget {
   CatExpense({super.key, required this.category});
   Category category;

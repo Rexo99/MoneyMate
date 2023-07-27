@@ -167,12 +167,12 @@ class CategoryCard extends StatelessWidget {
                   children: [Text(category.budget.toString() + ' €') ]
               ),
               trailing: getColor(),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CatExpense(category: category,))
-          );
-        },
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CatExpense(category: category,))
+                );
+                },
             ),
           ],
         ),
