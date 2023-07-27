@@ -242,7 +242,7 @@ class BarChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-        aspectRatio: 1.7,
+        aspectRatio: 1.3,
         child: BarChart(
             BarChartData(
                 barGroups: _chartGroups(),
@@ -255,13 +255,14 @@ class BarChartWidget extends StatelessWidget {
                 gridData: FlGridData(show: true),
                 titlesData: FlTitlesData(
                   bottomTitles: AxisTitles(
-                      axisNameWidget:  Text('Category', style: TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 14),),
-                      sideTitles: SideTitles(showTitles: true,   getTitlesWidget: bottomTitles)),
-                  leftTitles: AxisTitles( axisNameWidget:  Text('Budget', style: TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 14),),
+                      // axisNameWidget:  Text('Category', style: TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 14),),
+                      sideTitles: SideTitles(showTitles: true, reservedSize: 100,   getTitlesWidget: bottomTitles)),
+                  leftTitles: AxisTitles(
+                      // axisNameWidget:  Text('Budget', style: TextStyle(color: Theme.of(context).iconTheme.color, fontSize: 14),),
                       sideTitles: SideTitles(showTitles: true, getTitlesWidget: leftTitles)),
                   topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                )
+                ),
             )
         ),
     );
@@ -346,6 +347,8 @@ class BarChartWidget extends StatelessWidget {
   }
 
   /// get the names for each category
+  /// the names are rotated in order to not overlap
+  /// to revert this change change rotated box to simpy text
   Widget bottomTitles(double value, TitleMeta meta) {
     final titles = barName();
     final Widget text = Text(
@@ -359,9 +362,9 @@ class BarChartWidget extends StatelessWidget {
 
     return SideTitleWidget(
         axisSide: meta.axisSide,
-        space: 0, //margin top
-        // child: RotatedBox(quarterTurns: -1, child: text),
-        child: text
+        space: 6, //margin top
+        child: RotatedBox(quarterTurns: -3, child: text),
+      // child: text;
     );
   }
 }
