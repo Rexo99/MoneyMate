@@ -19,11 +19,32 @@ class ChartsOverview extends StatelessWidget{
       ),
       body: ListView(
         children: [
-          PieChartState(context: context),
           Padding(
             padding: EdgeInsets.all(16.0),
           ),
-          BarChartWidget(context: context)
+          Text(
+            'Anteil pro Kategorie',
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle( color: Theme.of(context).iconTheme.color,
+                fontSize: 24),
+          ),
+          PieChartState(context: context),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Ausgaben einer Kategorie',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle( color: Theme.of(context).iconTheme.color,
+                  fontSize: 24),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(20.0),
+            child: BarChartWidget(context: context)
+          ),
+
         ],
 
       ),
@@ -55,7 +76,7 @@ class PieChartState extends StatelessWidget{
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Row(
+      child:  Row(
         children: <Widget>[
           const SizedBox(
             height: 18,
@@ -233,9 +254,8 @@ class BarChartWidget extends StatelessWidget {
   //todo - fix bottom axis name being cut off
   @override
   Widget build(BuildContext context) {
-    return Container (
-      child: AspectRatio(
-        aspectRatio: 2,
+    return AspectRatio(
+        aspectRatio: 1.7,
         child: BarChart(
             BarChartData(
                 barGroups: _chartGroups(),
@@ -256,7 +276,6 @@ class BarChartWidget extends StatelessWidget {
                 )
             )
         ),
-      ),
     );
   }
 
