@@ -1,15 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:convert';
-import 'dart:typed_data';
-
 import '../util/HTTPRequestBuilder.dart';
 import 'dtos.dart';
 
 abstract class Model{
   int? _id;
-
   get id => _id;
 
   Model copyWith();
@@ -19,7 +14,8 @@ abstract class Model{
   }
 }
 
-
+/// Model for expenses
+/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann
 class Expense implements Model {
   @override
   int? _id;
@@ -63,6 +59,8 @@ class Expense implements Model {
   Expense setImage(int imageId) => copyWith(imageId: imageId);
 }
 
+/// Model for categories
+/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann, Daniel Ottolien
 class Category implements Model {
   @override
   int? _id;
@@ -115,43 +113,30 @@ class Category implements Model {
 
   Category setIcon(String icon) => copyWith(icon: icon);
 
+  /// Returns the IconData for the icon name
+  /// Code by Erik Hinkelmanns
   IconData getIconData(){
       switch(icon) {
         case '':
           return Icons.square;
-          break;
         case 'home':
           return Icons.home;
-          break;
         case 'car_repair':
           return Icons.car_repair;
-          break;
         case 'local_grocery_store':
           return Icons.local_grocery_store;
-          break;
         case 'local_bar':
           return Icons.local_bar;
-          break;
         case 'flight':
           return Icons.flight;
-          break;
         case 'business':
           return Icons.business;
-          break;
         case 'album':
           return Icons.album;
-          break;
         case 'pets':
           return Icons.pets;
-          break;
         default:
           return Icons.square;
       }
   }
-
-/*  Category addExpenditure(Expense expenditure) {
-    List<Expense> expenditures = expenditureList;
-    expenditures.add(expenditure);
-    return copyWith(expenditureList: expenditures);
-  }*/
 }
