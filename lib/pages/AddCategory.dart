@@ -3,7 +3,9 @@ import '../UserState.dart';
 import 'package:flutter/services.dart';
 import '../main.dart';
 
-
+/// Used to create a new instance of a category
+///
+/// Code by Daniel Ottolien
 class AddCategory extends StatelessWidget {
   AddCategory({super.key});
 
@@ -14,7 +16,6 @@ class AddCategory extends StatelessWidget {
 
   ///Method to set the Icon of a category
   int iconCase = 0;
-
   String getIcon(iconCase){
     String result = '';
     switch( iconCase) {

@@ -5,7 +5,9 @@ import '../models/models.dart';
 import 'package:flutter/services.dart';
 
 
-
+/// Used to update an instance of a category
+///
+/// Code by Daniel Ottolien
 class EditCategory extends StatelessWidget {
   Category category;
   EditCategory({required this.category, super.key});
