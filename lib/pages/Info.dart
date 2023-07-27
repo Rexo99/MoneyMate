@@ -103,6 +103,10 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('WillPopScore', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Widget, that ignores the system back button for navigation'),
+                  ),
+                  ListTile(
+                    title: Text('GestureDetector', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Widget, that detects gestures on the screen'),
                   )
                 ],
               ),
