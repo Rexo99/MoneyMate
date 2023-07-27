@@ -318,7 +318,7 @@ class TutorialState extends State {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      "Your leftover budget \n per category",
+                      "Your used budget \n per category",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
@@ -329,7 +329,7 @@ class TutorialState extends State {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      "How much you spent \n compared to last month",
+                      "What you spent your \n money on the most",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                       textAlign: TextAlign.center,
                     ),

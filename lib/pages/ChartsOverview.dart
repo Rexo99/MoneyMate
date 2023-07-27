@@ -23,30 +23,29 @@ class ChartsOverview extends StatelessWidget{
             padding: EdgeInsets.all(16.0),
           ),
           Text(
-            'Anteil pro Kategorie',
+            'Percentage per Category',
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle( color: Theme.of(context).iconTheme.color,
-                fontSize: 24),
+                fontSize: 20),
           ),
           PieChartState(context: context),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(10.0),
             child: Text(
-              'Ausgaben einer Kategorie',
+              'Expenses by Category',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: TextStyle( color: Theme.of(context).iconTheme.color,
-                  fontSize: 24),
+                  fontSize: 20),
             ),
           ),
+          SizedBox(height: 20),
           Padding(
             padding: EdgeInsets.all(20.0),
             child: BarChartWidget(context: context)
           ),
-
         ],
-
       ),
     );
   }
@@ -79,7 +78,7 @@ class PieChartState extends StatelessWidget{
       child:  Row(
         children: <Widget>[
           const SizedBox(
-            height: 18,
+            height: 10,
           ),
           AspectRatio(aspectRatio: 1,
             child: PieChart(PieChartData(
