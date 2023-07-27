@@ -137,6 +137,33 @@ class ExpenseCard extends StatelessWidget {
                   )
                 ],
               ),
+              onTap: () async {
+                if (expense.value.imageId != null) {
+                  try{
+                    var imageBytes = await UserState.of(context).builder.getImage(imageId: expense.value.imageId);
+                    showDialog(
+                      context: context,
+                      builder: (_) => Dialog(
+                        child: Image.memory(
+                          imageBytes,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }
+                  catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        uniformSnackBar('Could not load image')
+                    );
+                  }
+                }
+                else
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      uniformSnackBar('Expense has no image attached')
+                  );
+                }
+              },
             ),
           ],
         ),

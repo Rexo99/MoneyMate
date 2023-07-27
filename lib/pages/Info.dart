@@ -53,7 +53,7 @@ class Info extends StatelessWidget {
                   Expanded(child:
                     Column(children: [
                       GestureDetector(
-                        onTap: () => infoPopup(featureList: [const Text('Category (business logic) \n App icons \n Login/register assistance (stay signed in, auto-login, login/register facade) \n Expense assistance (sorting, decimal) \n Backend assistance (error handling) \n Quality assurance (fine-tuning, testing, debugging)', textAlign: TextAlign.center)], context: context), /*todo fill list*/
+                        onTap: () => infoPopup(featureList: [const Text('Category (business logic) \n App icons \n Login/register assistance (stay signed in, auto-login, login/register facade) \n Expense assistance (sorting, decimal) \n Backend assistance (error handling) \n Quality assurance (fine-tuning, testing, debugging) \n Image on expense', textAlign: TextAlign.center)], context: context), /*todo fill list*/
                         child: const Icon(Icons.account_circle_outlined, size: 90),
                       ),
                       const ListTile(
@@ -103,10 +103,6 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('WillPopScore', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Widget, that ignores the system back button for navigation'),
-                  ),
-                  ListTile(
-                    title: Text('Widget', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Used for'),
                   )
                 ],
               ),
@@ -152,6 +148,10 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('fl_chart', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for data visualization'),
+                  ),
+                  ListTile(
+                    title: Text('file_picker', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Allows you to use the native file explorer to pick files.'),
                   )
                 ],
               ),
