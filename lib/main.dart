@@ -9,13 +9,14 @@ import 'package:money_mate/pages/Homepage.dart';
 import 'package:money_mate/pages/Info.dart';
 import 'package:money_mate/pages/Login.dart';
 import 'package:money_mate/pages/Tutorial.dart';
-import 'package:money_mate/util/StateManagement.dart';
 import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import 'package:money_mate/util/Popups.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'UserState.dart';
 
+/// Main method of the app
+/// Code by Dorian Zimmermann, Dannie Krösche, Erik Hinkelmanns, Daniel Ottolien
 Future<void> main() async {
   //Initialize for Camera
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +36,7 @@ class MyApp extends StatefulWidget {
       context.findAncestorStateOfType<_MyAppState>()!;
   }
 
-  // This widget is the root of your application.
+  // Root widget of the app
   class _MyAppState extends State<MyApp> {
     ///Default values for loading the app
     ThemeMode _themeMode = ThemeMode.system;
@@ -72,7 +73,8 @@ class MyApp extends StatefulWidget {
       );
     }
 
-    ///Checks SharedPreferences whether the app is started for the first time after installing or not
+    /// Checks SharedPreferences whether the app is started for the first time after installing or not
+    /// Code by Dorian Zimmermann
     Future checkFirstSeen() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       bool? _seen = (prefs.getBool('tutorialSeen'));
@@ -83,7 +85,8 @@ class MyApp extends StatefulWidget {
       }
     }
 
-    ///Checks SharedPreferences which theme should be applied
+    /// Checks SharedPreferences which theme should be applied
+    /// Code by Dorian Zimmermann
     Future<void> checkTheme() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -124,7 +127,8 @@ class MyApp extends StatefulWidget {
       return _themeColor;
     }
 
-    ///Returns the list of available theme colors. Only stored here so they can be changed easily
+    /// Returns the list of available theme colors. Only stored here so they can be changed easily
+    /// Code by Dorian Zimmermann
     List<Color> getThemeColors() {
       return <Color> [
         Colors.redAccent,
@@ -143,6 +147,8 @@ class Hud extends StatefulWidget {
   Hud({super.key});
 }
 
+/// The state of the HUD
+/// Code by Dorian Zimmermann, Dannie Krösche, Erik Hinkelmanns, Daniel Ottolien
 class HudState extends State<Hud> {
   int _currentIndex = 0;
   final List<String> _titleList = ["Home", "Categories"];
@@ -157,6 +163,8 @@ class HudState extends State<Hud> {
   late String _title = _titleList[_currentIndex];
   final PageController _pageController = PageController(initialPage: 0);
 
+  /// Method to change the page
+  /// Code by Erik Hinkelmanns
   void changePage(int newPageIndex){
     setState(() {
       _currentIndex = newPageIndex;
@@ -261,11 +269,15 @@ class HudState extends State<Hud> {
     );
   }
 
+  /// Method to toggle the endDrawer
+  /// Code by Dorian Zimmermann
   void _toggleEndDrawer() {
     _scaffoldKey.currentState!.openEndDrawer();
   }
 }
 
+/// The menu drawer
+/// Code by Dannie Krösche, Erik Hinkelmanns, Daniel Ottolien, Dorian Zimmermann
 class MenuDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -371,5 +383,3 @@ class MenuDrawer extends StatelessWidget{
     );
   }
 }
-
-
