@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
-import 'package:money_mate/util/HTTPRequestBuilder.dart';
 import '../UserState.dart';
+import '../models/ExpenseList.dart';
 import '../models/models.dart';
 import 'package:money_mate/pages/EditCategory.dart';
+import '../util/StateManagement.dart';
+
 
 /// Shows all Categories of an user
 ///
@@ -44,9 +46,13 @@ class CategoryOverviewContent extends State<CategoryOverview> {
 class CategoryCard extends StatelessWidget {
 
   Category category;
-  List<Expense> categoryExpenseList = [];
+  late final BuildContext context;
+  late final ExpenseList categoryExpenseList;
 
-  CategoryCard({required this.category, super.key});
+  CategoryCard({required this.context, required this.category, super.key}) {
+    categoryExpenseList = UserState.of(context).expendList;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +88,11 @@ class CategoryCard extends StatelessWidget {
 
     /// Method to get the spent budget of all expenses in a category
     int getBudgetofCategory() {
+
       int expensebudget = 0;
-      for (var expense in categoryExpenseList) {
-        if ( expense.categoryId == category.id) {
-          expensebudget += expense.amount.toInt();
+      for (Prop<Expense> expense in categoryExpenseList.value) {
+        if ( expense.value.categoryId == category.id) {
+          expensebudget += expense.value.amount.toInt();
         }
       }
       return expensebudget;
@@ -226,7 +233,7 @@ class CategoryListView extends StatelessWidget {
         }
         index -= 1;
         var cats = categoryListOverview[index];
-        return CategoryCard(category: cats);
+        return CategoryCard(category: cats, context: context);
       },
     );
   }
