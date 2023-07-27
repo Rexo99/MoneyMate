@@ -369,24 +369,6 @@ class MenuDrawer extends StatelessWidget{
                 ],
               ),
             ),
-              //todo - remove camera button
-              ElevatedButton(
-                onPressed: () async {
-                Navigator.of(context).pop();
-                final cameras = await availableCameras();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => InitializeCamera(camera: cameras.first)));
-                },
-                style: ElevatedButton.styleFrom(side: const BorderSide(width: .01, color: Colors.grey)),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 25),
-                    Icon(Icons.accessibility, size: 24.0),
-                    SizedBox(width: 10),
-                    Text('Camera Test'),
-                  ],
-                ),
-              ),
         ],
         )
     );
