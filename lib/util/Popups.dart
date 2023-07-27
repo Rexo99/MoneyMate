@@ -81,7 +81,7 @@ Future<void> updateExpensePopup(
                   final cameras = await availableCameras();
                   Widget camera = InitializeCamera(camera: cameras.first);
                   imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
-                  if(imagePath != null && imagePath.isNotEmpty) {
+                  if(imagePath.isNotEmpty) {
                     // Read the file as bytes
                     File image = File(imagePath);
 
@@ -129,13 +129,14 @@ Future<void> updateExpensePopup(
                   );
                 }
               },
-              child: Container(
-                height: 100,
-                width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
                 child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
                     ? Image.memory(
                   imageBytes.value,
                   fit: BoxFit.cover,
+                  height: 150,
+                  width: 150,
                 )
                     : const Text(''),
                 ),
@@ -258,7 +259,7 @@ void createExpensePopup({required BuildContext context}) {
                   final cameras = await availableCameras();
                   Widget camera = InitializeCamera(camera: cameras.first);
                   imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => camera));
-                  if(imagePath != null && imagePath.isNotEmpty) {
+                  if(imagePath.isNotEmpty) {
                     // Read the file as bytes
                     File image = File(imagePath);
 
@@ -306,13 +307,14 @@ void createExpensePopup({required BuildContext context}) {
                   );
                 }
               },
-              child: Container(
-                height: 100,
-                width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
                 child: $(imageBytes, (p0) => imageBytes.value.isNotEmpty
                     ? Image.memory(
                   imageBytes.value,
                   fit: BoxFit.cover,
+                  height: 150,
+                  width: 150,
                 )
                     : const Text(''),
                 ),
