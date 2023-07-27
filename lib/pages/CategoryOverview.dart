@@ -8,7 +8,7 @@ import '../util/StateManagement.dart';
 import 'CatExpense.dart';
 
 
-/// Shows all Categories of an user
+/// Displays all Categories of an user
 /// The Overview is updated when an instance of a category is added or changed
 ///
 /// Code in [CategoryOverview.dart] by Daniel Ottolien
@@ -45,6 +45,8 @@ class CategoryOverviewContent extends State<CategoryOverview> {
 }
 
 /// Displays the data for each category as a card
+/// swipe Actions for deleting and editing of a category
+/// Code by Daniel Ottolien
 class CategoryCard extends StatelessWidget {
 
   Category category;

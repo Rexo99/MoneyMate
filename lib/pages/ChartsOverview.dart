@@ -348,7 +348,6 @@ class BarChartWidget extends StatelessWidget {
 
   /// get the names for each category
   /// the names are rotated in order to not overlap
-  /// to revert this change change rotated box to simpy text
   Widget bottomTitles(double value, TitleMeta meta) {
     final titles = barName();
     final Widget text = Text(
