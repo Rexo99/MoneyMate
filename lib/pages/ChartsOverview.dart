@@ -72,7 +72,6 @@ class PieChartState extends StatelessWidget{
     Colors.teal.shade400, Colors.orangeAccent, Colors.blue.shade900, Colors.lightGreen.shade100, Colors.purpleAccent.shade700,
     Colors.greenAccent, Colors.lightBlueAccent.shade200, Colors.deepPurple.shade200, Colors.pinkAccent.shade200, Colors.yellow.shade200];
 
-  //Todo - add chart names, so that the user knows what the chart is displaying
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
