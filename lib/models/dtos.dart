@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 
+/// Data Transfer Object for the communication with the backend.
+/// Code by Erik Hinkelmanns, Dannie Krösche, Dorian Zimmermann, Daniel Ottolien
 abstract class DTO {
   String get name;
 
   String toJson();
 }
 
+/// DTO for expenses
 @immutable
 class ExpenseDTO extends DTO {
   @override
@@ -31,6 +34,7 @@ class ExpenseDTO extends DTO {
   }
 }
 
+/// DTO for categories
 @immutable
 class CategoryDTO extends DTO {
   @override
