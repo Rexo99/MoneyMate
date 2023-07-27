@@ -26,35 +26,10 @@ class _CatExpenseOverview extends State<CatExpense> {
   @override
   void initState() {
     super.initState();
-    searchController.addListener(queryListener);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    searchController.removeListener(queryListener);
-    searchController.dispose();
-  }
-
-  void queryListener() {
-    search(searchController.text);
-  }
-
-  void search(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        items = allItems.value.toList();
-      });
-    } else {
-      setState(() {
-        items = allItems.value
-            .where(
-                (e) => e.value.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      });
-    }
-  }
-
+  /// Code by Erik Hinkelmanns
+  /// Get the Expenses for the given category
   ExpenseList getCatExpense(ExpenseList exp) {
     ExpenseList newexp = ExpenseList(<Prop<Expense>>[].lockUnsafe);
     for (Prop<Expense> expense in exp.value) {
@@ -66,25 +41,14 @@ class _CatExpenseOverview extends State<CatExpense> {
     return newexp;
   }
 
-  /// Code by Erik Hinkelmanns
-  // ExpenseList getCatExpense(ExpenseList exp, int? categoryid) {
-  //   ExpenseList newexp = ExpenseList(<Prop<Expense>>[].lockUnsafe);
-  //   for (Prop<Expense> expense in exp.value) {
-  //     if ( expense.value.categoryId == categoryid) {
-  //       newexp.value.add(expense);
-  //     }
-  //   }
-  //   return newexp;
-  // }
 
   @override
   Widget build(BuildContext context,) {
-    // int? categoryid = category.id;
     allItems = getCatExpense(UserState.of(context).expendList);
     print(allItems);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search"),
+        title: const Text("Expenses"),
       ),
       body: Center(
         child: Padding(
