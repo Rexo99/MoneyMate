@@ -52,7 +52,6 @@ dependencies:
   flutter_swipe_action_cell: ^3.1.1
   connectivity_plus: ^4.0.1
   fl_chart: ^0.63.0
-  material_design_icons_flutter: 7.0.7296
   http_parser: ^4.0.2
 
 dev_dependencies:
