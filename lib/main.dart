@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:money_mate/pages/CategoryOverview.dart';
 import 'package:money_mate/pages/AddCategory.dart';
@@ -154,8 +156,10 @@ class HudState extends State<Hud> {
   final List<String> _titleList = ["Home", "Categories"];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //Checks for a Connectivity
-  late StreamSubscription connection; //todo - add cancellation of subscription
+  /// Checks for a Connectivity
+  late StreamSubscription connection;
+  var connected = false;
+  bool Alert = false;
 
   TutorialState _tutorial = TutorialState();
 
@@ -174,22 +178,8 @@ class HudState extends State<Hud> {
 
   @override
   void initState() {
+    getConnectivity();
     super.initState();
-
-    //Code to check if there is a valid network connection
-    connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      /// whenever connection status is changed.
-      /// there isn´t any connection
-      if (result == ConnectivityResult.none) {
-        Future.delayed(Duration(seconds: 10), () {
-          connectivityPopup(context: context); //todo - increase duration (it just delays the popup, it will show even after .1 seconds of no internet, just 10 seconds later)
-        });
-      } else if (result == ConnectivityResult.mobile) {
-        /// connection is mobile data network
-      } else if (result == ConnectivityResult.wifi) {
-        ///connection is from wifi
-      }
-    });
 
     if(MyApp.of(context)._loadTutorial) {
       MyApp.of(context)._loadTutorial = false;
@@ -197,6 +187,61 @@ class HudState extends State<Hud> {
       _tutorial.showTutorial(context);
     }
   }
+
+  getConnectivity() =>
+      connection = Connectivity().onConnectivityChanged.listen(
+          (ConnectivityResult result) async {
+            connected = await InternetConnectionChecker().hasConnection;
+            if (!connected && Alert == false) {
+              showDialogBox();
+              setState(() => Alert = true);
+            }
+          }
+      );
+
+  @override
+  void dispose() {
+    connection.cancel;
+    super.dispose();
+  }
+
+  showDialogBox() => showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('No connectivity found'),
+        content: const Text('If this error persists, check your phones network connection  \n  \nYour Data will not be saved'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, 'Cancel');
+              setState(() => Alert = false);
+              connected =
+                  await InternetConnectionChecker().hasConnection;
+              if (!connected) {
+                showDialogBox();
+                setState(() => Alert = true);
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      )
+  );
+
+  /*/// Code to check if there is a valid network connection
+  connection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+  /// whenever connection status is changed.
+  /// there isn´t any connection
+  if (result == ConnectivityResult.none) {
+  Timer(Duration(seconds: 20), () {
+  connectivityPopup(context: context);
+  });
+  } else if (result == ConnectivityResult.mobile) {
+  connection.cancel();
+  } else if (result == ConnectivityResult.wifi) {
+  connection.cancel();
+  }
+  });*/
 
   @override
   Widget build(BuildContext context) {

@@ -51,6 +51,7 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   flutter_swipe_action_cell: ^3.1.1
   connectivity_plus: ^4.0.1
+  internet_connection_checker: ^1.0.0+1
   fl_chart: ^0.63.0
   http_parser: ^4.0.2
 
