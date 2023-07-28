@@ -105,6 +105,14 @@ class Info extends StatelessWidget {
                     subtitle: Text('Widget, that ignores the system back button for navigation'),
                   ),
                   ListTile(
+                    title: Text('SnackBar', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Widget used for status information for the user'),
+                  ),
+                  ListTile(
+                    title: Text('Floating Action Button', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Button with different positional presets'),
+                  ),
+                  ListTile(
                     title: Text('GestureDetector', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Widget, that detects gestures on the screen'),
                   )
@@ -126,6 +134,10 @@ class Info extends StatelessWidget {
                     subtitle: Text('Used for creating and displaying the Tutorial'),
                   ),
                   ListTile(
+                    title: Text('Camera', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Used to access the devices camera and take photos with it'),
+                  ),
+                  ListTile(
                     title: Text('jwt_decoder', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for decoding the jwt_token and read protected Data from it'),
                   ),
@@ -136,10 +148,6 @@ class Info extends StatelessWidget {
                   ListTile(
                     title: Text('fast_immutable_collections', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Used for creating immutable lists'),
-                  ),
-                  ListTile(
-                    title: Text('flutter_speed_dial', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Used for creating a collapsable menu on for  the floatingActionButton widget'),
                   ),
                   ListTile(
                     title: Text('flutter_swipe_action_cell', style: TextStyle(fontWeight: FontWeight.bold)),
