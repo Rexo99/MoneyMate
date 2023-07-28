@@ -45,8 +45,10 @@ dependencies:
   intl: ^0.18.1
   encrypt: ^5.0.1
   jwt_decoder: ^2.0.1
+  google_mlkit_text_recognition: ^0.5.0
   camera: ^0.9.3+1
   path_provider: ^2.0.14
+  flutter_speed_dial: ^6.2.0
   flutter_swipe_action_cell: ^3.1.1
   connectivity_plus: ^4.0.1
   fl_chart: ^0.63.0
